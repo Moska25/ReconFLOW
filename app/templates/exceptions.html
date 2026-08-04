@@ -1,0 +1,101 @@
+{% extends "_layout.html" %}
+{% block title %}Exception queue{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Exception queue</h1>
+  <p class="lede">Everything the engine could not settle cleanly, typed by reason, priced in
+    GEL and aged from the dataset's as-of date of {{ as_of }}.</p>
+</div>
+
+<div class="section">
+  <div class="grid grid-2">
+    <div class="card card-tight">
+      <div class="card-head"><h2>By reason</h2></div>
+      {% if summary %}
+      <div class="table-wrap"><table class="data">
+        <thead><tr><th>Reason</th><th class="num">Open</th><th class="num">Value (GEL)</th></tr></thead>
+        <tbody>{% for s in summary %}
+        <tr><td><a href="/exceptions?reason={{ s.reason_code }}">{{ s.label }}</a>
+            <div class="faint small">{{ s.means }}</div></td>
+          <td class="num">{{ s.n }}</td><td class="num">{{ s.value | money }}</td></tr>
+        {% endfor %}</tbody>
+      </table></div>
+      {% else %}<div class="card-body"><div class="empty">The queue is empty.</div></div>{% endif %}
+    </div>
+    <div class="card">
+      <div class="section-head"><h2>Ageing</h2></div>
+      {% set amax = (ageing | map(attribute='n') | max) or 1 %}
+      {% for b in ageing %}
+      <div class="bd">
+        <span class="bd-label"><a href="/exceptions?bucket={{ b.bucket }}">{{ b.bucket }} days</a></span>
+        <div class="bar {{ 'bar-fail' if b.bucket == '60+' else 'bar-warn' if b.bucket == '31-60' else '' }}">
+          <span style="width: {{ (100 * b.n / amax) | round(1) }}%"></span></div>
+        <span class="bd-val">{{ b.n }}</span>
+        <span class="bd-why">GEL {{ b.value | money }} at risk</span>
+      </div>
+      {% endfor %}
+      <p class="note" style="margin-top:16px"><strong>Severity sets the clock.</strong>
+        High-severity items breach after 3 days, medium after 7, low after 30. A breach is
+        marked in the table below.</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="card">
+    <form class="toolbar" method="get" action="/exceptions">
+      <div class="field"><label for="reason">Reason</label>
+        <select name="reason" id="reason"><option value="">All</option>
+          {% for code, meta in reasons.items() %}
+          <option value="{{ code }}" {{ 'selected' if f.reason == code }}>{{ meta.label }}</option>{% endfor %}
+        </select></div>
+      <div class="field"><label for="severity">Severity</label>
+        <select name="severity" id="severity"><option value="">All</option>
+          {% for s in ['high','medium','low'] %}
+          <option value="{{ s }}" {{ 'selected' if f.severity == s }}>{{ s }}</option>{% endfor %}
+        </select></div>
+      <div class="field"><label for="status">Status</label>
+        <select name="status" id="status"><option value="">All</option>
+          {% for s in ['open','investigating','resolved'] %}
+          <option value="{{ s }}" {{ 'selected' if f.status == s }}>{{ s }}</option>{% endfor %}
+        </select></div>
+      <div class="field"><label for="bucket">Ageing</label>
+        <select name="bucket" id="bucket"><option value="">All</option>
+          {% for b in buckets %}<option value="{{ b }}" {{ 'selected' if f.bucket == b }}>{{ b }}</option>{% endfor %}
+        </select></div>
+      <div class="field"><label for="assignee">Owner</label>
+        <select name="assignee" id="assignee"><option value="">All</option>
+          {% for a in assignees %}<option value="{{ a }}" {{ 'selected' if f.assignee == a }}>{{ a }}</option>{% endfor %}
+        </select></div>
+      <button class="btn btn-primary" type="submit">Filter</button>
+      <a class="btn" href="/exceptions">Reset</a>
+    </form>
+  </div>
+
+  <div class="card card-tight" style="margin-top:14px">
+    <div class="card-head"><h2>{{ rows | length }} item{{ '' if rows | length == 1 else 's' }}</h2>
+      <span class="faint small">highest severity and value first, at most 300</span></div>
+    {% if rows %}
+    <div class="table-wrap"><table class="data">
+      <thead><tr><th>Reason</th><th>Item</th><th>Customer</th><th class="num">GEL at risk</th>
+        <th class="num">Age</th><th>Owner</th><th>Status</th><th></th></tr></thead>
+      <tbody>{% for r in rows %}
+      <tr>
+        <td><span class="pill pill-{{ 'fail' if r.severity == 'high' else 'warn' if r.severity == 'medium' else 'idle' }}">{{ r.label }}</span></td>
+        <td class="mono">{{ r.entity_label }}</td>
+        <td>{{ r.customer_name }}</td>
+        <td class="num">{{ r.value_minor | money }}</td>
+        <td class="num"><span class="age {{ 'age-4' if r.breached else 'age-3' if r.bucket == '60+' else 'age-2' if r.bucket == '31-60' else '' }}">{{ r.age_days }}d</span></td>
+        <td class="mono small">{{ r.assignee }}</td>
+        <td><span class="pill pill-{{ 'pass' if r.status == 'resolved' else 'info' if r.status == 'investigating' else 'idle' }}">{{ r.status }}</span>
+          {% if r.breached %}<span class="pill pill-fail">SLA</span>{% endif %}</td>
+        <td><a class="btn btn-sm" href="/exceptions/{{ r.id }}">Open</a></td>
+      </tr>
+      {% endfor %}</tbody>
+    </table></div>
+    {% else %}
+    <div class="card-body"><div class="empty">Nothing matches those filters.</div></div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

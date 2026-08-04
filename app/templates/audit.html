@@ -1,0 +1,60 @@
+{% extends "_layout.html" %}
+{% block title %}Audit log{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Audit log</h1>
+  <p class="lede">Every state change, in order, with who did it and what the record looked
+    like before and after. {{ total }} entries recorded.</p>
+</div>
+
+<p class="note"><strong>Append-only, enforced by the database.</strong> Two SQLite triggers
+  in <code>app/db.py</code> abort any <code>UPDATE</code> or <code>DELETE</code> on this
+  table, so history cannot be rewritten even by a bug in the application code. The test
+  suite asserts that both raise.</p>
+
+<div class="section">
+  <div class="card">
+    <form class="toolbar" method="get" action="/audit">
+      <div class="field"><label for="actor">Actor</label>
+        <select name="actor" id="actor"><option value="">All</option>
+          {% for a in actor_options %}<option value="{{ a }}" {{ 'selected' if f.actor == a }}>{{ a }}</option>{% endfor %}
+        </select></div>
+      <div class="field"><label for="action">Action</label>
+        <select name="action" id="action"><option value="">All</option>
+          {% for a in actions %}<option value="{{ a }}" {{ 'selected' if f.action == a }}>{{ a }}</option>{% endfor %}
+        </select></div>
+      <div class="field"><label for="entity_type">Entity</label>
+        <select name="entity_type" id="entity_type"><option value="">All</option>
+          {% for e in entities %}<option value="{{ e }}" {{ 'selected' if f.entity_type == e }}>{{ e }}</option>{% endfor %}
+        </select></div>
+      <button class="btn btn-primary" type="submit">Filter</button>
+      <a class="btn" href="/audit">Reset</a>
+    </form>
+  </div>
+
+  <div class="card card-tight" style="margin-top:14px">
+    <div class="card-head"><h2>{{ rows | length }} entr{{ 'y' if rows | length == 1 else 'ies' }}</h2>
+      <span class="faint small">newest first, at most 300</span></div>
+    {% if rows %}
+    <div class="table-wrap"><table class="data">
+      <thead><tr><th class="num">#</th><th>When (UTC)</th><th>Actor</th><th>Role</th>
+        <th>Action</th><th>Entity</th><th>Before</th><th>After</th></tr></thead>
+      <tbody>{% for r in rows %}
+      <tr>
+        <td class="num">{{ r.id }}</td>
+        <td class="mono small nowrap">{{ r.ts }}</td>
+        <td class="mono small">{{ r.actor }}</td>
+        <td><span class="pill pill-plain pill-idle">{{ r.role }}</span></td>
+        <td class="mono small">{{ r.action }}</td>
+        <td class="mono small">{{ r.entity_type }} {{ r.entity_id }}</td>
+        <td class="mono small faint">{{ r.before_json if r.before_json != 'null' else '-' }}</td>
+        <td class="mono small">{{ r.after_json if r.after_json != 'null' else '-' }}</td>
+      </tr>
+      {% endfor %}</tbody>
+    </table></div>
+    {% else %}
+    <div class="card-body"><div class="empty">No audit entries match those filters.</div></div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

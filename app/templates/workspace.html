@@ -1,0 +1,126 @@
+{% extends "_layout.html" %}
+{% block title %}Workspace{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Reconciliation workspace</h1>
+  <p class="lede">Every match the engine made, with the rule or score that produced it, plus
+    the invoices and payments it could not settle.</p>
+</div>
+
+<div class="grid grid-4">
+  <div class="metric"><div class="metric-label">Posted automatically</div>
+    <div class="metric-value is-pass">{{ counts.auto }}</div>
+    <div class="metric-sub">confidence at or above the auto threshold</div></div>
+  <div class="metric"><div class="metric-label">Proposed for review</div>
+    <div class="metric-value is-warn">{{ counts.proposed }}</div>
+    <div class="metric-sub">a human decides</div></div>
+  <div class="metric"><div class="metric-label">Open invoices</div>
+    <div class="metric-value">{{ counts.open_invoices }}</div>
+    <div class="metric-sub">nothing applied yet</div></div>
+  <div class="metric"><div class="metric-label">Unapplied payments</div>
+    <div class="metric-value">{{ counts.open_payments }}</div>
+    <div class="metric-sub">cash without a home</div></div>
+</div>
+
+<div class="section">
+  <div class="row" style="margin-bottom:14px">
+    <a class="btn btn-sm {{ 'btn-primary' if view == 'matches' else '' }}" href="/workspace?view=matches">Matches</a>
+    <a class="btn btn-sm {{ 'btn-primary' if view == 'invoices' else '' }}" href="/workspace?view=invoices">Open invoices</a>
+    <a class="btn btn-sm {{ 'btn-primary' if view == 'payments' else '' }}" href="/workspace?view=payments">Unapplied payments</a>
+  </div>
+
+  {% if view == 'matches' %}
+  <div class="card">
+    <form class="toolbar" method="get" action="/workspace">
+      <input type="hidden" name="view" value="matches">
+      <div class="field"><label for="status">Status</label>
+        <select name="status" id="status">
+          <option value="">All</option>
+          {% for s in ['auto', 'proposed', 'confirmed', 'rejected'] %}
+          <option value="{{ s }}" {{ 'selected' if f.status == s }}>{{ s }}</option>{% endfor %}
+        </select></div>
+      <div class="field"><label for="rule">Rule</label>
+        <select name="rule" id="rule"><option value="">All</option>
+          {% for r in rules %}<option value="{{ r }}" {{ 'selected' if f.rule == r }}>{{ r }}</option>{% endfor %}
+        </select></div>
+      <div class="field"><label for="currency">Currency</label>
+        <select name="currency" id="currency"><option value="">All</option>
+          {% for c in currencies %}<option value="{{ c }}" {{ 'selected' if f.currency == c }}>{{ c }}</option>{% endfor %}
+        </select></div>
+      <div class="field"><label for="q">Search</label>
+        <input type="search" name="q" id="q" value="{{ f.q }}" placeholder="invoice, payment or customer"></div>
+      <button class="btn btn-primary" type="submit">Filter</button>
+      <a class="btn" href="/workspace?view=matches">Reset</a>
+    </form>
+  </div>
+
+  <div class="card card-tight" style="margin-top:14px">
+    <div class="card-head"><h2>{{ rows | length }} match{{ '' if rows | length == 1 else 'es' }}</h2>
+      <span class="faint small">showing at most 200, highest confidence first</span></div>
+    {% if rows %}
+    <div class="table-wrap"><table class="data">
+      <thead><tr><th>Invoice</th><th>Payment</th><th>Customer</th><th>Shape</th><th>Rule</th>
+        <th class="num">Difference</th><th class="num">Confidence</th><th>Status</th><th></th></tr></thead>
+      <tbody>{% for m in rows %}
+      <tr>
+        <td class="mono">{{ m.invoice_label }}</td>
+        <td class="mono">{{ m.payment_label }}</td>
+        <td>{{ m.customer }}</td>
+        <td><span class="pill pill-plain pill-idle">{{ m.shape }}</span></td>
+        <td class="mono small">{{ m.rule }}</td>
+        <td class="num {{ 'is-fail' if m.delta_minor else '' }}">{{ m.delta_minor | money }}</td>
+        <td class="num">{{ m.confidence }}</td>
+        <td><span class="pill pill-{{ 'pass' if m.status in ['auto','confirmed'] else 'warn' if m.status == 'proposed' else 'idle' }}">{{ m.status }}</span></td>
+        <td><a class="btn btn-sm" href="/workspace/match/{{ m.id }}">Why</a></td>
+      </tr>
+      {% endfor %}</tbody>
+    </table></div>
+    {% else %}
+    <div class="card-body"><div class="empty">No match meets those filters. Try resetting them.</div></div>
+    {% endif %}
+  </div>
+  <p class="note" style="margin-top:14px"><strong>Difference is shown in GEL</strong> so rows
+    in different currencies can be compared in one column. The native amounts are on the
+    detail page. A non-zero difference is not automatically an error - it is only an
+    exception once it falls outside tolerance.</p>
+
+  {% elif view == 'invoices' %}
+  <div class="card card-tight">
+    <div class="card-head"><h2>Open invoices</h2><span class="faint small">largest first, at most 200</span></div>
+    {% if invoices %}
+    <div class="table-wrap"><table class="data">
+      <thead><tr><th>Invoice</th><th>Customer</th><th>Issued</th><th>Due</th>
+        <th class="num">Amount</th><th>Ccy</th><th class="num">GEL</th></tr></thead>
+      <tbody>{% for i in invoices %}
+      <tr><td class="mono">{{ i.invoice_no }}</td><td>{{ i.customer_name }}</td>
+        <td class="mono small">{{ i.issue_date }}</td><td class="mono small">{{ i.due_date }}</td>
+        <td class="num">{{ i.amount_minor | money }}</td><td class="mono">{{ i.currency }}</td>
+        <td class="num">{{ i.gel_minor | money }}</td></tr>
+      {% endfor %}</tbody>
+    </table></div>
+    {% else %}<div class="card-body"><div class="empty">Every invoice has been settled.</div></div>{% endif %}
+  </div>
+
+  {% else %}
+  <div class="card card-tight">
+    <div class="card-head"><h2>Unapplied payments</h2><span class="faint small">largest first, at most 200</span></div>
+    {% if payments %}
+    <div class="table-wrap"><table class="data">
+      <thead><tr><th>Payment</th><th>Payer</th><th>Reference as received</th><th>Value date</th>
+        <th class="num">Amount</th><th>Ccy</th><th class="num">GEL</th></tr></thead>
+      <tbody>{% for p in payments %}
+      <tr><td class="mono">{{ p.payment_ref }}</td><td>{{ p.payer_name }}</td>
+        <td class="mono small">{{ p.reference or '(empty)' }}</td>
+        <td class="mono small">{{ p.value_date }}</td>
+        <td class="num {{ 'is-fail' if p.amount_minor < 0 else '' }}">{{ p.amount_minor | money }}</td>
+        <td class="mono">{{ p.currency }}</td><td class="num">{{ p.gel_minor | money }}</td></tr>
+      {% endfor %}</tbody>
+    </table></div>
+    {% else %}<div class="card-body"><div class="empty">All cash is applied.</div></div>{% endif %}
+  </div>
+  <p class="note" style="margin-top:14px"><strong>Read the reference column.</strong> Most of
+    these are unapplied for one reason: the payer sent money with no usable remittance
+    information. That is the real constraint on the auto-match rate, not the algorithm.</p>
+  {% endif %}
+</div>
+{% endblock %}

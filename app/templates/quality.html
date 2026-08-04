@@ -1,0 +1,94 @@
+{% extends "_layout.html" %}
+{% block title %}Quality{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Test evidence</h1>
+  <p class="lede">The hard cases this system claims to handle, and whether the suite actually
+    proved it on the last run. This page is generated from the test run, not written by hand.</p>
+</div>
+
+{% if report.cases %}
+<div class="grid grid-4">
+  <div class="metric"><div class="metric-label">Tests passed</div>
+    <div class="metric-value is-pass">{{ report.passed }}</div>
+    <div class="metric-sub">of {{ report.total }} collected</div></div>
+  <div class="metric"><div class="metric-label">Failed</div>
+    <div class="metric-value {{ 'is-fail' if report.failed else 'is-pass' }}">{{ report.failed }}</div>
+    <div class="metric-sub">{{ 'suite is green' if not report.failed else 'suite is red' }}</div></div>
+  <div class="metric"><div class="metric-label">Duration</div>
+    <div class="metric-value sm">{{ report.duration }}s</div>
+    <div class="metric-sub">wall clock for the run</div></div>
+  <div class="metric"><div class="metric-label">Recorded</div>
+    <div class="metric-value sm">{{ report.generated_at }}</div>
+    <div class="metric-sub">UTC, by the test run itself</div></div>
+</div>
+
+<p class="note"><strong>Where this comes from.</strong> A
+  <code>pytest_runtest_logreport</code> hook in <code>tests/conftest.py</code> writes
+  <code>data/quality.json</code> on every run, and seeding runs the suite so this page is
+  never empty and never stale. The labels below are the tests' own docstrings.</p>
+
+{% for module, cases in report.by_module.items() %}
+<div class="section">
+  <div class="section-head"><h2 class="mono">{{ module }}</h2>
+    <span class="faint small">{{ cases | length }} checks</span></div>
+  <div class="card card-tight"><div class="table-wrap"><table class="data">
+    <thead><tr><th>Result</th><th>What it proves</th><th class="num">Seconds</th></tr></thead>
+    <tbody>{% for c in cases %}
+    <tr>
+      <td><span class="pill pill-{{ 'pass' if c.outcome == 'passed' else 'fail' }}">{{ c.outcome }}</span></td>
+      <td>{{ c.label }}<div class="faint small mono">{{ c.name }}</div></td>
+      <td class="num">{{ c.duration }}</td>
+    </tr>
+    {% endfor %}</tbody>
+  </table></div></div>
+</div>
+{% endfor %}
+
+{% else %}
+<div class="empty">
+  No test report has been recorded yet. Run
+  <code>./.venv/bin/python -m pytest -q</code> and reload this page.
+  {% if report.detail %}<br><span class="faint">{{ report.detail }}</span>{% endif %}
+</div>
+{% endif %}
+
+<div class="section">
+  <div class="section-head"><h2>What the dataset deliberately contains</h2></div>
+  <p class="note note-warn"><strong>Synthetic by design.</strong> The generator plants a
+    known number of each awkward situation so the engine is measured against messy input
+    rather than a clean happy path. These are planted counts, not detection results - the
+    engine finds additional cases that emerge from the data, and the dashboard shows what
+    it actually detected.</p>
+  {% if manifest.scenarios %}
+  <div class="card card-tight"><div class="table-wrap"><table class="data">
+    <thead><tr><th>Situation planted</th><th class="num">Count</th></tr></thead>
+    <tbody>{% for name, n in manifest.scenarios.items() %}
+      <tr><td class="mono">{{ name }}</td><td class="num">{{ n }}</td></tr>
+    {% endfor %}
+      <tr><td class="mono">MALFORMED_ROWS</td><td class="num">{{ manifest.planted_bad_rows }}</td></tr>
+    </tbody>
+  </table></div></div>
+  <p class="note" style="margin-top:14px"><strong>Seed {{ manifest.generated_from_seed }}</strong>
+    over {{ manifest.window[0] }} to {{ manifest.window[1] }}:
+    {{ manifest.customers }} customers, {{ manifest.invoice_rows }} invoices,
+    {{ manifest.payment_rows }} payments. Regenerating produces byte-identical files.</p>
+  {% else %}
+  <div class="empty">No manifest found. Run <code>./run.sh</code> to generate the dataset.</div>
+  {% endif %}
+</div>
+
+<div class="section">
+  <div class="section-head"><h2>Matching configuration in force</h2></div>
+  <div class="card">
+    <dl class="kv">
+      <dt>Tolerance</dt><dd>{{ cfg.tol_abs_minor | money }} absolute or {{ cfg.tol_pct_bp / 100 }}%, whichever is larger</dd>
+      <dt>Auto-post at</dt><dd>{{ cfg.auto_threshold }}</dd>
+      <dt>Review from</dt><dd>{{ cfg.propose_threshold }}</dd>
+      <dt>Weights</dt><dd>reference {{ cfg.w_reference }} · amount {{ cfg.w_amount }} · date {{ cfg.w_date }} · customer {{ cfg.w_customer }}</dd>
+      <dt>Date window</dt><dd>{{ cfg.date_window_days }} days, {{ cfg.early_grace_days }} days of grace before issue</dd>
+      <dt>Max group size</dt><dd>{{ cfg.max_group }} on either side</dd>
+    </dl>
+  </div>
+</div>
+{% endblock %}

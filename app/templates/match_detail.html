@@ -1,0 +1,117 @@
+{% extends "_layout.html" %}
+{% block title %}Match {{ m.id }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Match {{ m.id }} · why this match</h1>
+  <p class="lede">The engine's reasoning, component by component. Nothing here is a black
+    box: the confidence is the sum of the contributions below.</p>
+</div>
+
+<div class="grid grid-4">
+  <div class="metric"><div class="metric-label">Confidence</div>
+    <div class="metric-value {{ 'is-pass' if m.confidence >= cfg.auto_threshold else 'is-warn' }}">{{ m.confidence }}</div>
+    <div class="metric-sub">auto at {{ cfg.auto_threshold }}, review from {{ cfg.propose_threshold }}</div></div>
+  <div class="metric"><div class="metric-label">Rule</div>
+    <div class="metric-value sm mono">{{ m.rule }}</div>
+    <div class="metric-sub">{{ 'deterministic rule' if m.method == 'pass1' else 'manual' if m.method == 'manual' else 'weighted score' }}</div></div>
+  <div class="metric"><div class="metric-label">Shape</div>
+    <div class="metric-value sm">{{ m.shape }}</div>
+    <div class="metric-sub">{{ m.invoices | length }} invoice(s), {{ m.payments | length }} payment(s)</div></div>
+  <div class="metric"><div class="metric-label">Difference (GEL)</div>
+    <div class="metric-value sm {{ 'is-fail' if m.delta_minor else 'is-pass' }}">{{ m.delta_minor | money }}</div>
+    <div class="metric-sub">payment less invoice</div></div>
+</div>
+
+<div class="section">
+  <div class="section-head"><h2>Why this match</h2>
+    <span class="pill pill-{{ 'pass' if m.status in ['auto','confirmed'] else 'warn' }}">{{ m.status }}</span></div>
+  <div class="card">
+    {% if m.breakdown.components %}
+      {% for c in m.breakdown.components %}
+      <div class="bd">
+        <span class="bd-label">{{ c.name }}</span>
+        <div class="bar"><span style="width: {{ (100 * c.score) | round(1) if c.score <= 1 else 100 }}%"></span></div>
+        <span class="bd-val">{{ c.contribution }} / {{ c.weight }}</span>
+        <span class="bd-why">{{ c.why }}</span>
+      </div>
+      {% endfor %}
+      <hr class="hr">
+      <div class="row"><strong>Total confidence</strong><span class="spacer"></span>
+        <span class="mono">{{ m.confidence }} / 100</span></div>
+      <p class="note" style="margin-top:16px"><strong>How to read this.</strong> Each
+        component scores 0-1 and is multiplied by its weight. The weights are
+        reference {{ cfg.w_reference }}, amount {{ cfg.w_amount }}, date {{ cfg.w_date }},
+        customer {{ cfg.w_customer }}. Without a usable reference the maximum reachable
+        score is {{ cfg.w_amount + cfg.w_date + cfg.w_customer }}, which is below the
+        auto-post threshold of {{ cfg.auto_threshold }} by design.</p>
+    {% elif m.breakdown.explain %}
+      <ul class="timeline">
+        {% for line in m.breakdown.explain %}<li class="ok"><div class="t-what">{{ line }}</div></li>{% endfor %}
+      </ul>
+      <p class="note" style="margin-top:16px"><strong>Deterministic rule.</strong> This match
+        came from rule {{ m.rule }} in the first pass, which is applied before any scoring.
+        Rules are ordered by how much trust they deserve, and a matched pair leaves the
+        pool immediately so it cannot be claimed twice.</p>
+    {% else %}
+      <div class="empty">No breakdown was recorded for this match.</div>
+    {% endif %}
+  </div>
+</div>
+
+<div class="section">
+  <div class="grid grid-2">
+    <div class="card card-tight">
+      <div class="card-head"><h3>Invoice side</h3></div>
+      {% if m.invoices %}
+      <div class="table-wrap"><table class="data">
+        <thead><tr><th>Invoice</th><th>Customer</th><th>Issued</th><th class="num">Amount</th><th>Ccy</th></tr></thead>
+        <tbody>{% for i in m.invoices %}
+        <tr><td class="mono">{{ i.invoice_no }}</td><td>{{ i.customer_name }}</td>
+          <td class="mono small">{{ i.issue_date }}</td>
+          <td class="num">{{ i.amount_minor | money }}</td><td class="mono">{{ i.currency }}</td></tr>
+        {% endfor %}</tbody>
+      </table></div>
+      {% else %}<div class="card-body"><div class="empty">No invoice on this match.</div></div>{% endif %}
+    </div>
+    <div class="card card-tight">
+      <div class="card-head"><h3>Payment side</h3></div>
+      {% if m.payments %}
+      <div class="table-wrap"><table class="data">
+        <thead><tr><th>Payment</th><th>Reference as received</th><th>Value date</th>
+          <th class="num">Amount</th><th>Ccy</th></tr></thead>
+        <tbody>{% for p in m.payments %}
+        <tr><td class="mono">{{ p.payment_ref }}</td>
+          <td class="mono small">{{ p.reference or '(empty)' }}</td>
+          <td class="mono small">{{ p.value_date }}</td>
+          <td class="num">{{ p.amount_minor | money }}</td><td class="mono">{{ p.currency }}</td></tr>
+        {% endfor %}</tbody>
+      </table></div>
+      {% else %}<div class="card-body"><div class="empty">No payment on this match.</div></div>{% endif %}
+    </div>
+  </div>
+</div>
+
+{% if m.status == 'proposed' %}
+<div class="section">
+  <div class="card">
+    <div class="section-head"><h2>Decide</h2></div>
+    <p>This scored below the auto-post threshold, so it waits for a person. Confirming a
+      match worth more than GEL {{ threshold | money }} raises an approval instead of
+      posting straight away.</p>
+    <form method="post" action="/workspace/match/{{ m.id }}/confirm" class="toolbar">
+      <div class="field" style="flex:1 1 320px"><label for="note">Note</label>
+        <input type="text" name="note" id="note" placeholder="what you checked"></div>
+      <button class="btn btn-primary" name="decision" value="confirm" type="submit">Confirm match</button>
+      <button class="btn btn-danger" name="decision" value="reject" type="submit">Reject</button>
+    </form>
+    {% if not can(role, 'propose') %}
+    <p class="note note-warn" style="margin-top:14px"><strong>{{ role_label }} is read-only.</strong>
+      The buttons above will be refused by the server, not merely hidden. Switch to an
+      analyst or supervisor in the demo bar to act.</p>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+
+<p class="row" style="margin-top:22px"><a class="btn" href="/workspace">Back to workspace</a></p>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends "_layout.html" %}
+{% block title %}Approvals{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Maker-checker approvals</h1>
+  <p class="lede">Value movements above GEL {{ threshold | money }} need a second person.
+    The rule that matters: whoever raised an item cannot decide it.</p>
+</div>
+
+<p class="note"><strong>Try to break it.</strong> Switch to <code>t.gogia</code> in the demo
+  bar and approve the item that <code>t.gogia</code> raised. The server refuses it, because
+  the check lives in <code>decide_approval()</code> in <code>app/controls.py</code> rather
+  than in this template. Approving as an analyst or an auditor is refused for the same
+  reason.</p>
+
+<div class="section">
+  <div class="card">
+    <form class="toolbar" method="get" action="/approvals">
+      <div class="field"><label for="status">Status</label>
+        <select name="status" id="status"><option value="">All</option>
+          {% for s in ['pending','approved','rejected'] %}
+          <option value="{{ s }}" {{ 'selected' if f.status == s }}>{{ s }}</option>{% endfor %}
+        </select></div>
+      <button class="btn btn-primary" type="submit">Filter</button>
+      <a class="btn" href="/approvals">Reset</a>
+    </form>
+  </div>
+</div>
+
+<div class="section">
+  {% if rows %}
+  <div class="stack">
+    {% for a in rows %}
+    <div class="card">
+      <div class="section-head">
+        <h2>#{{ a.id }} · {{ a.action_type.replace('_', ' ') | title }} · {{ a.entity_label }}</h2>
+        <span class="pill pill-{{ 'pass' if a.status == 'approved' else 'fail' if a.status == 'rejected' else 'warn' }}">{{ a.status }}</span>
+      </div>
+      <dl class="kv">
+        <dt>Amount</dt><dd>GEL {{ a.amount_minor | money }}</dd>
+        <dt>Raised by</dt><dd>{{ a.maker }} ({{ a.maker_role }}) at {{ a.created_at }}</dd>
+        {% if a.payload.reason %}<dt>Reason</dt><dd style="font-family:var(--sans)">{{ a.payload.reason }}</dd>{% endif %}
+        {% if a.checker %}<dt>Decided by</dt><dd>{{ a.checker }} ({{ a.checker_role }}) at {{ a.decided_at }}</dd>{% endif %}
+        {% if a.decision_note %}<dt>Note</dt><dd style="font-family:var(--sans)">{{ a.decision_note }}</dd>{% endif %}
+      </dl>
+
+      {% if a.status == 'pending' %}
+        {% if a.blocked %}
+        <p class="note note-warn" style="margin-top:14px"><strong>You cannot decide this:</strong>
+          {{ a.blocked }} The buttons are still live - press one and the server will explain
+          the refusal itself.</p>
+        {% endif %}
+        <form method="post" action="/approvals/{{ a.id }}/decide" class="toolbar" style="margin-top:14px">
+          <div class="field" style="flex:1 1 320px"><label for="note-{{ a.id }}">Decision note</label>
+            <input type="text" name="note" id="note-{{ a.id }}" placeholder="why"></div>
+          <button class="btn btn-primary" name="decision" value="approved" type="submit">Approve</button>
+          <button class="btn btn-danger" name="decision" value="rejected" type="submit">Reject</button>
+        </form>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty">No approvals match this filter. Propose a write-off on a large
+    exception to create one.</div>
+  {% endif %}
+</div>
+{% endblock %}

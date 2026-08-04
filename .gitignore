@@ -1,0 +1,8 @@
+.venv/
+__pycache__/
+*.py[cod]
+*.db
+.pytest_cache/
+data/cache/
+data/quality.json
+.DS_Store

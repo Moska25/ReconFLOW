@@ -1,0 +1,141 @@
+{% extends "_layout.html" %}
+{% block title %}Exception {{ e.id }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>{{ e.meta.label }} · {{ e.entity_label }}</h1>
+  <p class="lede">{{ e.meta.means }}</p>
+</div>
+
+<div class="grid grid-4">
+  <div class="metric"><div class="metric-label">Value at risk</div>
+    <div class="metric-value sm">GEL {{ e.value_minor | money }}</div>
+    <div class="metric-sub">converted at the {{ rate_date }} rate</div></div>
+  <div class="metric"><div class="metric-label">Age</div>
+    <div class="metric-value sm {{ 'is-fail' if e.breached else '' }}">{{ e.age_days }} days</div>
+    <div class="metric-sub">bucket {{ e.bucket }}{{ ' · past SLA' if e.breached else '' }}</div></div>
+  <div class="metric"><div class="metric-label">Severity</div>
+    <div class="metric-value sm {{ 'is-fail' if e.severity == 'high' else 'is-warn' if e.severity == 'medium' else '' }}">{{ e.severity }}</div>
+    <div class="metric-sub">owner {{ e.assignee }}</div></div>
+  <div class="metric"><div class="metric-label">Status</div>
+    <div class="metric-value sm {{ 'is-pass' if e.status == 'resolved' else '' }}">{{ e.status }}</div>
+    <div class="metric-sub">opened {{ e.opened_on }}</div></div>
+</div>
+
+<div class="section">
+  <div class="grid grid-2">
+    <div class="card">
+      <div class="section-head"><h2>What happened</h2></div>
+      <p>{{ e.detail }}</p>
+      <p class="note"><strong>What to do.</strong> {{ e.meta.action }}</p>
+      <dl class="kv">
+        <dt>Reason code</dt><dd>{{ e.reason_code }}</dd>
+        <dt>Entity</dt><dd>{{ e.entity_type }} {{ e.entity_label }}</dd>
+        <dt>Customer</dt><dd>{{ e.customer_name }}</dd>
+        <dt>Opened</dt><dd>{{ e.opened_on }}</dd>
+      </dl>
+    </div>
+    <div class="card">
+      <div class="section-head"><h2>Underlying record</h2></div>
+      {% if e.related %}
+      <dl class="kv">
+        {% if e.entity_type == 'payment' %}
+        <dt>Payment</dt><dd>{{ e.related.payment_ref }}</dd>
+        <dt>Payer</dt><dd>{{ e.related.payer_name }}</dd>
+        <dt>Reference</dt><dd>{{ e.related.reference or '(empty)' }}</dd>
+        <dt>Value date</dt><dd>{{ e.related.value_date }}</dd>
+        <dt>Amount</dt><dd>{{ e.related.amount_minor | money }} {{ e.related.currency }}</dd>
+        <dt>In GEL</dt><dd>{{ e.related.gel_minor | money }}</dd>
+        {% elif e.entity_type == 'invoice' %}
+        <dt>Invoice</dt><dd>{{ e.related.invoice_no }}</dd>
+        <dt>Customer</dt><dd>{{ e.related.customer_name }}</dd>
+        <dt>Issued</dt><dd>{{ e.related.issue_date }}</dd>
+        <dt>Due</dt><dd>{{ e.related.due_date }}</dd>
+        <dt>Amount</dt><dd>{{ e.related.amount_minor | money }} {{ e.related.currency }}</dd>
+        {% else %}
+        <dt>Match</dt><dd><a href="/workspace/match/{{ e.related.id }}">#{{ e.related.id }}</a></dd>
+        <dt>Invoices</dt><dd>{{ e.related.invoice_label }}</dd>
+        <dt>Payments</dt><dd>{{ e.related.payment_label }}</dd>
+        <dt>Difference</dt><dd>{{ e.related.delta_minor | money }} GEL</dd>
+        <dt>Confidence</dt><dd>{{ e.related.confidence }}</dd>
+        {% endif %}
+      </dl>
+      {% else %}<div class="empty">The underlying record could not be located.</div>{% endif %}
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="card">
+    <div class="section-head"><h2>Act on it</h2>
+      <span class="pill pill-idle">acting as {{ actor }} · {{ role_label }}</span></div>
+    {% if e.status == 'resolved' %}
+    <p class="note"><strong>Closed.</strong> {{ e.resolution or 'Resolved.' }} A resolved
+      exception cannot be reopened; the audit trail keeps the history.</p>
+    {% else %}
+    <form method="post" action="/exceptions/{{ e.id }}/action" class="stack">
+      <div class="toolbar">
+        <div class="field" style="flex:2 1 320px"><label for="note">Investigation note</label>
+          <input type="text" name="note" id="note" placeholder="what you found"></div>
+        <div class="field"><label for="resolution">Resolution</label>
+          <input type="text" name="resolution" id="resolution" placeholder="how it was settled"></div>
+      </div>
+      <div class="row">
+        <button class="btn" name="action" value="investigating" type="submit">Mark investigating</button>
+        <button class="btn btn-primary" name="action" value="resolved" type="submit">Resolve</button>
+        <button class="btn btn-danger" name="action" value="write_off" type="submit">Propose write-off</button>
+      </div>
+    </form>
+    <p class="note" style="margin-top:14px"><strong>Write-offs above GEL
+      {{ threshold | money }}</strong> do not post. They raise an approval that a different
+      person holding the supervisor role has to decide. Below that threshold an analyst
+      acts alone and the action is logged.</p>
+    {% if not can(role, 'investigate') %}
+    <p class="note note-warn"><strong>{{ role_label }} is read-only.</strong> These buttons
+      are live, and the server will refuse them with a message. That refusal is enforced in
+      <code>app/controls.py</code>, not by hiding the control.</p>
+    {% endif %}
+    {% endif %}
+  </div>
+</div>
+
+{% if e.approvals %}
+<div class="section">
+  <div class="section-head"><h2>Approvals raised</h2><a class="btn btn-sm" href="/approvals">Approvals queue</a></div>
+  <div class="card card-tight"><div class="table-wrap"><table class="data">
+    <thead><tr><th>#</th><th>Action</th><th class="num">Amount (GEL)</th><th>Maker</th>
+      <th>Checker</th><th>Status</th></tr></thead>
+    <tbody>{% for a in e.approvals %}
+    <tr><td class="mono">{{ a.id }}</td><td>{{ a.action_type }}</td>
+      <td class="num">{{ a.amount_minor | money }}</td><td class="mono">{{ a.maker }}</td>
+      <td class="mono">{{ a.checker or '-' }}</td>
+      <td><span class="pill pill-{{ 'pass' if a.status == 'approved' else 'fail' if a.status == 'rejected' else 'warn' }}">{{ a.status }}</span></td></tr>
+    {% endfor %}</tbody>
+  </table></div></div>
+</div>
+{% endif %}
+
+<div class="section">
+  <div class="grid grid-2">
+    <div class="card">
+      <div class="section-head"><h2>Investigation notes</h2></div>
+      {% if e.notes %}
+      <ul class="timeline">{% for n in e.notes %}
+        <li><div class="t-when">{{ n.ts }} · {{ n.actor }} ({{ n.role }})</div>
+          <div class="t-what">{{ n.note }}</div></li>
+      {% endfor %}</ul>
+      {% else %}<div class="empty">No notes yet.</div>{% endif %}
+    </div>
+    <div class="card">
+      <div class="section-head"><h2>Audit for this item</h2></div>
+      {% if e.audit %}
+      <ul class="timeline">{% for a in e.audit %}
+        <li class="ok"><div class="t-when">{{ a.ts }} · {{ a.actor }} ({{ a.role }})</div>
+          <div class="t-what">{{ a.action }}</div></li>
+      {% endfor %}</ul>
+      {% else %}<div class="empty">No recorded state change yet.</div>{% endif %}
+    </div>
+  </div>
+</div>
+
+<p class="row" style="margin-top:22px"><a class="btn" href="/exceptions">Back to the queue</a></p>
+{% endblock %}

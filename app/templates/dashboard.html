@@ -1,0 +1,189 @@
+{% extends "_layout.html" %}
+{% block title %}Operations dashboard{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Operations dashboard</h1>
+  <p class="lede">Where the ledger and the bank disagree today: what matched automatically,
+    what value is still unapplied, and what is ageing past its service level.</p>
+</div>
+
+<p class="note note-warn"><strong>Synthetic data.</strong> Every invoice, payment and
+  customer here is generated from a fixed seed in <code>app/generate.py</code>. Nothing is
+  real, no external system was contacted, and the figures below are computed from that
+  generated set at {{ d.as_of }}. Foreign currency is converted at a single fixed rate
+  dated {{ rate_date }} ({% for c, r in rates.items() %}{{ c }} {{ r }}{% if not loop.last %} · {% endif %}{% endfor %} to GEL).</p>
+
+<div class="grid grid-4">
+  <div class="metric">
+    <div class="metric-label">Auto-match rate</div>
+    <div class="metric-value is-accent">{{ d.stats.auto_match_rate }}%</div>
+    <div class="metric-sub">{{ d.stats.auto_matched_payments }} of {{ d.stats.payments }} payments
+      posted without a human</div>
+  </div>
+  <div class="metric">
+    <div class="metric-label">Open exceptions</div>
+    <div class="metric-value {{ 'is-warn' if d.open_exceptions else 'is-pass' }}">{{ d.open_exceptions }}</div>
+    <div class="metric-sub">GEL {{ d.open_value | money }} at risk</div>
+  </div>
+  <div class="metric">
+    <div class="metric-label">SLA breaches</div>
+    <div class="metric-value {{ 'is-fail' if d.breaches else 'is-pass' }}">{{ d.breaches | length }}</div>
+    <div class="metric-sub">past {{ d.sla_days.high }}/{{ d.sla_days.medium }}/{{ d.sla_days.low }} days by severity</div>
+  </div>
+  <div class="metric">
+    <div class="metric-label">Approvals pending</div>
+    <div class="metric-value {{ 'is-warn' if d.approvals_pending else '' }}">{{ d.approvals_pending }}</div>
+    <div class="metric-sub">need a second person</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-head"><h2>Value not yet applied</h2>
+    <span class="faint small">native currency, with the GEL equivalent at the {{ rate_date }} rate</span></div>
+  <div class="grid grid-2">
+    <div class="card card-tight">
+      <div class="card-head"><h3>Cash received, not applied</h3></div>
+      {% if d.unapplied %}
+      <div class="table-wrap"><table class="data">
+        <thead><tr><th>Currency</th><th class="num">Payments</th><th class="num">Native</th><th class="num">GEL</th></tr></thead>
+        <tbody>{% for r in d.unapplied %}
+          <tr><td class="mono">{{ r.currency }}</td><td class="num">{{ r.n }}</td>
+            <td class="num">{{ r.native | money }}</td><td class="num">{{ r.gel | money }}</td></tr>
+        {% endfor %}</tbody>
+      </table></div>
+      {% else %}<div class="card-body"><div class="empty">Every payment is applied.</div></div>{% endif %}
+    </div>
+    <div class="card card-tight">
+      <div class="card-head"><h3>Invoices with nothing received</h3></div>
+      {% if d.unpaid %}
+      <div class="table-wrap"><table class="data">
+        <thead><tr><th>Currency</th><th class="num">Invoices</th><th class="num">Native</th><th class="num">GEL</th></tr></thead>
+        <tbody>{% for r in d.unpaid %}
+          <tr><td class="mono">{{ r.currency }}</td><td class="num">{{ r.n }}</td>
+            <td class="num">{{ r.native | money }}</td><td class="num">{{ r.gel | money }}</td></tr>
+        {% endfor %}</tbody>
+      </table></div>
+      {% else %}<div class="card-body"><div class="empty">Every invoice is settled.</div></div>{% endif %}
+    </div>
+  </div>
+  <p class="note"><strong>What this is not.</strong> Unapplied cash is not a loss - it is
+    money received that no invoice could be tied to yet. It matters because it overstates
+    debtors and understates collections until someone places it.</p>
+</div>
+
+<div class="section">
+  <div class="section-head"><h2>Exceptions by reason</h2>
+    <a class="btn btn-sm" href="/exceptions">Open the queue</a></div>
+  <div class="card card-tight">
+    {% if d.reasons %}
+    <div class="table-wrap"><table class="data">
+      <thead><tr><th>Reason</th><th>Severity</th><th class="num">Count</th>
+        <th class="num">Value at risk (GEL)</th><th style="width:26%">Share</th></tr></thead>
+      <tbody>{% for r in d.reasons %}
+        <tr>
+          <td><a href="/exceptions?reason={{ r.reason_code }}">{{ r.label }}</a>
+            <div class="faint small">{{ r.means }}</div></td>
+          <td><span class="pill pill-{{ 'fail' if r.severity == 'high' else 'warn' if r.severity == 'medium' else 'idle' }}">{{ r.severity }}</span></td>
+          <td class="num">{{ r.n }}</td>
+          <td class="num">{{ r.value | money }}</td>
+          <td><div class="bar"><span style="width: {{ (100 * r.value / d.reason_max) | round(1) }}%"></span></div></td>
+        </tr>
+      {% endfor %}</tbody>
+    </table></div>
+    {% else %}<div class="card-body"><div class="empty">No exceptions. Run the import and matching first.</div></div>{% endif %}
+  </div>
+</div>
+
+<div class="section">
+  <div class="grid grid-2">
+    <div class="card">
+      <div class="section-head"><h2>Ageing of open items</h2></div>
+      {% if d.ageing %}
+      {% for b in d.ageing %}
+      <div class="bd">
+        <span class="bd-label">{{ b.bucket }} days</span>
+        <div class="bar {{ 'bar-fail' if b.bucket == '60+' else 'bar-warn' if b.bucket == '31-60' else '' }}">
+          <span style="width: {{ (100 * b.n / d.ageing_max) | round(1) }}%"></span></div>
+        <span class="bd-val">{{ b.n }}</span>
+        <span class="bd-why">GEL {{ b.value | money }} at risk</span>
+      </div>
+      {% endfor %}
+      {% else %}<div class="empty">Nothing open.</div>{% endif %}
+      <p class="note" style="margin-top:16px"><strong>Measured from {{ d.as_of }}</strong>,
+        the dataset's fixed as-of date, not from the wall clock - otherwise the buckets
+        would drift every day and the tests could not assert on them.</p>
+    </div>
+    <div class="card">
+      <div class="section-head"><h2>How matches were made</h2></div>
+      {% if d.stats.by_rule %}
+      {% for rule, n in d.stats.by_rule.items() %}
+      <div class="bd">
+        <span class="bd-label mono small">{{ rule }}</span>
+        <div class="bar"><span style="width: {{ (100 * n / d.rule_max) | round(1) }}%"></span></div>
+        <span class="bd-val">{{ n }}</span>
+      </div>
+      {% endfor %}
+      {% else %}<div class="empty">Matching has not been run.</div>{% endif %}
+      <p class="note" style="margin-top:16px"><strong>R1-R4 are deterministic rules</strong>
+        applied in priority order; <code>SCORED</code> is the probabilistic second pass.
+        A scored match can only post automatically when the remittance reference carries
+        real signal: amount, date and customer together cap out at
+        {{ d.ref_free_ceiling }}, below the {{ d.auto_threshold }} auto threshold, so no
+        payment is ever posted on an amount coincidence alone.</p>
+    </div>
+  </div>
+</div>
+
+{% if d.breaches %}
+<div class="section">
+  <div class="section-head"><h2>Past service level</h2>
+    <span class="faint small">high {{ d.sla_days.high }} days · medium {{ d.sla_days.medium }} days · low {{ d.sla_days.low }} days</span></div>
+  <p class="note note-warn"><strong>Why almost everything is breaching.</strong> The demo
+    dataset is four months of history that nobody has worked yet, so on this first run most
+    items are already older than their service level. That is what a go-live backlog
+    genuinely looks like; the number is not a health score, it is the size of the queue you
+    inherit. Resolve an item and it leaves this list.</p>
+  <div class="card card-tight"><div class="table-wrap"><table class="data">
+    <thead><tr><th>Reason</th><th>Item</th><th>Customer</th><th class="num">Age</th>
+      <th class="num">GEL at risk</th><th>Owner</th></tr></thead>
+    <tbody>{% for r in d.breaches[:10] %}
+      <tr><td><a href="/exceptions/{{ r.id }}">{{ reasons[r.reason_code].label }}</a></td>
+        <td class="mono">{{ r.entity_label }}</td><td>{{ r.customer_name }}</td>
+        <td class="num"><span class="age age-4">{{ r.age_days }}d</span></td>
+        <td class="num">{{ r.value_minor | money }}</td><td class="mono">{{ r.assignee }}</td></tr>
+    {% endfor %}</tbody>
+  </table></div></div>
+</div>
+{% endif %}
+
+<div class="section">
+  <div class="grid grid-2">
+    <div class="card">
+      <div class="section-head"><h2>Import health</h2><a class="btn btn-sm" href="/import">Import page</a></div>
+      <dl class="kv">
+        <dt>Batches</dt><dd>{{ d.imports.batches }}</dd>
+        <dt>Rows accepted</dt><dd>{{ d.imports.accepted }}</dd>
+        <dt>Rows rejected</dt><dd>{{ d.imports.rejected }}</dd>
+        <dt>Rows already known</dt><dd>{{ d.imports.skipped }}</dd>
+        <dt>Duplicate files</dt><dd>{{ d.imports.duplicates }}</dd>
+      </dl>
+      <p class="note" style="margin-top:14px"><strong>Rows rejected is a feature.</strong>
+        A malformed line is refused with a reason and the other rows still post. A file
+        that has already been imported posts nothing at all.</p>
+    </div>
+    <div class="card">
+      <div class="section-head"><h2>Recent activity</h2><a class="btn btn-sm" href="/audit">Full audit</a></div>
+      {% if d.activity %}
+      <ul class="timeline">
+        {% for a in d.activity %}
+        <li class="{{ 'bad' if 'REJECT' in a.action else 'ok' if 'APPROV' in a.action else '' }}">
+          <div class="t-when">{{ a.ts }} · {{ a.actor }} ({{ a.role }})</div>
+          <div class="t-what">{{ a.action }} on {{ a.entity_type }} {{ a.entity_id }}</div>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}<div class="empty">No activity recorded yet.</div>{% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

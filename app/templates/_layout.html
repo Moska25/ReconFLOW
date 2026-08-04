@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}{{ project_name }}{% endblock %} · {{ project_name }}</title>
+<link rel="stylesheet" href="/static/base.css">
+<link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+<header class="topbar"><div class="topbar-inner">
+  <a class="brand" href="/"><span class="brand-mark"></span>{{ project_name }}
+    <span class="brand-sub">{{ project_tagline }}</span></a>
+  <nav class="nav">
+    {% for href, label in nav %}
+    <a href="{{ href }}" class="{{ 'active' if active == href else '' }}">{{ label }}</a>
+    {% endfor %}
+  </nav>
+</div></header>
+<div class="rolebar"><div class="rolebar-inner">
+  <span class="pill pill-warn">Demo roles - no real authentication</span>
+  <span>Acting as</span>
+  {% for name, r in actors.items() %}
+  <a href="/role/{{ name }}?next={{ request.url.path }}"
+     class="{{ 'on' if name == actor else '' }}">{{ name }} · {{ roles[r].label }}</a>
+  {% endfor %}
+  <span class="spacer"></span>
+  <span class="faint">{{ role_note }}</span>
+</div></div>
+<main class="container">
+  {% if msg %}
+  <p class="note {{ 'note-warn' if level == 'warn' else '' }}"><strong>{{ 'Refused' if level == 'warn' else 'Done' }}:</strong> {{ msg }}</p>
+  {% endif %}
+  {% block content %}{% endblock %}
+</main>
+<footer class="footer"><div class="footer-inner">
+  <span>{{ project_name }}</span><span class="spacer"></span>
+  <span>{{ footer_note }}</span>
+</div></footer>
+{% block scripts %}{% endblock %}
+</body>
+</html>

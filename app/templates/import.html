@@ -1,0 +1,120 @@
+{% extends "_layout.html" %}
+{% block title %}Import{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Import</h1>
+  <p class="lede">Upload a file or review what has already been loaded. Every batch records
+    the hash of the bytes it saw, so the same file can never post twice.</p>
+</div>
+
+<div class="grid grid-4">
+  <div class="metric"><div class="metric-label">Batches</div>
+    <div class="metric-value">{{ health.batches }}</div>
+    <div class="metric-sub">{{ health.duplicates }} refused as duplicates</div></div>
+  <div class="metric"><div class="metric-label">Rows accepted</div>
+    <div class="metric-value is-pass">{{ health.accepted }}</div>
+    <div class="metric-sub">posted to the ledger</div></div>
+  <div class="metric"><div class="metric-label">Rows rejected</div>
+    <div class="metric-value {{ 'is-warn' if health.rejected else '' }}">{{ health.rejected }}</div>
+    <div class="metric-sub">refused with a reason, file still imported</div></div>
+  <div class="metric"><div class="metric-label">Rows already known</div>
+    <div class="metric-value">{{ health.skipped }}</div>
+    <div class="metric-sub">skipped, never double-posted</div></div>
+</div>
+
+<div class="section">
+  <div class="grid grid-2">
+    <div class="card">
+      <div class="section-head"><h2>Upload a file</h2></div>
+      <p>CSV only. Column order does not matter, header spelling and case are tolerated, and
+        both <code>1234.56</code> and <code>1.234,56</code> parse. Try uploading one of the
+        bundled files from <code>data/</code> a second time to watch the duplicate check
+        refuse it.</p>
+      <form method="post" action="/import/upload" enctype="multipart/form-data" class="stack">
+        <div class="toolbar">
+          <div class="field"><label for="kind">File type</label>
+            <select name="kind" id="kind">
+              <option value="payments">payments</option>
+              <option value="invoices">invoices</option>
+            </select></div>
+          <div class="field" style="flex:2 1 260px"><label for="upload_file">CSV file</label>
+            <input type="file" name="upload_file" id="upload_file" accept=".csv,text/csv" required></div>
+        </div>
+        <div class="row">
+          <button class="btn btn-primary" type="submit">Import</button>
+        </div>
+      </form>
+      <hr class="hr">
+      <form method="post" action="/import/rematch">
+        <button class="btn" type="submit">Re-run matching and rebuild exceptions</button>
+      </form>
+      <p class="note" style="margin-top:14px"><strong>Matching is re-runnable.</strong>
+        It rebuilds every automated match from scratch and produces the same result for the
+        same data. Manual confirmations are preserved and their rows are excluded from
+        re-matching.</p>
+    </div>
+
+    <div class="card">
+      <div class="section-head"><h2>What the validator checks</h2></div>
+      <p>Each row is validated on its own. A bad row is refused with a reason and the rest of
+        the file still posts, because rejecting four hundred good rows over one malformed
+        date is not a safety feature.</p>
+      {% if health.reject_reasons %}
+      <div class="table-wrap"><table class="data">
+        <thead><tr><th>Reason</th><th class="num">Rows</th></tr></thead>
+        <tbody>{% for r in health.reject_reasons %}
+          <tr><td class="mono">{{ r.reason }}</td><td class="num">{{ r.n }}</td></tr>
+        {% endfor %}</tbody>
+      </table></div>
+      {% else %}<div class="empty">No rows have been rejected.</div>{% endif %}
+      {% if manifest.planted_bad_rows %}
+      <p class="note note-warn" style="margin-top:14px"><strong>{{ manifest.planted_bad_rows }} bad
+        rows are planted on purpose</strong> in the generated files, so the rejected-rows
+        report is populated by real validation failures rather than by a mock-up.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-head"><h2>Batch history</h2>
+    <span class="faint small">newest first</span></div>
+  {% if batches %}
+  <div class="stack">
+    {% for b in batches %}
+    <div class="card card-tight">
+      <div class="card-head">
+        <h3 class="mono">#{{ b.id }} · {{ b.filename }}</h3>
+        <span class="row">
+          <span class="pill pill-{{ 'pass' if b.status == 'imported' else 'warn' if b.status == 'duplicate' else 'fail' }}">{{ b.status }}</span>
+          <span class="faint small">{{ b.created_at }} · {{ b.actor }}</span>
+        </span>
+      </div>
+      <div class="card-body">
+        <dl class="kv">
+          <dt>Rows seen</dt><dd>{{ b.rows_total }}</dd>
+          <dt>Accepted</dt><dd>{{ b.rows_accepted }}</dd>
+          <dt>Rejected</dt><dd>{{ b.rows_rejected }}</dd>
+          <dt>Already known</dt><dd>{{ b.rows_dupe }}</dd>
+          <dt>SHA-256</dt><dd class="small">{{ b.sha256 }}</dd>
+        </dl>
+        {% if b.rejects %}
+        <div class="table-wrap" style="margin-top:14px"><table class="data">
+          <thead><tr><th class="num">Row</th><th>Reason</th><th>Detail</th><th>Raw</th></tr></thead>
+          <tbody>{% for r in b.rejects %}
+          <tr><td class="num">{{ r.row_no or '-' }}</td>
+            <td><span class="pill pill-fail">{{ r.reason }}</span></td>
+            <td>{{ r.detail }}</td>
+            <td class="mono small faint">{{ r.raw[:120] }}</td></tr>
+          {% endfor %}</tbody>
+        </table></div>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty">Nothing has been imported. Run <code>./run.sh</code> to seed.</div>
+  {% endif %}
+</div>
+{% endblock %}

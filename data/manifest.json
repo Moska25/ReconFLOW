@@ -1,0 +1,41 @@
+{
+  "generated_from_seed": 20260801,
+  "as_of": "2026-08-01",
+  "window": [
+    "2026-04-01",
+    "2026-07-31"
+  ],
+  "customers": 60,
+  "invoice_rows": 402,
+  "payment_rows": 411,
+  "planted_bad_rows": 8,
+  "scenarios": {
+    "CLEAN_EXACT_REF": 150,
+    "REF_PREFIX": 14,
+    "REF_CASE": 10,
+    "REF_GEORGIAN": 8,
+    "REF_TYPO": 18,
+    "AMOUNT_ONLY": 30,
+    "TOLERANCE": 14,
+    "SHORT_PAY": 14,
+    "OVER_PAY": 8,
+    "CURRENCY_MISMATCH": 6,
+    "EARLY_PAYMENT": 8,
+    "MANY_TO_ONE_GROUPS": 6,
+    "ONE_TO_MANY_GROUPS": 7,
+    "PARTIAL_CONFIDENCE": 25,
+    "NO_PAYMENT": 72,
+    "DUPLICATE": 14,
+    "UNKNOWN_CUSTOMER": 7,
+    "UNAPPLIED": 56,
+    "REVERSAL": 9
+  },
+  "files": [
+    "customers.csv",
+    "invoices.csv",
+    "payments_2026_04.csv",
+    "payments_2026_05.csv",
+    "payments_2026_06.csv",
+    "payments_2026_07.csv"
+  ]
+}
