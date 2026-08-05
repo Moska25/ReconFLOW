@@ -22,6 +22,7 @@ import sqlite3
 from datetime import datetime
 from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 
+from app import statements
 from app.controls import audit, now_iso, require
 
 # Fixed FX table. A real system would hold a dated rate curve; this is a single snapshot
@@ -311,7 +312,13 @@ def import_bytes(
         (digest,),
     ).fetchone()
 
-    headers, rows = read_rows(content)
+    statement_format = statements.detect(content)
+    if statement_format:
+        # A bank statement is payments by definition, whatever the form said.
+        kind = "payments"
+        headers, rows = statements.as_rows(content)
+    else:
+        headers, rows = read_rows(content)
 
     if prior is not None:
         # Identical bytes already posted. Record the attempt, post nothing.

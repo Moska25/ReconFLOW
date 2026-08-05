@@ -6,3 +6,8 @@ __pycache__/
 data/cache/
 data/quality.json
 .DS_Store
+
+# Local design handoff bundle: the extracted UI components, their gallery and the
+# prompts that go with them. Kept in the working tree to hand to a designer, not
+# part of what this repo ships.
+/ui-kit/

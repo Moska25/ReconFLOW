@@ -13,8 +13,7 @@
   suite asserts that both raise.</p>
 
 <div class="section">
-  <div class="card">
-    <form class="toolbar" method="get" action="/audit">
+    <form class="toolbar rail" method="get" action="/audit">
       <div class="field"><label for="actor">Actor</label>
         <select name="actor" id="actor"><option value="">All</option>
           {% for a in actor_options %}<option value="{{ a }}" {{ 'selected' if f.actor == a }}>{{ a }}</option>{% endfor %}
@@ -30,25 +29,36 @@
       <button class="btn btn-primary" type="submit">Filter</button>
       <a class="btn" href="/audit">Reset</a>
     </form>
-  </div>
 
-  <div class="card card-tight" style="margin-top:14px">
+  <div class="card card-tight doc">
     <div class="card-head"><h2>{{ rows | length }} entr{{ 'y' if rows | length == 1 else 'ies' }}</h2>
       <span class="faint small">newest first, at most 300</span></div>
     {% if rows %}
     <div class="table-wrap"><table class="data">
-      <thead><tr><th class="num">#</th><th>When (UTC)</th><th>Actor</th><th>Role</th>
-        <th>Action</th><th>Entity</th><th>Before</th><th>After</th></tr></thead>
+      <caption class="sr-only">Audit entries, newest first</caption>
+      <thead><tr><th class="num" scope="col">#</th><th scope="col">When (UTC)</th><th scope="col">Actor</th><th scope="col">Role</th>
+        <th scope="col">Action</th><th scope="col">Entity</th><th scope="col">What changed</th></tr></thead>
       <tbody>{% for r in rows %}
       <tr>
         <td class="num">{{ r.id }}</td>
         <td class="mono small nowrap">{{ r.ts }}</td>
         <td class="mono small">{{ r.actor }}</td>
         <td><span class="pill pill-plain pill-idle">{{ r.role }}</span></td>
-        <td class="mono small">{{ r.action }}</td>
-        <td class="mono small">{{ r.entity_type }} {{ r.entity_id }}</td>
-        <td class="mono small faint">{{ r.before_json if r.before_json != 'null' else '-' }}</td>
-        <td class="mono small">{{ r.after_json if r.after_json != 'null' else '-' }}</td>
+        <td>{% if r.action in ('APPROVAL_APPROVED', 'APPROVAL_REJECTED', 'APPROVAL_REQUESTED') %}
+          <span class="stamp stamp-sm stamp-{{ 'approved' if r.action == 'APPROVAL_APPROVED' else 'refused' if r.action == 'APPROVAL_REJECTED' else 'pending' }}"
+                title="{{ r.action }}">{{ 'Approved' if r.action == 'APPROVAL_APPROVED' else 'Refused' if r.action == 'APPROVAL_REJECTED' else 'Pending' }}</span>
+          {% else %}<span class="mono small">{{ r.action }}</span>{% endif %}</td>
+        <td class="mono small nowrap">{{ r.entity_type }} {{ r.entity_id }}</td>
+        <td>{% set ch = changed(r.before_json, r.after_json) %}{% if ch %}<span class="kvp">
+          {%- for c in ch %}<span class="kvp-i" title="{{ c.field }}: {{ c.before if c.before is not none else c.after }}{{ ' to ' ~ c.after if c.before is not none and c.after is not none else '' }}">
+            <span class="kvp-k">{{ c.field }}</span>
+            {%- if c.before is not none and c.after is not none -%}
+              <span class="kvp-v was">{{ c.before }}</span><span class="kvp-to">to</span><span class="kvp-v">{{ c.after }}</span>
+            {%- else -%}
+              <span class="kvp-v">{{ c.after if c.after is not none else c.before }}</span>
+            {%- endif -%}
+          </span>{% endfor -%}
+        </span>{% else %}<span class="faint">no field changed</span>{% endif %}</td>
       </tr>
       {% endfor %}</tbody>
     </table></div>

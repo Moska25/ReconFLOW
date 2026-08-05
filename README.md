@@ -4,11 +4,16 @@ Invoice-to-payment reconciliation with an exception queue, maker-checker approva
 immutable audit trail. The interesting part is not the CRUD: it is the matching logic, the
 exception taxonomy, and how the system behaves when the input is messy.
 
+![Operations dashboard: auto-match rate, unapplied cash by currency and the exception queue behind it](docs/screenshots/hero.png)
+
 ## What it does
 
 - Ingests invoice and bank-payment CSVs defensively: content-hashed for idempotency,
   tolerant of reordered and oddly spelled columns, parses both `1234.56` and `1.234,56`,
   and rejects a bad row with a reason instead of failing the whole file.
+- Reads the formats banks actually send: SWIFT **MT940** and ISO 20022 **CAMT.053**,
+  recognised by content rather than file extension, and routed through that same
+  validation so a statement line is rejected with a reason like any other row.
 - Matches payments to invoices in two passes: five deterministic rules first, then a
   weighted probabilistic score for the remainder, including one-payment-to-many-invoices
   and many-payments-to-one-invoice groupings.
@@ -58,21 +63,75 @@ Five minutes, in this order:
 1. **http://127.0.0.1:8012/** — the dashboard. Auto-match rate, unapplied value by
    currency, exceptions by reason, ageing, SLA breaches. Note the synthetic-data warning
    and the caveat explaining why nearly everything is breaching SLA on a first run.
-2. **http://127.0.0.1:8012/workspace/match/194** — a scored match. The confidence is not a
-   number the system asks you to trust: it is the sum of four weighted components, each
-   with the sentence explaining what it measured.
+2. **http://127.0.0.1:8012/workspace?status=proposed** — the 30 matches the engine would
+   not post. Each row draws its confidence against the auto-post threshold, so a column of
+   bars all stopping just short of the same line is the whole argument in one glance.
+
+   ![Workspace filtered to proposed matches: scores of 82, 81, 80, 79 each drawn as a bar stopping short of the threshold tick](docs/screenshots/workspace-scan.png)
+
+   *Scores in the high seventies and low eighties, every one of them short of 85. The engine
+   found a credible candidate and still refused to post it.*
+
+   Then **http://127.0.0.1:8012/workspace/match/194** — a scored match. The confidence is
+   not a number the system asks you to trust: it is the sum of four weighted components,
+   each with the sentence explaining what it measured.
+
+   ![Match 294 scoring 60: the four contributions stack to 60 and stop short of the dashed auto-post line at 85, with the gap hatched](docs/screenshots/match-confidence.png)
+
+   *A match scoring 60. The bar is the score; the dashed line is the auto-post threshold of
+   85. The hatched band is the distance the evidence does not cover, so this payment waits
+   for a person.*
+
 3. **http://127.0.0.1:8012/exceptions?severity=high** — the queue filtered to high
    severity. Open any item: it states what happened, what it means, and what to do.
+
+   ![Exception queue: each row carries a leading severity rule, a severity tag, value at risk in GEL and its age as a bar](docs/screenshots/exception-queue.png)
+
+   *Severity leads each row as a rule and a tag; age is a length, not just a number.*
+
+   ![Exception detail: an SLA clock showing 100 days elapsed against a 7 day service level](docs/screenshots/exception-detail.png)
+
+   *On the detail page the SLA clock is drawn against the limit for that severity, hatched
+   when breached so it survives greyscale, with the overrun stated in days.*
+
 4. **http://127.0.0.1:8012/approvals** — switch to `t.gogia` in the demo role bar and try
    to approve the item `t.gogia` raised. The server refuses it. Then approve the item
    `n.kapanadze` raised, which works. Try either as `audit.ext` and it is refused for a
    different reason.
+
+   ![Approvals on parchment cards, each stamped PENDING in a rotated dashed frame](docs/screenshots/approvals-stamps.png)
+
+   *Approvals are records, so they sit on paper and carry a stamp. The state is in the word
+   and the frame, not only in the colour.*
+
+   ![Audit log rows on parchment, decisions stamped, with before and after state per entry](docs/screenshots/audit-log.png)
+
+   *The same stamp in the audit log at **/audit**, which SQLite triggers make append-only.*
+
 5. **http://127.0.0.1:8012/import** — batch history. One batch is the same file imported
    twice: 103 rows seen, 0 accepted, 103 skipped. The rejected-row report shows the eight
-   malformed rows planted in the generated files and why each was refused.
+   malformed rows planted in the generated files and why each was refused. Upload
+   `data/samples/statement_mt940.sta` (or the CAMT.053 equivalent beside it, which carries
+   the same eight receipts) and re-run matching to watch the rate move.
+
+   ![Import page: CSV, MT940 and CAMT.053 accepted, with the rejected-row report and batch history](docs/screenshots/statement-import.png)
+
+   *The same batch, hash and rejected-row machinery handles all three formats.*
 
 Then **http://127.0.0.1:8012/quality** for the test evidence, written by the test run
-itself rather than by hand.
+itself rather than by hand: six areas, what each protects, and the pass counts that came
+out of the run.
+
+![Test evidence: 214 passing, grouped into the six areas the suite protects](docs/screenshots/quality-evidence.png)
+
+*Nothing on that page is typed by hand except the sentence describing each area. The counts
+and outcomes come from a pytest hook.*
+
+It holds at a phone width — every page is checked at 375px for horizontal overflow, and
+wide tables scroll inside their own container rather than the page:
+
+![Approvals at a 375px viewport: the header value-at-risk strip wraps to its own row and the stamp clears the text](docs/screenshots/mobile-375.png)
+![Exception queue at 375px: severity rules and ageing bars survive the narrow column](docs/screenshots/mobile-375-queue.png)
 
 ## How it works
 
@@ -132,9 +191,13 @@ and no global state, so the same inputs always produce byte-identical output;
 ./.venv/bin/python -m pytest -q
 ```
 
-**185 tests, all passing.** They import the domain modules directly rather than driving the
+**214 tests, all passing.** They import the domain modules directly rather than driving the
 UI, which is what makes them meaningful. Coverage of the awkward cases:
 
+- **Statements** — MT940 and CAMT.053 fixtures describing the same ten transactions, parsed
+  and compared row for row; a `D` mark and a `DBIT` indicator both arriving negative;
+  continuation lines folded into their tag; format detected from content rather than file
+  extension; an unparseable statement line skipped without failing the file.
 - **Import** — same file twice posts nothing; comma-decimal and thousands-separator
   parsing; reordered columns and header noise; bad date, negative amount, missing
   reference and unknown currency each rejected individually while the rest of the file
@@ -153,7 +216,9 @@ UI, which is what makes them meaningful. Coverage of the awkward cases:
   already-decided items refused; threshold boundary; audit written on every transition and
   *not* written when an action was refused; `UPDATE` and `DELETE` on `audit_log` raising.
 - **Web** — every route returns 200 with a heading, a lede and a mobile viewport; refusals
-  driven through the real HTTP forms.
+  driven through the real HTTP forms; errors rendered in the page shell with their real
+  status code; every page checked against an empty database, which is how the NULL-sum bug
+  in the import-health query was found.
 
 Deliberately not covered: CSS rendering, browser behaviour, and concurrent writes (SQLite
 is opened per request and the demo is single-user).
@@ -167,8 +232,10 @@ is opened per request and the demo is single-user).
 - **There is no authentication.** The role switcher in the top bar is a demo affordance and
   is labelled as one. Authorisation is enforced server-side, but identity is a cookie anyone
   can set.
-- **No bank-statement formats.** Only CSV is parsed. MT940 and CAMT.053 are the formats a
-  real deployment would receive, and they are not implemented.
+- **Statement support is the common subset.** MT940 tags 20/25/28C/60F/61/86/62F and the
+  CAMT.053 entry fields a receipt needs. Structured `:86:` sub-fields beyond `ORDP` and
+  `REMI` are read as free text, and no balance reconciliation is performed against the
+  opening and closing balances the statement carries.
 - **Grouping is bounded at three members per side** and searches combinations exhaustively.
   It is correct for the demo's scale and would need a smarter search for a large ledger.
 - **The date convention is assumed day-first.** An ambiguous `03/04/2026` is read as 3 April.

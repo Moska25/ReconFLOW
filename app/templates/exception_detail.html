@@ -2,7 +2,8 @@
 {% block title %}Exception {{ e.id }}{% endblock %}
 {% block content %}
 <div class="page-head">
-  <h1>{{ e.meta.label }} · {{ e.entity_label }}</h1>
+  <div class="rec-h"><h1>{{ e.meta.label }}</h1>
+    <span class="rec-id">{{ e.entity_type }} {{ e.entity_label }}</span></div>
   <p class="lede">{{ e.meta.means }}</p>
 </div>
 
@@ -26,6 +27,31 @@
     <div class="card">
       <div class="section-head"><h2>What happened</h2></div>
       <p>{{ e.detail }}</p>
+
+      {% set limit = sla_days[e.severity] %}
+      {% set over = e.age_days - limit %}
+      <div class="clock">
+        <div class="clock-head">
+          <span>Age against the {{ e.severity }} service level</span>
+          <span class="num">{{ e.age_days }} / {{ limit }} days</span>
+        </div>
+        <div class="clock-bar {{ 'over' if e.breached }}"
+             role="img"
+             aria-label="{{ e.age_days }} days old against a {{ limit }} day service level">
+          <span style="width: {{ [100, (100 * e.age_days / limit) | round(1)] | min }}%"></span>
+        </div>
+        <p class="clock-note">
+          {%- if e.status == 'resolved' %}<strong>Resolved.</strong> The clock stopped when it
+            was closed.
+          {%- elif e.breached %}<strong>Past its service level by {{ over }} day{{ '' if over == 1 else 's' }}.</strong>
+            High-severity items are due in {{ sla_days.high }} days, medium in
+            {{ sla_days.medium }}, low in {{ sla_days.low }}.
+          {%- else %}<strong>{{ limit - e.age_days }} day{{ '' if limit - e.age_days == 1 else 's' }} left.</strong>
+            Measured from {{ as_of }}, the dataset's fixed as-of date.
+          {%- endif %}
+        </p>
+      </div>
+
       <p class="note"><strong>What to do.</strong> {{ e.meta.action }}</p>
       <dl class="kv">
         <dt>Reason code</dt><dd>{{ e.reason_code }}</dd>
@@ -102,8 +128,9 @@
 <div class="section">
   <div class="section-head"><h2>Approvals raised</h2><a class="btn btn-sm" href="/approvals">Approvals queue</a></div>
   <div class="card card-tight"><div class="table-wrap"><table class="data">
-    <thead><tr><th>#</th><th>Action</th><th class="num">Amount (GEL)</th><th>Maker</th>
-      <th>Checker</th><th>Status</th></tr></thead>
+      <caption class="sr-only">Approvals raised against this exception</caption>
+    <thead><tr><th scope="col">#</th><th scope="col">Action</th><th class="num" scope="col">Amount (GEL)</th><th scope="col">Maker</th>
+      <th scope="col">Checker</th><th scope="col">Status</th></tr></thead>
     <tbody>{% for a in e.approvals %}
     <tr><td class="mono">{{ a.id }}</td><td>{{ a.action_type }}</td>
       <td class="num">{{ a.amount_minor | money }}</td><td class="mono">{{ a.maker }}</td>

@@ -162,6 +162,62 @@ def test_quality_page_reports_the_planted_scenarios(client):
     assert "MALFORMED_ROWS" in text
 
 
+def test_errors_are_served_as_pages_with_their_real_status(client):
+    """A person who mistypes a URL gets the application, not a JSON fragment."""
+    missing = client.get("/nope")
+    assert missing.status_code == 404
+    assert '{"detail"' not in missing.text
+    assert "<h1>" in missing.text and 'class="lede"' in missing.text
+    assert "ReconFLOW" in missing.text
+
+    wrong_method = client.post("/audit")
+    assert wrong_method.status_code == 405
+    assert '{"detail"' not in wrong_method.text
+    assert "<h1>" in wrong_method.text
+
+
+def test_the_app_has_an_identity_in_the_browser_chrome(client):
+    """Favicon under both names, from a local file, plus page metadata."""
+    for path in ("/favicon.svg", "/favicon.ico"):
+        response = client.get(path)
+        assert response.status_code == 200
+        assert response.text.lstrip().startswith("<svg")
+
+    head = client.get("/").text
+    assert 'name="description"' in head
+    assert 'name="theme-color"' in head
+    assert "cdn" not in head.lower(), "every asset must be local"
+
+
+@pytest.mark.parametrize("route", ROUTES)
+def test_every_page_is_navigable_by_keyboard_and_screen_reader(client, route):
+    """Skip link first, landmarks named, tables captioned with column scope."""
+    text = client.get(route).text
+    assert 'class="skip" href="#content"' in text
+    assert 'id="content"' in text
+    assert 'aria-live="polite"' in text
+    assert 'aria-label="Sections"' in text
+    if "<table class=\"data\">" in text:
+        assert "<caption" in text
+        assert 'scope="col"' in text
+
+
+def test_every_page_holds_up_against_an_empty_database(tmp_path):
+    """First run, nothing imported: every page shows an empty state, not a stack trace."""
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setattr(db, "DATA_DIR", tmp_path)
+        mp.setattr(db, "DB_PATH", tmp_path / "empty.db")
+        db.fresh(tmp_path / "empty.db").close()
+
+        from app.main import app as fresh_app
+        empty = TestClient(fresh_app)
+        for route in ROUTES:
+            response = empty.get(route)
+            assert response.status_code == 200, f"{route} broke on an empty database"
+            assert "Traceback" not in response.text
+            assert "None" not in response.text.replace("None</code>", "")
+
+
 # ------------------------------------------------------------ controls over HTTP
 
 def test_role_switch_changes_the_acting_user(app_env):
@@ -299,6 +355,50 @@ def test_an_empty_upload_is_refused(app_env):
     assert "empty" in response.text
 
 
+def test_uploading_a_bank_statement_goes_through_the_same_machinery(app_env):
+    """An MT940 upload imports as payments, with the batch and hash checks intact."""
+    from tests.test_statements import _mt940
+
+    client = TestClient(app_env["app"])
+    payload = _mt940().encode()
+
+    response = client.post("/import/upload", data={"kind": "invoices"},
+                           files={"upload_file": ("statement.sta", payload, "text/plain")})
+    assert "10 accepted" in response.text, response.text[:400]
+
+    conn = db_conn(app_env)
+    row = conn.execute("SELECT * FROM payments WHERE payment_ref = 'BNK-STA-0001'").fetchone()
+    batch = conn.execute("SELECT kind FROM import_batches ORDER BY id DESC LIMIT 1").fetchone()
+    conn.close()
+    # the form said invoices; a statement is payments whatever the form said
+    assert batch["kind"] == "payments"
+    assert row["amount_minor"] == 482000
+    assert row["value_date"] == "2026-08-03"
+
+    # and the content hash still refuses the same statement twice
+    again = client.post("/import/upload", data={"kind": "payments"},
+                        files={"upload_file": ("statement-copy.sta", payload, "text/plain")})
+    assert "already imported" in again.text
+
+
+def test_uploading_a_camt053_statement_imports_the_same_way(app_env):
+    """The XML format lands through the identical path, debits included."""
+    from tests.test_statements import _camt053
+
+    client = TestClient(app_env["app"])
+    xml = _camt053().replace("BNK-STA-", "CAMT-STA-").encode()
+
+    response = client.post("/import/upload", data={"kind": "payments"},
+                           files={"upload_file": ("statement.xml", xml, "application/xml")})
+    assert "10 accepted" in response.text, response.text[:400]
+
+    conn = db_conn(app_env)
+    debit = conn.execute(
+        "SELECT amount_minor FROM payments WHERE payment_ref = 'CAMT-STA-0010'").fetchone()
+    conn.close()
+    assert debit["amount_minor"] == -120000, "a DBIT entry must not post as incoming cash"
+
+
 def test_auditor_cannot_upload_over_http(app_env):
     """The read-only role is refused at the import route too."""
     client = as_role(app_env, "audit.ext")
@@ -312,6 +412,52 @@ def test_rematch_is_refused_for_the_auditor(app_env):
     """Re-running the engine is a write and is gated like one."""
     client = as_role(app_env, "audit.ext")
     assert "read-only" in client.post("/import/rematch").text
+
+
+def test_audit_state_is_rendered_as_fields_not_raw_json(client):
+    """Recorded state reaches the page as field names, not a JSON blob."""
+    from app import reporting
+
+    pairs = reporting.state_pairs('{"status": "pending", "amount_minor": 4470390}')
+    assert pairs == [("status", "pending"), ("amount minor", "4470390")]
+    assert reporting.state_pairs("null") == []
+    assert reporting.state_pairs(None) == []
+    # a file hash stays whole: the column shortens it visually, the page keeps it
+    sha = "d6b2d13f85dae0d8682ce654d5e3b1a963c26b0f3dd0db0a1f6c4a0d0b1e5f77"
+    assert reporting.state_pairs('{"sha256": "%s"}' % sha) == [("sha256", sha)]
+    # only an absurd blob is cut, and it says so
+    long_value = reporting.state_pairs('{"note": "%s"}' % ("x" * 400))[0][1]
+    assert len(long_value) <= 160 and long_value.endswith("…")
+    # and unparseable text survives as itself rather than being swallowed
+    assert reporting.state_pairs("not json") == [("value", "not json")]
+
+    text = client.get("/audit").text
+    assert '"status"' not in text, "raw JSON should not reach the audit table"
+
+
+def test_audit_change_column_shows_only_what_moved(client):
+    """The audit page states the transition, and drops fields that did not move."""
+    from app import reporting
+
+    diff = reporting.state_diff(
+        '{"status": "pending", "checker": null, "amount_minor": 4470390}',
+        '{"status": "approved", "checker": "t.gogia", "amount_minor": 4470390}',
+    )
+    assert diff == [
+        {"field": "status", "before": "pending", "after": "approved"},
+        {"field": "checker", "before": "none", "after": "t.gogia"},
+    ], "an unchanged amount is not part of what happened"
+
+    # a creation has no prior state, so every field reads as newly set
+    assert reporting.state_diff(None, '{"status": "pending"}') == [
+        {"field": "status", "before": None, "after": "pending"}]
+
+    # a field on one side only is reported with None opposite it, so the page can
+    # print it as a recorded value rather than claim the field was cleared
+    assert reporting.state_diff('{"sha256": "abc"}', '{"accepted": 163}') == [
+        {"field": "accepted", "before": None, "after": "163"},
+        {"field": "sha256", "before": "abc", "after": None}]
+    assert "cleared" not in client.get("/audit").text
 
 
 def test_audit_page_shows_the_recorded_history(client):

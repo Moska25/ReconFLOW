@@ -8,8 +8,29 @@ bundled dataset (60 customers, 402 invoices, 411 payments over four months) the 
 matches 72.7% of payments automatically and raises 227 typed exceptions. The import
 pipeline is idempotent by file hash and by row key. Maker-checker approval, role-based
 access and an append-only audit log are enforced in the domain layer, not the templates.
-**The suite is green: 185 tests passing** (`./.venv/bin/python -m pytest -q`). Phases 6 to 9
-are not started.
+Bank statements in SWIFT MT940 and ISO 20022 CAMT.053 import through that same pipeline.
+**The suite is green: 214 tests passing** (`./.venv/bin/python -m pytest -q`).
+
+Phase 10 has landed: the app now wears the "ledger terminal" identity - parchment document
+surfaces for approvals and the audit log, ruled figure columns, a rubber stamp for approval
+state, the match confidence drawn as a stacked contribution bar against the auto-post
+threshold, a value-at-risk strip in the header, and a severity/ageing rhythm in the
+exception queue. It was a restyle only: no matching, control, ingestion or reporting logic
+changed, and every displayed figure is the one the engine already computed. Phase 11's
+screenshots are in `docs/screenshots/` and the hero is linked from the README.
+
+A second design pass then took the boxes out: the dashboard leads with one figure instead of
+four equal cards, filter bars are rails rather than cards floating on cards, supporting
+figures are hairline-led, and the audit log states what changed per entry instead of printing
+two columns of raw JSON.
+
+Phase 6 (bank statement formats) and Phase 12 (showcase polish) are done. Errors render in
+the app shell with their real status code, the app has a favicon and page metadata, every
+table is captioned with column scope behind a working skip link, the workspace draws each
+match against the auto-post threshold, the exception detail carries an SLA clock, `/quality`
+reads as an evidence sheet rather than 231 rows, and every page survives an empty database.
+**Phases 7, 8 and 9 are not started** and are the next work: analyst-feedback learning,
+SLA notification rules, and period close.
 
 ## How to pick up a task
 
@@ -147,22 +168,43 @@ are not started.
       Done when: at a 375px viewport `document.documentElement.scrollWidth` equals
       `clientWidth` on every route and every `table.data` sits inside a `.table-wrap`.
 
-## Phase 6 — Bank statement formats
+## Phase 6 — Bank statement formats (done)
 
-- [ ] **RCN-6.1** Parse MT940 statements into the existing payment row shape.
+**One deviation from the task text, decided during the build.** RCN-6.1 asked for rows
+carrying "the same keys `validate_payment()` produces" - that is, already-validated output
+with `amount_minor` and `gel_minor`. Both parsers instead return the *input* shape
+(`amount` and `value_date` as strings, keyed by the same canonical field names) and hand it
+to `validate_payment()` unchanged. The reason is RCN-6.3: the rejected-row machinery only
+runs if validation runs. Returning finished rows would have given statements a second,
+weaker validation path and no rejection report, which is the opposite of the point. The
+observable outcome asked for is unchanged - a statement produces payment rows - and a
+malformed statement line now lands in the rejected-row report with a reason like any CSV row.
+
+- [x] **RCN-6.1** Parse MT940 statements into the existing payment row shape.
       Files: `app/statements.py` (new), `tests/test_statements.py` (new)
       Done when: `parse_mt940(text)` returns rows with the same keys
       `validate_payment()` produces, tags 61/86 fields onto `reference`, and a fixture
       statement of 10 transactions yields 10 rows with matching amounts and value dates.
-- [ ] **RCN-6.2** Parse CAMT.053 XML into the same shape.
+      Landed as: tags 20/25/28C/60F/61/86/62F. Currency comes from the balance line, the
+      bank reference after `//` becomes the payment key, and `:86:` `/ORDP/` and `/REMI/`
+      sub-fields give the payer and the remittance text. Continuation lines are folded into
+      their tag, and a line that does not parse is skipped rather than failing the file.
+- [x] **RCN-6.2** Parse CAMT.053 XML into the same shape.
       Files: `app/statements.py`, `tests/test_statements.py`
       Done when: `parse_camt053(xml)` reads `Ntry` entries including `CdtDbtInd` so debit
       entries arrive as negative amounts, and a fixture file round-trips to the same rows
       as its MT940 equivalent.
-- [ ] **RCN-6.3** Accept statement uploads through the import route.
+      Landed as: elements are resolved by local name, so any camt.053 minor version parses.
+      `test_the_two_formats_produce_the_same_payments` runs both fixtures through
+      `validate_payment` and compares every field.
+- [x] **RCN-6.3** Accept statement uploads through the import route.
       Files: `app/ingest.py`, `app/main.py`, `app/templates/import.html`
       Done when: uploading a `.sta` or `.xml` file is detected by content and imported
       through the existing batch, hashing and rejected-row machinery unchanged.
+      Landed as: a four-line branch in `import_bytes` swaps `read_rows` for
+      `statements.as_rows`; nothing downstream changed. A statement always imports as
+      payments whatever the form's dropdown said. Two synthetic sample statements ship at
+      `data/samples/`, both settling the same eight unpaid GEL invoices in this dataset.
 
 ## Phase 7 — Learning from analyst decisions
 
@@ -212,6 +254,135 @@ are not started.
       Done when: `/close/2026-06` renders opening and closing unapplied cash, matched value,
       write-offs approved, and the exceptions carried forward.
 
+## Phase 10 — Visual identity: "ledger terminal" (done)
+
+Design spec: `MOSKA_MAIN/shared/UI_DIRECTION.md`, ReconFLOW section. Restyle only:
+matching, controls, ingestion and every computed figure stay exactly as they are.
+
+- [x] **RCN-10.1** Add the parchment document surface, ruled-ledger table hairlines, and a
+      monetary type scale that makes amounts optically dominant.
+      Files: `app/static/app.css`
+      Done when: amounts are the most prominent element in any row and text on the
+      parchment surface still passes WCAG AA.
+      Landed as: `.doc` scopes the palette variables, so every base.css component inside it
+      re-skins to parchment without a variant of its own. Figures run at 14.5px/560 against
+      13px body text with a rule down the left of the `.num` column. Contrast on parchment
+      measured in the browser: ink 15.9:1, muted 6.5:1, faint 5.5:1, all against the ruled
+      surface rather than the flat one.
+- [x] **RCN-10.2** Build the rotated rubber-stamp component for APPROVED / REFUSED / PENDING.
+      Files: `app/templates/approvals.html`, `audit.html`, `app/static/app.css`
+      Done when: state is legible without colour alone and the stamp never overlaps or
+      obscures text at 375px.
+      Landed as: the word plus the frame carries the state - solid for approved, dashed for
+      pending, a diagonal cancel bar behind the word for refused. Margins hold the clearance
+      the rotation eats and the rotation drops to 3 degrees below 640px. Measured: zero
+      overlaps against any text box on `/approvals` and `/audit` at both 375px and 1440px,
+      closest clearance 11px.
+- [x] **RCN-10.3** Replace the numeric confidence breakdown with a stacked contribution bar
+      (amount / date / customer / reference) with the auto-post threshold drawn as a line.
+      Files: `app/templates/match_detail.html`, `app/static/app.css`
+      Done when: a match scoring 60 visibly falls short of the 85 threshold line.
+      Landed as: on match 294 (confidence 60) the stack ends at 59.5% of the track, the
+      threshold line sits at 84.8%, and the gap is hatched - 79px of visible shortfall at a
+      375px viewport. The component `why` strings are kept as the legend beneath.
+- [x] **RCN-10.4** Add a persistent value-at-risk strip to the header.
+      Files: `app/templates/_layout.html`, `app/reporting.py`, `app/static/app.css`
+      Done when: unapplied value and open exception count are visible on every page,
+      fed by the existing reporting query with no new SQL.
+      Landed as: `reporting.value_at_risk()` composes `unapplied_by_currency()` and
+      `ageing()`; it writes no SQL of its own. Assembled in `ctx()` so it is on every page.
+      The topbar wraps rather than squeezing navigation when the window is narrow.
+- [x] **RCN-10.5** Give exception severity and ageing a visual rhythm (leading severity rule
+      per row, ageing as a small bar) instead of plain pills.
+      Files: `app/templates/exceptions.html`, `app/static/app.css`
+      Landed as: an inset rule on the first cell keyed to severity, a HIGH/MED/LOW tag so
+      severity never rests on colour, and age as a bar scaled to the oldest item in the
+      current result set alongside the day count.
+
+## Phase 11 — Showcase assets (done)
+
+- [x] **RCN-11.1** Capture screenshots into `docs/screenshots/`: hero (dashboard), match
+      confidence breakdown, approvals with stamps, audit log, plus one at 375px.
+      Done when: five captioned PNGs exist, taken after Phase 10 lands.
+      Landed as seven: `hero.png`, `match-confidence.png`, `approvals-stamps.png`,
+      `audit-log.png`, `exception-queue.png`, `mobile-375.png`, `mobile-375-queue.png`.
+      Note for whoever re-shoots these: Chrome's `--headless --screenshot` clamps
+      `--window-size` at 500px and ignores `<meta viewport>`, so a "375px" CLI capture is
+      really a crop of a desktop layout. Drive `Emulation.setDeviceMetricsOverride` over the
+      DevTools protocol instead.
+- [x] **RCN-11.2** Link the hero image at the top of README.md.
+
+## Phase 12 — Showcase polish (done)
+
+The engine is done and honest; these are the things a recruiter meets in the first two
+minutes and the things an accessibility audit fails on. Restyle and presentation only:
+no matching, control or ingestion behaviour changes, and no displayed figure changes.
+
+**One real bug fell out of RCN-12.7.** `reporting.import_health()` summed without
+`COALESCE` on two columns, so over an empty `import_batches` table SQLite returned NULL and
+a first run printed "None" where a count belongs. Fixed at the query. Everything else in
+this phase was presentation.
+
+- [x] **RCN-12.1** Serve errors inside the page shell instead of as raw JSON.
+      Files: `app/main.py`, `app/templates/error.html` (new), `tests/test_app.py`
+      Done when: `GET /nope` returns 404 as a rendered page carrying an `h1`, a `.lede` and
+      a route back, `POST /audit` returns 405 rendered the same way, and neither response
+      body contains `{"detail"`. The handler must not swallow the status code: a 404 still
+      answers 404, because a showcase that returns 200 for a missing page is lying to the
+      crawler as well as to the reader.
+      Landed as: one Starlette exception handler renders `error.html` for every HTTP
+      error and passes the status through, so 404 answers 404 and 405 answers 405.
+- [x] **RCN-12.2** Give the app an identity in the browser chrome.
+      Files: `app/main.py`, `app/templates/_layout.html`, `app/static/favicon.svg` (new)
+      Done when: `/favicon.svg` and `/favicon.ico` both return 200 from a local file with no
+      CDN, every page carries a `meta name="description"` and a `theme-color`, and a detail
+      page's `<title>` names the record it shows rather than repeating the project name.
+      Landed as: `app/static/favicon.svg`, two ledger columns brought level, served at
+      both `/favicon.svg` and `/favicon.ico` from the one local file. No CDN anywhere.
+- [x] **RCN-12.3** Accessibility pass over the shared shell.
+      Files: `app/templates/_layout.html`, every template, `app/static/app.css`
+      Done when: a "Skip to content" link is the first focusable element on every page and
+      moves focus to `<main id="content">`; every `table.data` carries a `<caption>` (visually
+      hidden is fine) and `scope` on its header cells; the flash message region is
+      `aria-live="polite"`; and `nav` / `main` / `footer` are landmarks with accessible names.
+      The skip link must be visible when focused, not permanently hidden.
+      Landed as: 87 header cells took `scope`, 17 tables took a screen-reader caption.
+      The skip link carries no transition, so it appears on the frame it is focused
+      rather than depending on animation running at all; measured at top 12px, fully
+      on screen, over CDP with focus emulation on.
+- [x] **RCN-12.4** Make the workspace table show the engine's decision, not only its number.
+      Files: `app/templates/workspace.html`, `app/static/app.css`
+      Done when: every match row draws its confidence on a shared scale with the auto-post
+      threshold marked, so a reader scanning the table can see which rows cleared the bar
+      without reading a single number, and the column still reports the numeric confidence
+      for anyone who wants it.
+      Landed as: a 74px bar per row filled to the score, with the auto-post threshold
+      drawn as a tick. Filtering to `proposed` gives a column of bars that all stop
+      short of it.
+- [x] **RCN-12.5** Put the SLA clock on the exception detail page.
+      Files: `app/templates/exception_detail.html`, `app/exceptions.py`, `app/static/app.css`
+      Done when: the page shows days elapsed against the threshold for that item's severity
+      as a bar, a breach is legible without relying on colour, and the figure comes from
+      `SLA_DAYS` rather than being restated in the template.
+      Landed as: days elapsed over the limit for that severity, hatched when breached
+      so it survives greyscale, plus a sentence stating the overrun in days.
+- [x] **RCN-12.6** Rebuild `/quality` as an evidence sheet rather than a wall of rows.
+      Files: `app/templates/quality.html`, `app/main.py`
+      Done when: the page opens with the properties the suite proves, grouped by the area
+      they protect, with counts; the full case list is still reachable but behind a
+      `<details>` disclosure; and the page renders from `data/quality.json` exactly as now,
+      with no hand-written claim about what passed.
+      Landed as: six areas, each naming what it protects, with pass counts from the run
+      and the case list behind a `<details>`. A module the list does not name still
+      appears, so the page cannot quietly hide one. 231 rows became 6 cards.
+- [x] **RCN-12.7** Make every page survive an empty database.
+      Files: `tests/test_app.py`, whichever templates assume rows exist
+      Done when: a test pointing the app at a freshly bootstrapped, unseeded database gets
+      200 from all seven nav routes, each showing its `.empty` state, with no
+      `ZeroDivisionError`, no `None` formatted as money and no blank panel.
+
+      Landed as: the test found a real first-run bug (NULL sums in `import_health`),
+      now fixed. Every nav route serves 200 against an empty database.
 ## Deliberately out of scope
 
 - **Real authentication and user management** — the portfolio point is authorisation logic,
@@ -241,7 +412,9 @@ are not started.
    raised: it works. Switch to `audit.ext` and try again: refused as read-only. Say that
    this is enforced in `decide_approval()`, and the buttons stay live on purpose.
 5. Go to **http://127.0.0.1:8012/import**. Show the duplicate batch: 103 rows seen, 0
-   accepted. Show the eight rejected rows and their reasons. Finish on
+   accepted. Show the eight rejected rows and their reasons. Upload
+   `data/samples/statement_mt940.sta`, press re-run matching, and point out that the
+   format was recognised from the content and validated by the same code as a CSV. Finish on
    **http://127.0.0.1:8012/quality** for the test evidence and the planted-scenario table.
 
 ## Resume bullets
@@ -257,7 +430,9 @@ are not started.
 - "Designed a defensive CSV import pipeline with content-hash idempotency, per-row
   validation and a rejected-row report, tolerant of column reordering and both European and
   Anglo decimal conventions." — earned by RCN-1.2 through RCN-1.6.
-- *NOT YET EARNED* — "Parsed MT940 and CAMT.053 bank statements into the reconciliation
-  pipeline." Requires RCN-6.1 and RCN-6.2.
+- "Parsed SWIFT MT940 and ISO 20022 CAMT.053 bank statements into an existing reconciliation
+  pipeline, detecting the format from file content and reusing the same per-row validation
+  and rejection reporting, with both formats proven to produce identical payments from
+  matched fixtures." — earned by RCN-6.1 through RCN-6.3.
 - *NOT YET EARNED* — "Improved match rates using a feedback loop trained on analyst
   decisions." Requires RCN-7.1 through RCN-7.3.

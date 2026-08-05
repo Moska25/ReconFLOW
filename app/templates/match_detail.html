@@ -2,7 +2,7 @@
 {% block title %}Match {{ m.id }}{% endblock %}
 {% block content %}
 <div class="page-head">
-  <h1>Match {{ m.id }} · why this match</h1>
+  <h1>Match {{ m.id }}</h1>
   <p class="lede">The engine's reasoning, component by component. Nothing here is a black
     box: the confidence is the sum of the contributions below.</p>
 </div>
@@ -27,12 +27,34 @@
     <span class="pill pill-{{ 'pass' if m.status in ['auto','confirmed'] else 'warn' }}">{{ m.status }}</span></div>
   <div class="card">
     {% if m.breakdown.components %}
+      <div class="score">
+        <div class="score-track" role="img"
+             aria-label="Confidence {{ m.confidence }} out of 100. The auto-post threshold is {{ cfg.auto_threshold }}.">
+          {%- for c in m.breakdown.components %}{% if c.contribution > 0 %}
+          <span class="score-seg seg-{{ loop.index0 }}" style="width: {{ c.contribution }}%"
+                title="{{ c.name }}: {{ c.contribution }}"></span>
+          {%- endif %}{% endfor %}
+          {% if m.confidence < cfg.auto_threshold %}
+          <span class="score-short" style="left: {{ m.confidence }}%; width: {{ cfg.auto_threshold - m.confidence }}%"
+                title="{{ cfg.auto_threshold - m.confidence }} short of the auto-post threshold"></span>
+          {% endif %}
+          <span class="score-thr" style="left: {{ cfg.auto_threshold }}%"></span>
+        </div>
+        <div class="score-axis">
+          <span class="end end-l">0</span>
+          {% if cfg.auto_threshold - m.confidence >= 14 %}
+          <span class="score-mark" style="left: {{ m.confidence }}%">scored {{ m.confidence }}</span>
+          {% endif %}
+          <span class="score-mark score-mark-thr" style="left: {{ cfg.auto_threshold }}%">auto-post {{ cfg.auto_threshold }}</span>
+          <span class="end end-r">100</span>
+        </div>
+      </div>
+
       {% for c in m.breakdown.components %}
-      <div class="bd">
-        <span class="bd-label">{{ c.name }}</span>
-        <div class="bar"><span style="width: {{ (100 * c.score) | round(1) if c.score <= 1 else 100 }}%"></span></div>
-        <span class="bd-val">{{ c.contribution }} / {{ c.weight }}</span>
-        <span class="bd-why">{{ c.why }}</span>
+      <div class="leg">
+        <span class="leg-name"><span class="key key-{{ loop.index0 }}"></span>{{ c.name }}</span>
+        <span class="leg-val">{{ c.contribution }} / {{ c.weight }}</span>
+        <span class="leg-why">{{ c.why }}</span>
       </div>
       {% endfor %}
       <hr class="hr">
@@ -43,7 +65,9 @@
         reference {{ cfg.w_reference }}, amount {{ cfg.w_amount }}, date {{ cfg.w_date }},
         customer {{ cfg.w_customer }}. Without a usable reference the maximum reachable
         score is {{ cfg.w_amount + cfg.w_date + cfg.w_customer }}, which is below the
-        auto-post threshold of {{ cfg.auto_threshold }} by design.</p>
+        auto-post threshold of {{ cfg.auto_threshold }} by design. The hatched band on the
+        bar is the distance still to travel: cash does not post across it on an amount
+        coincidence.</p>
     {% elif m.breakdown.explain %}
       <ul class="timeline">
         {% for line in m.breakdown.explain %}<li class="ok"><div class="t-what">{{ line }}</div></li>{% endfor %}
@@ -64,7 +88,8 @@
       <div class="card-head"><h3>Invoice side</h3></div>
       {% if m.invoices %}
       <div class="table-wrap"><table class="data">
-        <thead><tr><th>Invoice</th><th>Customer</th><th>Issued</th><th class="num">Amount</th><th>Ccy</th></tr></thead>
+      <caption class="sr-only">Invoices on this match</caption>
+        <thead><tr><th scope="col">Invoice</th><th scope="col">Customer</th><th scope="col">Issued</th><th class="num" scope="col">Amount</th><th scope="col">Ccy</th></tr></thead>
         <tbody>{% for i in m.invoices %}
         <tr><td class="mono">{{ i.invoice_no }}</td><td>{{ i.customer_name }}</td>
           <td class="mono small">{{ i.issue_date }}</td>
@@ -77,8 +102,9 @@
       <div class="card-head"><h3>Payment side</h3></div>
       {% if m.payments %}
       <div class="table-wrap"><table class="data">
-        <thead><tr><th>Payment</th><th>Reference as received</th><th>Value date</th>
-          <th class="num">Amount</th><th>Ccy</th></tr></thead>
+      <caption class="sr-only">Payments on this match</caption>
+        <thead><tr><th scope="col">Payment</th><th scope="col">Reference as received</th><th scope="col">Value date</th>
+          <th class="num" scope="col">Amount</th><th scope="col">Ccy</th></tr></thead>
         <tbody>{% for p in m.payments %}
         <tr><td class="mono">{{ p.payment_ref }}</td>
           <td class="mono small">{{ p.reference or '(empty)' }}</td>

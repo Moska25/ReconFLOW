@@ -8,42 +8,65 @@
 </div>
 
 {% if report.cases %}
-<div class="grid grid-4">
-  <div class="metric"><div class="metric-label">Tests passed</div>
-    <div class="metric-value is-pass">{{ report.passed }}</div>
-    <div class="metric-sub">of {{ report.total }} collected</div></div>
-  <div class="metric"><div class="metric-label">Failed</div>
-    <div class="metric-value {{ 'is-fail' if report.failed else 'is-pass' }}">{{ report.failed }}</div>
-    <div class="metric-sub">{{ 'suite is green' if not report.failed else 'suite is red' }}</div></div>
-  <div class="metric"><div class="metric-label">Duration</div>
-    <div class="metric-value sm">{{ report.duration }}s</div>
-    <div class="metric-sub">wall clock for the run</div></div>
-  <div class="metric"><div class="metric-label">Recorded</div>
-    <div class="metric-value sm">{{ report.generated_at }}</div>
-    <div class="metric-sub">UTC, by the test run itself</div></div>
-</div>
+<section class="headline">
+  <div>
+    <div class="headline-k">Tests passing</div>
+    <div class="headline-v">{{ report.passed }}</div>
+    <p class="headline-p">of {{ report.total }} collected, in {{ report.duration }} seconds,
+      recorded {{ report.generated_at }} UTC by the run itself. This page is written by a
+      pytest hook in <code>tests/conftest.py</code>, so it cannot claim a pass the suite
+      did not produce.</p>
+  </div>
+  <dl class="headline-stats">
+    <div class="headline-stat">
+      <dt>Failing</dt>
+      <dd class="{{ 'is-fail' if report.failed else 'is-pass' }}">{{ report.failed }}</dd>
+      <p class="sub">{{ 'the suite is green' if not report.failed else 'the suite is red' }}</p>
+    </div>
+    <div class="headline-stat">
+      <dt>Areas covered</dt>
+      <dd>{{ areas | length }}</dd>
+      <p class="sub">each protecting one property of the system</p>
+    </div>
+    <div class="headline-stat">
+      <dt>Slowest case</dt>
+      <dd>{{ (report.cases | map(attribute='duration') | max) }}s</dd>
+      <p class="sub">the suite runs on SQLite with no fixtures to speak of</p>
+    </div>
+  </dl>
+</section>
 
-<p class="note"><strong>Where this comes from.</strong> A
-  <code>pytest_runtest_logreport</code> hook in <code>tests/conftest.py</code> writes
-  <code>data/quality.json</code> on every run, and seeding runs the suite so this page is
-  never empty and never stale. The labels below are the tests' own docstrings.</p>
-
-{% for module, cases in report.by_module.items() %}
 <div class="section">
-  <div class="section-head"><h2 class="mono">{{ module }}</h2>
-    <span class="faint small">{{ cases | length }} checks</span></div>
-  <div class="card card-tight"><div class="table-wrap"><table class="data">
-    <thead><tr><th>Result</th><th>What it proves</th><th class="num">Seconds</th></tr></thead>
-    <tbody>{% for c in cases %}
-    <tr>
-      <td><span class="pill pill-{{ 'pass' if c.outcome == 'passed' else 'fail' }}">{{ c.outcome }}</span></td>
-      <td>{{ c.label }}<div class="faint small mono">{{ c.name }}</div></td>
-      <td class="num">{{ c.duration }}</td>
-    </tr>
-    {% endfor %}</tbody>
-  </table></div></div>
+  <div class="section-head"><h2>What the suite proves</h2>
+    <span class="faint small">counts and outcomes come from the run, not from this page</span></div>
+  <div class="stack">
+    {% for a in areas %}
+    <div class="card">
+      <div class="section-head">
+        <div class="rec-h"><h3>{{ a.title }}</h3><span class="rec-id">{{ a.module }}</span></div>
+        <span class="pill pill-{{ 'pass' if not a.failed else 'fail' }}">
+          {{ a.passed }} passing{{ ', ' ~ a.failed ~ ' failing' if a.failed else '' }}</span>
+      </div>
+      {% if a.protects %}<p>{{ a.protects }}</p>{% endif %}
+      <details class="ev">
+        <summary>Show all {{ a.cases | length }} checks</summary>
+        <div class="table-wrap"><table class="data">
+          <caption class="sr-only">Test cases in {{ a.module }} and what each proves</caption>
+          <thead><tr><th scope="col">Result</th><th scope="col">What it proves</th>
+            <th class="num" scope="col">Seconds</th></tr></thead>
+          <tbody>{% for c in a.cases %}
+          <tr>
+            <td><span class="pill pill-{{ 'pass' if c.outcome == 'passed' else 'fail' }}">{{ c.outcome }}</span></td>
+            <td>{{ c.label }}<div class="faint small mono">{{ c.name }}</div></td>
+            <td class="num">{{ c.duration }}</td>
+          </tr>
+          {% endfor %}</tbody>
+        </table></div>
+      </details>
+    </div>
+    {% endfor %}
+  </div>
 </div>
-{% endfor %}
 
 {% else %}
 <div class="empty">
@@ -62,7 +85,8 @@
     it actually detected.</p>
   {% if manifest.scenarios %}
   <div class="card card-tight"><div class="table-wrap"><table class="data">
-    <thead><tr><th>Situation planted</th><th class="num">Count</th></tr></thead>
+      <caption class="sr-only">Situations the generator plants in the dataset on purpose</caption>
+    <thead><tr><th scope="col">Situation planted</th><th class="num" scope="col">Count</th></tr></thead>
     <tbody>{% for name, n in manifest.scenarios.items() %}
       <tr><td class="mono">{{ name }}</td><td class="num">{{ n }}</td></tr>
     {% endfor %}

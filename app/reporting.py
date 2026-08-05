@@ -96,6 +96,85 @@ def ageing(conn: sqlite3.Connection) -> list[dict]:
     return list(counts.values())
 
 
+def state_pairs(raw: str | None, limit: int = 160) -> list[tuple[str, str]]:
+    """Turn an audit row's before/after JSON into field/value pairs for display.
+
+    The audit table stores whatever the transition recorded, as JSON text. Printed
+    raw it is an unreadable blob that stretches a table row to five lines, so the
+    page renders the fields instead. Presentation only: nothing here is persisted,
+    and an unparseable value is shown as-is rather than swallowed.
+
+    Values stay whole up to `limit`; a long one (a file hash, say) is shortened to
+    fit its column by CSS, not here, so the full string is still in the page and
+    still selectable. This is an audit trail - it does not get to lose characters.
+    """
+    if not raw or raw == "null":
+        return []
+    try:
+        loaded = json.loads(raw)
+    except json.JSONDecodeError:
+        return [("value", raw[:limit])]
+    if not isinstance(loaded, dict):
+        return [("value", str(loaded)[:limit])]
+
+    pairs: list[tuple[str, str]] = []
+    for key, value in loaded.items():
+        if value is None:
+            text = "none"
+        elif isinstance(value, bool):
+            text = "yes" if value else "no"
+        elif isinstance(value, (list, dict)):
+            text = json.dumps(value, separators=(",", ":"))
+        else:
+            text = str(value)
+        text = " ".join(text.split())
+        if len(text) > limit:
+            text = text[: limit - 1] + "…"
+        pairs.append((key.replace("_", " "), text or "-"))
+    return pairs
+
+
+def state_diff(before: str | None, after: str | None) -> list[dict]:
+    """What actually changed in an audit entry, field by field.
+
+    Two columns of raw JSON make the reader do the diff in their head. The entry
+    is a state transition, so the page shows the transition: only fields whose
+    value moved, with where they moved from. Fields that carried the same value
+    across the change are dropped as noise, not hidden as inconvenient - an
+    unchanged field is, by definition, not part of what happened.
+
+    Not every entry is a field-level mutation: an import records the file it read
+    as `before` and the row counts as `after`, which is context and outcome rather
+    than old and new. A field on only one side is therefore returned with `None`
+    opposite it and must be rendered as a plain recorded value. Reading it as
+    "this field was cleared" would put a claim in the audit trail that the entry
+    never made.
+    """
+    was = dict(state_pairs(before))
+    now = dict(state_pairs(after))
+    fields = list(now) + [f for f in was if f not in now]
+    return [
+        {"field": f, "before": was.get(f), "after": now.get(f)}
+        for f in fields
+        if was.get(f) != now.get(f)
+    ]
+
+
+def value_at_risk(conn: sqlite3.Connection) -> dict:
+    """The header strip: cash with no home, and the queue behind it.
+
+    Deliberately composed from the two aggregations the dashboard already runs
+    rather than a query of its own - the strip is on every page, so it must not
+    add a third read of the same tables.
+    """
+    buckets = ageing(conn)
+    return {
+        "unapplied_gel": sum(r["gel"] or 0 for r in unapplied_by_currency(conn)),
+        "open_exceptions": sum(b["n"] for b in buckets),
+        "open_value": sum(b["value"] for b in buckets),
+    }
+
+
 def sla_breaches(conn: sqlite3.Connection) -> list[dict]:
     rows = _rows(conn, "SELECT * FROM exceptions WHERE status != 'resolved'")
     breached = [r for r in rows if breaches_sla(r["severity"], r["age_days"])]
@@ -106,8 +185,10 @@ def sla_breaches(conn: sqlite3.Connection) -> list[dict]:
 def import_health(conn: sqlite3.Connection) -> dict:
     totals = _one(conn, """
         SELECT COUNT(*) batches,
-               SUM(status = 'duplicate') duplicates,
-               SUM(status = 'rejected') rejected_files,
+               -- COALESCE on every SUM: over an empty table SUM() is NULL, not 0,
+               -- and a first run then prints "None" where a count belongs.
+               COALESCE(SUM(status = 'duplicate'), 0) duplicates,
+               COALESCE(SUM(status = 'rejected'), 0) rejected_files,
                COALESCE(SUM(rows_accepted), 0) accepted,
                COALESCE(SUM(rows_rejected), 0) rejected,
                COALESCE(SUM(rows_dupe), 0) skipped

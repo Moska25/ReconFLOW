@@ -14,30 +14,30 @@
   reason.</p>
 
 <div class="section">
-  <div class="card">
-    <form class="toolbar" method="get" action="/approvals">
-      <div class="field"><label for="status">Status</label>
-        <select name="status" id="status"><option value="">All</option>
-          {% for s in ['pending','approved','rejected'] %}
-          <option value="{{ s }}" {{ 'selected' if f.status == s }}>{{ s }}</option>{% endfor %}
-        </select></div>
-      <button class="btn btn-primary" type="submit">Filter</button>
-      <a class="btn" href="/approvals">Reset</a>
-    </form>
-  </div>
+  <form class="toolbar rail" method="get" action="/approvals">
+    <div class="field"><label for="status">Status</label>
+      <select name="status" id="status"><option value="">All</option>
+        {% for s in ['pending','approved','rejected'] %}
+        <option value="{{ s }}" {{ 'selected' if f.status == s }}>{{ s }}</option>{% endfor %}
+      </select></div>
+    <button class="btn btn-primary" type="submit">Filter</button>
+    <a class="btn" href="/approvals">Reset</a>
+  </form>
 </div>
 
 <div class="section">
   {% if rows %}
   <div class="stack">
     {% for a in rows %}
-    <div class="card">
+    <div class="card doc">
       <div class="section-head">
-        <h2>#{{ a.id }} · {{ a.action_type.replace('_', ' ') | title }} · {{ a.entity_label }}</h2>
-        <span class="pill pill-{{ 'pass' if a.status == 'approved' else 'fail' if a.status == 'rejected' else 'warn' }}">{{ a.status }}</span>
+        <div class="rec-h"><h2>{{ a.action_type.replace('_', ' ') | title }}</h2>
+          <span class="rec-id">#{{ a.id }} {{ a.entity_label }}</span></div>
+        <span class="stamp stamp-{{ 'approved' if a.status == 'approved' else 'refused' if a.status == 'rejected' else 'pending' }}"
+              title="{{ a.status }}">{{ 'Approved' if a.status == 'approved' else 'Refused' if a.status == 'rejected' else 'Pending' }}</span>
       </div>
       <dl class="kv">
-        <dt>Amount</dt><dd>GEL {{ a.amount_minor | money }}</dd>
+        <dt>Amount</dt><dd class="money">GEL {{ a.amount_minor | money }}</dd>
         <dt>Raised by</dt><dd>{{ a.maker }} ({{ a.maker_role }}) at {{ a.created_at }}</dd>
         {% if a.payload.reason %}<dt>Reason</dt><dd style="font-family:var(--sans)">{{ a.payload.reason }}</dd>{% endif %}
         {% if a.checker %}<dt>Decided by</dt><dd>{{ a.checker }} ({{ a.checker_role }}) at {{ a.decided_at }}</dd>{% endif %}

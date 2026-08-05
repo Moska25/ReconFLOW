@@ -13,29 +13,33 @@
   generated set at {{ d.as_of }}. Foreign currency is converted at a single fixed rate
   dated {{ rate_date }} ({% for c, r in rates.items() %}{{ c }} {{ r }}{% if not loop.last %} · {% endif %}{% endfor %} to GEL).</p>
 
-<div class="grid grid-4">
-  <div class="metric">
-    <div class="metric-label">Auto-match rate</div>
-    <div class="metric-value is-accent">{{ d.stats.auto_match_rate }}%</div>
-    <div class="metric-sub">{{ d.stats.auto_matched_payments }} of {{ d.stats.payments }} payments
-      posted without a human</div>
+<section class="headline">
+  <div>
+    <div class="headline-k">Auto-match rate</div>
+    <div class="headline-v">{{ d.stats.auto_match_rate }}%</div>
+    <p class="headline-p">{{ d.stats.auto_matched_payments }} of {{ d.stats.payments }} payments
+      posted with no human involved. The rest scored below the auto-post threshold of
+      {{ d.auto_threshold }} and wait for a person.</p>
   </div>
-  <div class="metric">
-    <div class="metric-label">Open exceptions</div>
-    <div class="metric-value {{ 'is-warn' if d.open_exceptions else 'is-pass' }}">{{ d.open_exceptions }}</div>
-    <div class="metric-sub">GEL {{ d.open_value | money }} at risk</div>
-  </div>
-  <div class="metric">
-    <div class="metric-label">SLA breaches</div>
-    <div class="metric-value {{ 'is-fail' if d.breaches else 'is-pass' }}">{{ d.breaches | length }}</div>
-    <div class="metric-sub">past {{ d.sla_days.high }}/{{ d.sla_days.medium }}/{{ d.sla_days.low }} days by severity</div>
-  </div>
-  <div class="metric">
-    <div class="metric-label">Approvals pending</div>
-    <div class="metric-value {{ 'is-warn' if d.approvals_pending else '' }}">{{ d.approvals_pending }}</div>
-    <div class="metric-sub">need a second person</div>
-  </div>
-</div>
+  <dl class="headline-stats">
+    <div class="headline-stat">
+      <dt>Open exceptions</dt>
+      <dd class="{{ 'is-warn' if d.open_exceptions else 'is-pass' }}">{{ d.open_exceptions }}</dd>
+      <p class="sub">GEL {{ d.open_value | money }} at risk</p>
+    </div>
+    <div class="headline-stat">
+      <dt>Past service level</dt>
+      <dd class="{{ 'is-fail' if d.breaches else 'is-pass' }}">{{ d.breaches | length }}</dd>
+      <p class="sub">high {{ d.sla_days.high }} days, medium {{ d.sla_days.medium }},
+        low {{ d.sla_days.low }}</p>
+    </div>
+    <div class="headline-stat">
+      <dt>Approvals pending</dt>
+      <dd class="{{ 'is-warn' if d.approvals_pending else '' }}">{{ d.approvals_pending }}</dd>
+      <p class="sub">need a second person</p>
+    </div>
+  </dl>
+</section>
 
 <div class="section">
   <div class="section-head"><h2>Value not yet applied</h2>
@@ -45,7 +49,8 @@
       <div class="card-head"><h3>Cash received, not applied</h3></div>
       {% if d.unapplied %}
       <div class="table-wrap"><table class="data">
-        <thead><tr><th>Currency</th><th class="num">Payments</th><th class="num">Native</th><th class="num">GEL</th></tr></thead>
+      <caption class="sr-only">Cash received that no confirmed match has consumed, by currency</caption>
+        <thead><tr><th scope="col">Currency</th><th class="num" scope="col">Payments</th><th class="num" scope="col">Native</th><th class="num" scope="col">GEL</th></tr></thead>
         <tbody>{% for r in d.unapplied %}
           <tr><td class="mono">{{ r.currency }}</td><td class="num">{{ r.n }}</td>
             <td class="num">{{ r.native | money }}</td><td class="num">{{ r.gel | money }}</td></tr>
@@ -57,7 +62,8 @@
       <div class="card-head"><h3>Invoices with nothing received</h3></div>
       {% if d.unpaid %}
       <div class="table-wrap"><table class="data">
-        <thead><tr><th>Currency</th><th class="num">Invoices</th><th class="num">Native</th><th class="num">GEL</th></tr></thead>
+      <caption class="sr-only">Invoices with nothing received against them, by currency</caption>
+        <thead><tr><th scope="col">Currency</th><th class="num" scope="col">Invoices</th><th class="num" scope="col">Native</th><th class="num" scope="col">GEL</th></tr></thead>
         <tbody>{% for r in d.unpaid %}
           <tr><td class="mono">{{ r.currency }}</td><td class="num">{{ r.n }}</td>
             <td class="num">{{ r.native | money }}</td><td class="num">{{ r.gel | money }}</td></tr>
@@ -77,8 +83,9 @@
   <div class="card card-tight">
     {% if d.reasons %}
     <div class="table-wrap"><table class="data">
-      <thead><tr><th>Reason</th><th>Severity</th><th class="num">Count</th>
-        <th class="num">Value at risk (GEL)</th><th style="width:26%">Share</th></tr></thead>
+      <caption class="sr-only">Open exceptions by reason code, with value at risk</caption>
+      <thead><tr><th scope="col">Reason</th><th scope="col">Severity</th><th class="num" scope="col">Count</th>
+        <th class="num" scope="col">Value at risk (GEL)</th><th style="width:26%" scope="col">Share</th></tr></thead>
       <tbody>{% for r in d.reasons %}
         <tr>
           <td><a href="/exceptions?reason={{ r.reason_code }}">{{ r.label }}</a>
@@ -144,8 +151,9 @@
     genuinely looks like; the number is not a health score, it is the size of the queue you
     inherit. Resolve an item and it leaves this list.</p>
   <div class="card card-tight"><div class="table-wrap"><table class="data">
-    <thead><tr><th>Reason</th><th>Item</th><th>Customer</th><th class="num">Age</th>
-      <th class="num">GEL at risk</th><th>Owner</th></tr></thead>
+      <caption class="sr-only">Exceptions past their service level, highest value first</caption>
+    <thead><tr><th scope="col">Reason</th><th scope="col">Item</th><th scope="col">Customer</th><th class="num" scope="col">Age</th>
+      <th class="num" scope="col">GEL at risk</th><th scope="col">Owner</th></tr></thead>
     <tbody>{% for r in d.breaches[:10] %}
       <tr><td><a href="/exceptions/{{ r.id }}">{{ reasons[r.reason_code].label }}</a></td>
         <td class="mono">{{ r.entity_label }}</td><td>{{ r.customer_name }}</td>

@@ -1,0 +1,28 @@
+{% extends "_layout.html" %}
+{% block title %}{{ code }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>{{ heading }}</h1>
+  <p class="lede">{{ explain }}</p>
+</div>
+
+<div class="section">
+  <div class="row" style="gap:22px; align-items:baseline">
+    <span class="headline-v" style="font-size:52px">{{ code }}</span>
+    <p class="headline-p" style="margin:0">{{ detail }}</p>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-head"><h2>Where you can go instead</h2></div>
+  <div class="row">
+    {% for href, label in nav %}
+    <a class="btn {{ 'btn-primary' if href == '/' else '' }}" href="{{ href }}">{{ label }}</a>
+    {% endfor %}
+  </div>
+</div>
+
+<p class="note" style="margin-top:24px"><strong>The status code is real.</strong> This page
+  answers {{ code }}, not 200 with an apology on it. A crawler, a monitor and a reader
+  should all be told the same thing about a request that did not work.</p>
+{% endblock %}

@@ -4,33 +4,46 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{% block title %}{{ project_name }}{% endblock %} · {{ project_name }}</title>
+<meta name="description" content="{{ project_description }}">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0d10">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/static/base.css">
 <link rel="stylesheet" href="/static/app.css">
 </head>
 <body>
+<a class="skip" href="#content">Skip to content</a>
 <header class="topbar"><div class="topbar-inner">
   <a class="brand" href="/"><span class="brand-mark"></span>{{ project_name }}
     <span class="brand-sub">{{ project_tagline }}</span></a>
-  <nav class="nav">
+  <nav class="nav" aria-label="Sections">
     {% for href, label in nav %}
     <a href="{{ href }}" class="{{ 'active' if active == href else '' }}">{{ label }}</a>
     {% endfor %}
   </nav>
+  <div class="var-strip" title="Cash received that no confirmed match has consumed, and the exception queue standing behind it (GEL {{ at_risk.open_value | money }} at risk). Computed at {{ as_of }} from the aggregations the dashboard uses.">
+    <span class="var-item"><span class="var-k">Unapplied</span>
+      <span class="var-v">GEL {{ at_risk.unapplied_gel | money }}</span></span>
+    <span class="var-item"><span class="var-k">Exceptions</span>
+      <span class="var-v {{ 'hot' if at_risk.open_exceptions }}">{{ at_risk.open_exceptions }}</span></span>
+  </div>
 </div></header>
-<div class="rolebar"><div class="rolebar-inner">
+<div class="rolebar"><nav class="rolebar-inner" aria-label="Demo identity">
   <span class="pill pill-warn">Demo roles - no real authentication</span>
   <span>Acting as</span>
   {% for name, r in actors.items() %}
   <a href="/role/{{ name }}?next={{ request.url.path }}"
-     class="{{ 'on' if name == actor else '' }}">{{ name }} · {{ roles[r].label }}</a>
+     class="{{ 'on' if name == actor else '' }}">{{ name }} <span class="role-of">{{ roles[r].label }}</span></a>
   {% endfor %}
   <span class="spacer"></span>
   <span class="faint">{{ role_note }}</span>
-</div></div>
-<main class="container">
-  {% if msg %}
-  <p class="note {{ 'note-warn' if level == 'warn' else '' }}"><strong>{{ 'Refused' if level == 'warn' else 'Done' }}:</strong> {{ msg }}</p>
-  {% endif %}
+</nav></div>
+<main class="container" id="content" tabindex="-1">
+  <div aria-live="polite">
+    {% if msg %}
+    <p class="note {{ 'note-warn' if level == 'warn' else '' }}"><strong>{{ 'Refused' if level == 'warn' else 'Done' }}:</strong> {{ msg }}</p>
+    {% endif %}
+  </div>
   {% block content %}{% endblock %}
 </main>
 <footer class="footer"><div class="footer-inner">

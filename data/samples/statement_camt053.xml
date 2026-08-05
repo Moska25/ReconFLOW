@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SYNTHETIC DEMO STATEMENT - generated from ReconFLOW's own seeded dataset.
+Not a real bank file. The account number is not a real IBAN. -->
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.053.001.02">
+  <BkToCstmrStmt><Stmt>
+    <Id>STMT-2026-0810</Id>
+    <Ntry>
+      <NtryRef>CAMT-STA-0001</NtryRef>
+      <Amt Ccy="GEL">44969.50</Amt>
+      <CdtDbtInd>CRDT</CdtDbtInd>
+      <BookgDt><Dt>2026-08-10</Dt></BookgDt>
+      <ValDt><Dt>2026-08-10</Dt></ValDt>
+      <NtryDtls><TxDtls>
+        <RltdPties><Dbtr><Nm>Poti Construction JSC</Nm>
+          <DbtrAcct><Id><Othr><Id>C014</Id></Othr></Id></DbtrAcct></Dbtr></RltdPties>
+        <RmtInf><Ustrd>INV-2026-0373 settlement</Ustrd></RmtInf>
+      </TxDtls></NtryDtls>
+    </Ntry>
+    <Ntry>
+      <NtryRef>CAMT-STA-0002</NtryRef>
+      <Amt Ccy="GEL">44493.00</Amt>
+      <CdtDbtInd>CRDT</CdtDbtInd>
+      <BookgDt><Dt>2026-08-10</Dt></BookgDt>
+      <ValDt><Dt>2026-08-10</Dt></ValDt>
+      <NtryDtls><TxDtls>
+        <RltdPties><Dbtr><Nm>Poti Foods JSC</Nm>
+          <DbtrAcct><Id><Othr><Id>C021</Id></Othr></Id></DbtrAcct></Dbtr></RltdPties>
+        <RmtInf><Ustrd>INV-2026-0394 settlement</Ustrd></RmtInf>
+      </TxDtls></NtryDtls>
+    </Ntry>
+    <Ntry>
+      <NtryRef>CAMT-STA-0003</NtryRef>
+      <Amt Ccy="GEL">42879.50</Amt>
+      <CdtDbtInd>CRDT</CdtDbtInd>
+      <BookgDt><Dt>2026-08-10</Dt></BookgDt>
+      <ValDt><Dt>2026-08-10</Dt></ValDt>
+      <NtryDtls><TxDtls>
+        <RltdPties><Dbtr><Nm>Kobuleti Agro JSC</Nm>
+          <DbtrAcct><Id><Othr><Id>C044</Id></Othr></Id></DbtrAcct></Dbtr></RltdPties>
+        <RmtInf><Ustrd>INV-2026-0342 settlement</Ustrd></RmtInf>
+      </TxDtls></NtryDtls>
+    </Ntry>
+    <Ntry>
+      <NtryRef>CAMT-STA-0004</NtryRef>
+      <Amt Ccy="GEL">42616.50</Amt>
+      <CdtDbtInd>CRDT</CdtDbtInd>
+      <BookgDt><Dt>2026-08-10</Dt></BookgDt>
+      <ValDt><Dt>2026-08-10</Dt></ValDt>
+      <NtryDtls><TxDtls>
+        <RltdPties><Dbtr><Nm>Kobuleti Print Group</Nm>
+          <DbtrAcct><Id><Othr><Id>C007</Id></Othr></Id></DbtrAcct></Dbtr></RltdPties>
+        <RmtInf><Ustrd>INV-2026-0378 settlement</Ustrd></RmtInf>
+      </TxDtls></NtryDtls>
+    </Ntry>
+    <Ntry>
+      <NtryRef>CAMT-STA-0005</NtryRef>
+      <Amt Ccy="GEL">41934.00</Amt>
+      <CdtDbtInd>CRDT</CdtDbtInd>
+      <BookgDt><Dt>2026-08-10</Dt></BookgDt>
+      <ValDt><Dt>2026-08-10</Dt></ValDt>
+      <NtryDtls><TxDtls>
+        <RltdPties><Dbtr><Nm>Gori Steel JSC</Nm>
+          <DbtrAcct><Id><Othr><Id>C016</Id></Othr></Id></DbtrAcct></Dbtr></RltdPties>
+        <RmtInf><Ustrd>INV-2026-0322 settlement</Ustrd></RmtInf>
+      </TxDtls></NtryDtls>
+    </Ntry>
+    <Ntry>
+      <NtryRef>CAMT-STA-0006</NtryRef>
+      <Amt Ccy="GEL">41550.00</Amt>
+      <CdtDbtInd>CRDT</CdtDbtInd>
+      <BookgDt><Dt>2026-08-10</Dt></BookgDt>
+      <ValDt><Dt>2026-08-10</Dt></ValDt>
+      <NtryDtls><TxDtls>
+        <RltdPties><Dbtr><Nm>Zugdidi Pharma Co</Nm>
+          <DbtrAcct><Id><Othr><Id>C043</Id></Othr></Id></DbtrAcct></Dbtr></RltdPties>
+        <RmtInf><Ustrd>INV-2026-0367 settlement</Ustrd></RmtInf>
+      </TxDtls></NtryDtls>
+    </Ntry>
+    <Ntry>
+      <NtryRef>CAMT-STA-0007</NtryRef>
+      <Amt Ccy="GEL">38683.50</Amt>
+      <CdtDbtInd>CRDT</CdtDbtInd>
+      <BookgDt><Dt>2026-08-10</Dt></BookgDt>
+      <ValDt><Dt>2026-08-10</Dt></ValDt>
+      <NtryDtls><TxDtls>
+        <RltdPties><Dbtr><Nm>Poti Construction JSC</Nm>
+          <DbtrAcct><Id><Othr><Id>C014</Id></Othr></Id></DbtrAcct></Dbtr></RltdPties>
+        <RmtInf><Ustrd>INV-2026-0343 settlement</Ustrd></RmtInf>
+      </TxDtls></NtryDtls>
+    </Ntry>
+    <Ntry>
+      <NtryRef>CAMT-STA-0008</NtryRef>
+      <Amt Ccy="GEL">37473.00</Amt>
+      <CdtDbtInd>CRDT</CdtDbtInd>
+      <BookgDt><Dt>2026-08-10</Dt></BookgDt>
+      <ValDt><Dt>2026-08-10</Dt></ValDt>
+      <NtryDtls><TxDtls>
+        <RltdPties><Dbtr><Nm>Poti Textiles Co</Nm>
+          <DbtrAcct><Id><Othr><Id>C052</Id></Othr></Id></DbtrAcct></Dbtr></RltdPties>
+        <RmtInf><Ustrd>INV-2026-0321 settlement</Ustrd></RmtInf>
+      </TxDtls></NtryDtls>
+    </Ntry>
+  </Stmt></BkToCstmrStmt>
+</Document>

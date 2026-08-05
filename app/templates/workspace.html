@@ -30,8 +30,7 @@
   </div>
 
   {% if view == 'matches' %}
-  <div class="card">
-    <form class="toolbar" method="get" action="/workspace">
+    <form class="toolbar rail" method="get" action="/workspace">
       <input type="hidden" name="view" value="matches">
       <div class="field"><label for="status">Status</label>
         <select name="status" id="status">
@@ -52,15 +51,15 @@
       <button class="btn btn-primary" type="submit">Filter</button>
       <a class="btn" href="/workspace?view=matches">Reset</a>
     </form>
-  </div>
 
-  <div class="card card-tight" style="margin-top:14px">
+  <div class="card card-tight">
     <div class="card-head"><h2>{{ rows | length }} match{{ '' if rows | length == 1 else 'es' }}</h2>
       <span class="faint small">showing at most 200, highest confidence first</span></div>
     {% if rows %}
     <div class="table-wrap"><table class="data">
-      <thead><tr><th>Invoice</th><th>Payment</th><th>Customer</th><th>Shape</th><th>Rule</th>
-        <th class="num">Difference</th><th class="num">Confidence</th><th>Status</th><th></th></tr></thead>
+      <caption class="sr-only">Matches the engine made, with the rule or score that produced each</caption>
+      <thead><tr><th scope="col">Invoice</th><th scope="col">Payment</th><th scope="col">Customer</th><th scope="col">Shape</th><th scope="col">Rule</th>
+        <th class="num" scope="col">Difference</th><th class="num" scope="col">Confidence</th><th scope="col">Status</th><th scope="col"></th></tr></thead>
       <tbody>{% for m in rows %}
       <tr>
         <td class="mono">{{ m.invoice_label }}</td>
@@ -69,7 +68,10 @@
         <td><span class="pill pill-plain pill-idle">{{ m.shape }}</span></td>
         <td class="mono small">{{ m.rule }}</td>
         <td class="num {{ 'is-fail' if m.delta_minor else '' }}">{{ m.delta_minor | money }}</td>
-        <td class="num">{{ m.confidence }}</td>
+        <td class="num">{{ m.confidence }}
+          <span class="conf {{ 'cleared' if m.confidence >= cfg.auto_threshold else '' }}"
+                style="--v: {{ m.confidence }}%; --t: {{ cfg.auto_threshold }}%"
+                title="confidence {{ m.confidence }} against the auto-post threshold of {{ cfg.auto_threshold }}"></span></td>
         <td><span class="pill pill-{{ 'pass' if m.status in ['auto','confirmed'] else 'warn' if m.status == 'proposed' else 'idle' }}">{{ m.status }}</span></td>
         <td><a class="btn btn-sm" href="/workspace/match/{{ m.id }}">Why</a></td>
       </tr>
@@ -89,8 +91,9 @@
     <div class="card-head"><h2>Open invoices</h2><span class="faint small">largest first, at most 200</span></div>
     {% if invoices %}
     <div class="table-wrap"><table class="data">
-      <thead><tr><th>Invoice</th><th>Customer</th><th>Issued</th><th>Due</th>
-        <th class="num">Amount</th><th>Ccy</th><th class="num">GEL</th></tr></thead>
+      <caption class="sr-only">Invoices with nothing applied to them</caption>
+      <thead><tr><th scope="col">Invoice</th><th scope="col">Customer</th><th scope="col">Issued</th><th scope="col">Due</th>
+        <th class="num" scope="col">Amount</th><th scope="col">Ccy</th><th class="num" scope="col">GEL</th></tr></thead>
       <tbody>{% for i in invoices %}
       <tr><td class="mono">{{ i.invoice_no }}</td><td>{{ i.customer_name }}</td>
         <td class="mono small">{{ i.issue_date }}</td><td class="mono small">{{ i.due_date }}</td>
@@ -106,8 +109,9 @@
     <div class="card-head"><h2>Unapplied payments</h2><span class="faint small">largest first, at most 200</span></div>
     {% if payments %}
     <div class="table-wrap"><table class="data">
-      <thead><tr><th>Payment</th><th>Payer</th><th>Reference as received</th><th>Value date</th>
-        <th class="num">Amount</th><th>Ccy</th><th class="num">GEL</th></tr></thead>
+      <caption class="sr-only">Payments with no invoice applied to them</caption>
+      <thead><tr><th scope="col">Payment</th><th scope="col">Payer</th><th scope="col">Reference as received</th><th scope="col">Value date</th>
+        <th class="num" scope="col">Amount</th><th scope="col">Ccy</th><th class="num" scope="col">GEL</th></tr></thead>
       <tbody>{% for p in payments %}
       <tr><td class="mono">{{ p.payment_ref }}</td><td>{{ p.payer_name }}</td>
         <td class="mono small">{{ p.reference or '(empty)' }}</td>

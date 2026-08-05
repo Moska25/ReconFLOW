@@ -1,6 +1,494 @@
-/* ReconFLOW — accent override + the handful of rules base.css does not cover. */
+/* ReconFLOW - "ledger terminal".
+   Teal is system chrome. Money is the hero. Records sit on parchment.
+   Only the accent override plus the rules base.css does not cover. */
 
 :root { --accent: #14b8a6; }
+
+/* ------------------------------------------------------------- accessibility
+   The skip link is the first focusable element and is visible once focused;
+   a permanently hidden one helps nobody and is the usual way this is faked. */
+
+.skip {
+  position: absolute;
+  left: 12px;
+  top: -60px;
+  z-index: 40;
+  padding: 9px 14px;
+  border-radius: var(--r-sm);
+  background: var(--accent);
+  color: #06201d;
+  font-size: 13px;
+  font-weight: 650;
+  /* No transition: a keyboard user tabbing in should see this on the frame it is
+     focused, not a tenth of a second later, and it must not depend on animation
+     running at all. */
+}
+.skip:focus { top: 12px; text-decoration: none; }
+#content:focus { outline: none; }
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --------------------------------------------------------------- page rhythm
+   Fewer boxes. Hierarchy comes from rules, weight and space, so a panel is only
+   drawn where it holds a real record; filters and figures sit on the page. */
+
+.page-head {
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border);
+}
+.section-head h2 { letter-spacing: -0.01em; }
+
+/* Filter bars: a rail on the page, not a card floating on a card. */
+.rail {
+  padding: 0 0 18px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Supporting figures: a hairline in the margin instead of a full box. */
+.metric {
+  background: none;
+  border: 0;
+  border-left: 2px solid var(--border-strong);
+  border-radius: 0;
+  padding: 2px 0 2px 14px;
+}
+.metric-label { color: var(--text-muted); }
+
+/* ------------------------------------------------------------------- headline
+   One figure leads the page. Everything else is support, set smaller and ruled. */
+
+.headline {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: 34px;
+  align-items: center;
+  padding: 22px 0 24px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 26px;
+}
+.headline-k {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+.headline-v {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums slashed-zero;
+  font-size: 66px;
+  font-weight: 550;
+  line-height: 0.92;
+  letter-spacing: -0.035em;
+  color: var(--accent-text);
+}
+.headline-p { margin: 14px 0 0; max-width: 46ch; font-size: 13.5px; }
+
+.headline-stats { display: grid; gap: 0; }
+.headline-stat {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 8px 16px;
+  padding: 9px 0;
+  border-top: 1px solid var(--border);
+}
+.headline-stat:last-child { border-bottom: 1px solid var(--border); }
+.headline-stat dt { font-size: 13px; color: var(--text); }
+.headline-stat dd {
+  margin: 0;
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums slashed-zero;
+  font-size: 21px;
+  font-weight: 550;
+  letter-spacing: -0.02em;
+}
+.headline-stat dd.is-pass { color: var(--pass); }
+.headline-stat dd.is-fail { color: var(--fail); }
+.headline-stat dd.is-warn { color: var(--warn); }
+.headline-stat .sub {
+  grid-column: 1 / -1;
+  margin: -3px 0 0;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Disclosure: the full evidence stays reachable without being the first thing read. */
+.ev { margin-top: 14px; border-top: 1px solid var(--border); padding-top: 12px; }
+.ev > summary {
+  cursor: pointer;
+  font-size: 12.5px;
+  font-weight: 550;
+  color: var(--accent-text);
+  list-style-position: outside;
+}
+.ev > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.ev[open] > summary { margin-bottom: 12px; }
+
+/* ---------------------------------------------------------- audit state pairs
+   Before and after as fields rather than a JSON blob, which is what stretched
+   these rows to five lines of unreadable text. */
+
+.kvp { display: flex; flex-wrap: wrap; gap: 2px 14px; max-width: 62ch; }
+.kvp-i { display: flex; align-items: baseline; gap: 6px; white-space: nowrap; max-width: 100%; }
+.kvp-k {
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.kvp-v {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text);
+  /* a hash is 64 characters; shorten it here, keep it whole in the page */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  max-width: 26ch;
+}
+.kvp-v.was { color: var(--text-muted); text-decoration: line-through; text-decoration-thickness: 1px; }
+.kvp-to { font-size: 10px; color: var(--text-muted); }
+
+/* Record heading: the action leads, the identifiers follow at label size. */
+.rec-h { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.rec-id {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums slashed-zero;
+}
+
+/* ------------------------------------------------------------------ money type
+   A ledger is read down its figures column, so figures outrank prose:
+   larger optical size, heavier, full-strength ink, slashed zero. */
+
+table.data td.num, table.data th.num {
+  font-variant-numeric: tabular-nums slashed-zero;
+}
+table.data td.num {
+  font-size: 14.5px;
+  font-weight: 560;
+  letter-spacing: -0.012em;
+  color: var(--text);
+}
+.metric-value, .kv dd, .num, .mono { font-variant-numeric: tabular-nums slashed-zero; }
+
+/* ------------------------------------------------------------- ruled ledger table
+   Hairline rules across, and one rule down the left of the figures column -
+   the vertical rule is what makes a table read as a ledger rather than a grid. */
+
+table.data td.num, table.data th.num {
+  border-left: 1px solid var(--border);
+}
+table.data tbody tr:hover { background: color-mix(in srgb, var(--accent) 6%, var(--surface-2)); }
+
+/* ---------------------------------------------------------------- parchment
+   Records - approvals and the audit log - are documents, not dashboard panels.
+   Scoping the palette variables on .doc re-skins every base.css component inside
+   it, so no component needs a parchment variant of its own.
+   Contrast checked against #efe6d5: text 15.9:1, muted 6.5:1, faint 5.5:1. */
+
+.doc {
+  --bg:            #f7f2e6;
+  --surface:       #efe6d5;
+  --surface-2:     #e6dbc4;
+  --border:        #cdbf9f;
+  --border-strong: #b09e78;
+  --text:          #1c1913;
+  --text-muted:    #57503f;
+  --text-faint:    #635a48;
+  --accent-text:   #0d5c54;
+  --pass:          #146c48;
+  --fail:          #a12a1e;
+  --warn:          #7a4f05;
+  --info:          #1a4f9c;
+  --idle:          #57503f;
+  color: var(--text);
+  background:
+    repeating-linear-gradient(to bottom,
+      transparent 0 27px,
+      color-mix(in srgb, #8a7a55 4%, transparent) 27px 28px),
+    var(--surface);
+  border-color: var(--border-strong);
+}
+.doc .note { background: var(--surface-2); }
+.doc .card-head { background: transparent; }
+.doc .btn-primary { color: #06201d; }
+
+/* ------------------------------------------------------------------- the stamp
+   Rotated rubber stamp for an approval decision. State is carried by the word,
+   by the frame (solid / dashed) and by the cancel bar - never by colour alone.
+   The margins hold the clearance the rotation eats, so it cannot land on text. */
+
+.stamp {
+  display: inline-block;
+  margin: 9px 14px 9px 4px;
+  padding: 5px 13px;
+  border: 2px solid currentColor;
+  border-radius: 3px;
+  outline: 1px solid currentColor;
+  outline-offset: 2px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-indent: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transform: rotate(-5deg);
+  opacity: 0.94;
+}
+.stamp-approved { color: var(--pass); }
+.stamp-pending  { color: var(--warn); border-style: dashed; outline-style: dashed; }
+.stamp-refused  {
+  color: var(--fail);
+  /* cancel bar sits behind the word, so it reads as struck without hurting it */
+  background-image: linear-gradient(to top right,
+    transparent calc(50% - 1px), currentColor calc(50% - 1px),
+    currentColor calc(50% + 1px), transparent calc(50% + 1px));
+}
+.stamp-sm {
+  margin: 3px 9px 3px 2px;
+  padding: 1px 7px;
+  border-width: 1.5px;
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-indent: 0.12em;
+  transform: rotate(-4deg);
+}
+
+/* ------------------------------------------------ match confidence, as one bar
+   The components stack to the score; the auto-post threshold is a line on the
+   same scale, so falling short of it is a picture rather than an inference. */
+
+.score { margin: 2px 0 6px; }
+.score-track {
+  position: relative;
+  display: flex;
+  height: 34px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  overflow: hidden;
+}
+.score-seg { height: 100%; border-right: 1px solid var(--surface); }
+.score-short {
+  position: absolute;
+  top: 0; bottom: 0;
+  background-image: repeating-linear-gradient(-45deg,
+    color-mix(in srgb, var(--fail) 34%, transparent) 0 5px, transparent 5px 10px);
+}
+.score-thr {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 0;
+  border-left: 2px dashed var(--warn);
+}
+.score-axis {
+  position: relative;
+  height: 17px;
+  margin-top: 5px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.score-axis .end { position: absolute; }
+.score-axis .end-l { left: 0; }
+.score-axis .end-r { right: 0; }
+.score-mark {
+  position: absolute;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-family: var(--mono);
+}
+.score-mark::before {
+  content: "";
+  position: absolute;
+  left: 50%; top: -5px;
+  width: 1px; height: 4px;
+  background: currentColor;
+}
+.score-mark-thr { color: var(--warn); }
+
+.leg { display: grid; grid-template-columns: 1fr auto; gap: 1px 14px; padding: 9px 0; }
+.leg + .leg { border-top: 1px solid var(--border); }
+.leg-name { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.leg-val {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums slashed-zero;
+  font-size: 14.5px;
+  font-weight: 560;
+  text-align: right;
+  white-space: nowrap;
+}
+.leg-why { grid-column: 1 / -1; font-size: 12px; color: var(--text-muted); }
+.key { width: 11px; height: 11px; border-radius: 3px; flex: none; border: 1px solid var(--border-strong); }
+
+.seg-0, .key-0 { background: var(--accent); }
+.seg-1, .key-1 { background: color-mix(in srgb, var(--accent) 70%, var(--surface)); }
+.seg-2, .key-2 { background: color-mix(in srgb, var(--accent) 45%, var(--surface)); }
+.seg-3, .key-3 { background: color-mix(in srgb, var(--accent) 26%, var(--surface)); }
+.seg-4, .key-4 { background: var(--surface-2); }
+
+/* -------------------------------------------------------- value-at-risk strip
+   Always in the header: what is unplaced and what is unresolved, in mono. */
+
+/* The bar wraps rather than squeezing the nav: on a narrow window the strip
+   drops to its own row instead of pushing navigation items out of reach. */
+.topbar-inner { flex-wrap: wrap; gap: 16px; height: auto; min-height: 56px; padding-top: 6px; padding-bottom: 6px; }
+.nav { flex: 0 1 auto; min-width: 0; }
+@media (max-width: 1100px) { .brand-sub { display: none; } }
+
+.var-strip {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+.var-item {
+  padding: 0 12px;
+  border-left: 1px solid var(--border);
+  line-height: 1.3;
+  white-space: nowrap;
+}
+.var-item:first-child { border-left: 0; }
+.var-k {
+  display: block;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.var-v {
+  display: block;
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums slashed-zero;
+  font-size: 13px;
+  font-weight: 550;
+  color: var(--text);
+  white-space: nowrap;
+}
+.var-v.hot { color: var(--warn); }
+
+/* ------------------------------------------ confidence, at a glance, in a row
+   The workspace lists hundreds of matches. Drawing each score on one scale with
+   the auto-post threshold marked lets a reader see which rows cleared the bar
+   without reading a single number, and the number stays in the cell for anyone
+   who wants it. */
+
+.conf {
+  display: block;
+  position: relative;
+  width: 74px;
+  height: 4px;
+  margin: 5px 0 0 auto;
+  border-radius: 100px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+.conf::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: var(--v);
+  background: var(--text-faint);
+}
+.conf.cleared::before { background: var(--accent); }
+.conf::after {
+  content: "";
+  position: absolute;
+  left: var(--t); top: 0; bottom: 0;
+  width: 1px;
+  background: var(--warn);
+}
+
+/* ------------------------------------------------------------- the SLA clock
+   Days elapsed against the threshold for this item's severity. A breach is
+   stated in words as well as drawn, because a full red bar is not a sentence. */
+
+.clock { margin-top: 4px; }
+.clock-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 7px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+.clock-head .num {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums slashed-zero;
+  font-size: 14px;
+  font-weight: 550;
+  color: var(--text);
+}
+.clock-bar {
+  height: 8px;
+  border-radius: 100px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.clock-bar > span { display: block; height: 100%; background: var(--pass); }
+.clock-bar.over > span {
+  /* hatched, so "past due" survives a greyscale print and a colour-blind reader */
+  background: repeating-linear-gradient(-45deg,
+    var(--fail) 0 5px, color-mix(in srgb, var(--fail) 55%, var(--surface)) 5px 10px);
+}
+.clock-note { margin: 8px 0 0; font-size: 12.5px; }
+.clock-note strong { color: var(--text); }
+
+/* ------------------------------------------------ exception severity and ageing
+   A leading rule gives the queue a rhythm you can scan; the tag keeps severity
+   readable without it, and age becomes a length rather than a number to compare. */
+
+tr.sev-high td:first-child   { box-shadow: inset 3px 0 0 var(--fail); }
+tr.sev-medium td:first-child { box-shadow: inset 3px 0 0 var(--warn); }
+tr.sev-low td:first-child    { box-shadow: inset 3px 0 0 var(--border-strong); }
+
+.sev-tag {
+  display: inline-block;
+  margin-right: 7px;
+  padding: 0 4px;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+}
+tr.sev-high .sev-tag   { color: var(--fail); }
+tr.sev-medium .sev-tag { color: var(--warn); }
+tr.sev-low .sev-tag    { color: var(--text-muted); }
+
+.agebar {
+  display: block;
+  width: 56px;
+  height: 4px;
+  margin: 4px 0 0 auto;
+  border-radius: 100px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+.agebar > span { display: block; height: 100%; background: var(--accent); }
+.agebar.hot > span  { background: var(--warn); }
+.agebar.late > span { background: var(--fail); }
 
 /* Demo role strip: sits under the topbar, never mistaken for real auth. */
 .rolebar {
@@ -28,12 +516,13 @@
 }
 .rolebar a:hover { background: var(--surface-2); color: var(--text); text-decoration: none; }
 .rolebar a.on { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 30%, transparent); color: var(--accent-text); }
+.role-of { opacity: 0.72; font-weight: 400; }
 
-/* Confidence breakdown: label / bar / contribution, aligned. */
+/* Label / bar / value row used for ageing and rule distributions. */
 .bd { display: grid; grid-template-columns: 190px 1fr 78px; gap: 10px; align-items: center; }
 .bd + .bd { margin-top: 9px; }
 .bd-label { font-size: 12.5px; color: var(--text-muted); }
-.bd-val { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12.5px; text-align: right; }
+.bd-val { font-family: var(--mono); font-variant-numeric: tabular-nums slashed-zero; font-size: 13.5px; font-weight: 550; text-align: right; }
 .bd-why { grid-column: 1 / -1; font-size: 12px; color: var(--text-faint); margin-top: -3px; }
 
 /* Ageing heat: reuse pill colours as a compact cell. */
@@ -42,14 +531,49 @@
 .age-2 { background: color-mix(in srgb, var(--warn) 14%, var(--surface)); color: var(--warn); }
 .age-3 { background: color-mix(in srgb, var(--fail) 12%, var(--surface)); color: var(--fail); }
 .age-4 { background: color-mix(in srgb, var(--fail) 24%, var(--surface)); color: var(--fail); }
+.age-n { font-family: var(--mono); font-variant-numeric: tabular-nums slashed-zero; }
+.age-n.late { color: var(--fail); }
 
 /* Key/value list used on detail pages. */
 .kv { display: grid; grid-template-columns: minmax(120px, max-content) 1fr; gap: 6px 18px; font-size: 13px; }
 .kv dt { color: var(--text-faint); }
-.kv dd { margin: 0; color: var(--text); font-family: var(--mono); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.kv dd { margin: 0; color: var(--text); font-family: var(--mono); overflow-wrap: anywhere; }
+.kv dd.money { font-size: 16px; font-weight: 560; letter-spacing: -0.012em; }
+
+/* ---------------------------------------------------------------------- print
+   An approval and an audit entry are documents. On paper they should read as
+   documents: no chrome, no controls, ink on white. */
+
+@media print {
+  .topbar, .rolebar, .footer, .rail, .toolbar, .btn, .var-strip { display: none !important; }
+  body { background: #fff; color: #000; }
+  body::before { display: none; }
+  .container { padding: 0; max-width: none; }
+  .card, .doc { break-inside: avoid; border-color: #999; background: #fff; }
+  .doc { --text: #000; --text-muted: #333; --text-faint: #444; --border: #bbb; }
+  .stamp { opacity: 1; }
+  a { color: #000; text-decoration: none; }
+}
 
 @media (max-width: 640px) {
   .rolebar-inner { padding: 7px 14px; }
+  .headline { grid-template-columns: minmax(0, 1fr); gap: 22px; padding: 20px 0 22px; }
+  .headline-v { font-size: 52px; }
+
   .bd { grid-template-columns: 1fr 60px; }
   .bd .bar { grid-column: 1 / -1; }
+  .var-strip {
+    width: 100%;
+    margin: 2px 0 0;
+    padding-top: 6px;
+    border-top: 1px solid var(--border);
+    gap: 4px 0;
+  }
+  .var-item { flex: 1 1 auto; padding: 0 10px; }
+  .var-item:first-child { padding-left: 0; }
+  .var-v { font-size: 12px; }
+  /* less rotation on a narrow column, so a stamp cannot reach its neighbour */
+  .stamp { transform: rotate(-3deg); }
+  .stamp-sm { transform: rotate(-2.5deg); }
+  table.data td.num { font-size: 13.5px; }
 }

@@ -26,19 +26,22 @@
   <div class="grid grid-2">
     <div class="card">
       <div class="section-head"><h2>Upload a file</h2></div>
-      <p>CSV only. Column order does not matter, header spelling and case are tolerated, and
-        both <code>1234.56</code> and <code>1.234,56</code> parse. Try uploading one of the
-        bundled files from <code>data/</code> a second time to watch the duplicate check
-        refuse it.</p>
+      <p>CSV, SWIFT <strong>MT940</strong> or ISO 20022 <strong>CAMT.053</strong>. For CSV,
+        column order does not matter, header spelling and case are tolerated, and both
+        <code>1234.56</code> and <code>1.234,56</code> parse. A statement is recognised by
+        its content rather than its file extension, and always imports as payments.
+        Try uploading one of the bundled files from <code>data/</code> a second time to
+        watch the duplicate check refuse it.</p>
       <form method="post" action="/import/upload" enctype="multipart/form-data" class="stack">
         <div class="toolbar">
-          <div class="field"><label for="kind">File type</label>
+          <div class="field"><label for="kind">Treat CSV as</label>
             <select name="kind" id="kind">
               <option value="payments">payments</option>
               <option value="invoices">invoices</option>
             </select></div>
-          <div class="field" style="flex:2 1 260px"><label for="upload_file">CSV file</label>
-            <input type="file" name="upload_file" id="upload_file" accept=".csv,text/csv" required></div>
+          <div class="field" style="flex:2 1 260px"><label for="upload_file">CSV, MT940 or CAMT.053</label>
+            <input type="file" name="upload_file" id="upload_file"
+                   accept=".csv,.sta,.txt,.xml,text/csv,text/plain,application/xml" required></div>
         </div>
         <div class="row">
           <button class="btn btn-primary" type="submit">Import</button>
@@ -48,6 +51,11 @@
       <form method="post" action="/import/rematch">
         <button class="btn" type="submit">Re-run matching and rebuild exceptions</button>
       </form>
+      <p class="note note-warn" style="margin-top:14px"><strong>Two synthetic sample
+        statements ship with the repo</strong> at <code>data/samples/</code>, one MT940 and
+        one CAMT.053. Neither is a real bank file. They describe the <em>same</em> eight
+        receipts, so upload one, not both: their transaction ids differ, so loading both
+        posts the same cash twice and the duplicate detector will say so.</p>
       <p class="note" style="margin-top:14px"><strong>Matching is re-runnable.</strong>
         It rebuilds every automated match from scratch and produces the same result for the
         same data. Manual confirmations are preserved and their rows are excluded from
@@ -61,7 +69,8 @@
         date is not a safety feature.</p>
       {% if health.reject_reasons %}
       <div class="table-wrap"><table class="data">
-        <thead><tr><th>Reason</th><th class="num">Rows</th></tr></thead>
+      <caption class="sr-only">Row rejection reasons across every batch</caption>
+        <thead><tr><th scope="col">Reason</th><th class="num" scope="col">Rows</th></tr></thead>
         <tbody>{% for r in health.reject_reasons %}
           <tr><td class="mono">{{ r.reason }}</td><td class="num">{{ r.n }}</td></tr>
         {% endfor %}</tbody>
@@ -100,7 +109,8 @@
         </dl>
         {% if b.rejects %}
         <div class="table-wrap" style="margin-top:14px"><table class="data">
-          <thead><tr><th class="num">Row</th><th>Reason</th><th>Detail</th><th>Raw</th></tr></thead>
+      <caption class="sr-only">Rows rejected in this batch, with the reason for each</caption>
+          <thead><tr><th class="num" scope="col">Row</th><th scope="col">Reason</th><th scope="col">Detail</th><th scope="col">Raw</th></tr></thead>
           <tbody>{% for r in b.rejects %}
           <tr><td class="num">{{ r.row_no or '-' }}</td>
             <td><span class="pill pill-fail">{{ r.reason }}</span></td>

@@ -6,9 +6,10 @@ from pathlib import Path
 from urllib.parse import urlencode
 
 from fastapi import FastAPI, Form, Request, UploadFile, File
-from fastapi.responses import RedirectResponse
+from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app import db, exceptions as exc, generate, ingest, matching, reporting
 from app.controls import (ACTORS, APPROVAL_THRESHOLD_MINOR, ControlError, DEFAULT_ACTOR,
@@ -22,16 +23,34 @@ templates = Jinja2Templates(directory=str(BASE / "templates"))
 
 PROJECT = "ReconFLOW"
 TAGLINE = "Reconciliation and exception operations"
+DESCRIPTION = ("Invoice-to-payment reconciliation with a typed exception queue, "
+               "maker-checker approval and a database-enforced append-only audit trail.")
 NAV = [("/", "Dashboard"), ("/workspace", "Workspace"), ("/exceptions", "Exceptions"),
        ("/approvals", "Approvals"), ("/audit", "Audit"), ("/import", "Import"),
        ("/quality", "Quality")]
 
 templates.env.filters["money"] = ingest.fmt_money
+templates.env.globals["changed"] = reporting.state_diff
 templates.env.globals.update(
     reasons=exc.REASONS, buckets=exc.BUCKETS, roles=ROLES, actors=ACTORS,
     rate_date=ingest.RATE_DATE, rates=ingest.RATES,
     threshold=APPROVAL_THRESHOLD_MINOR, can=can,
+    # constants the pages draw against, so no template restates a threshold
+    cfg=matching.DEFAULT_CONFIG, sla_days=exc.SLA_DAYS,
 )
+
+
+ERRORS = {
+    404: ("No such page",
+          "That route does not exist in this application.",
+          "The address was typed, linked or guessed wrong. Nothing was changed."),
+    405: ("Wrong method for this route",
+          "This address exists, but not for the method the request used.",
+          "A form was posted to a page that only answers GET, or the reverse."),
+    500: ("Something failed on the server",
+          "The request reached the application and the application could not finish it.",
+          "Nothing was written. The server log holds the traceback."),
+}
 
 
 def get_conn():
@@ -46,10 +65,16 @@ def ctx(request: Request, active: str, **extra) -> dict:
     if actor not in ACTORS:
         actor = DEFAULT_ACTOR
     role = role_of(actor)
+    conn = get_conn()
+    try:
+        at_risk = reporting.value_at_risk(conn)
+    finally:
+        conn.close()
     base = {
         "request": request,
         "project_name": PROJECT,
         "project_tagline": TAGLINE,
+        "project_description": DESCRIPTION,
         "nav": NAV,
         "active": active,
         "footer_note": f"Synthetic dataset, as of {generate.AS_OF.isoformat()} - "
@@ -61,6 +86,7 @@ def ctx(request: Request, active: str, **extra) -> dict:
         "msg": request.query_params.get("msg", ""),
         "level": request.query_params.get("level", "info"),
         "as_of": generate.AS_OF,
+        "at_risk": at_risk,
     }
     base.update(extra)
     return base
@@ -76,6 +102,23 @@ def render(name: str, request: Request, active: str, **extra):
     context = ctx(request, active, **extra)
     context.pop("request", None)
     return templates.TemplateResponse(request=request, name=name, context=context)
+
+
+@app.exception_handler(StarletteHTTPException)
+def http_error(request: Request, exc: StarletteHTTPException):
+    """Answer errors in the application's own shell, with the real status code.
+
+    FastAPI's default is a JSON body, which is right for an API and wrong for a
+    page a person reached by mistake. The status code is passed through unchanged:
+    a 404 that answers 200 misleads monitoring as much as it misleads the reader.
+    """
+    heading, explain, detail = ERRORS.get(
+        exc.status_code,
+        ("Request refused", "The server would not answer this request.", str(exc.detail)))
+    response = render("error.html", request, "", code=exc.status_code,
+                      heading=heading, explain=explain, detail=detail)
+    response.status_code = exc.status_code
+    return response
 
 
 # ------------------------------------------------------------------------ dashboard
@@ -365,6 +408,31 @@ def rematch(request: Request):
 
 # -------------------------------------------------------------------------- quality
 
+# What each test module is there to protect. The counts and outcomes come from the
+# run itself; only these sentences are written by hand, and none of them claims a
+# result - they say what the area is, not whether it passed.
+AREAS = [
+    ("tests/test_matching.py", "The matching engine",
+     "Rules in priority order, the tolerance boundary, grouping, determinism, and the "
+     "ceiling that stops a payment posting on an amount coincidence."),
+    ("tests/test_controls.py", "Segregation of duties",
+     "Maker-checker refusing self-approval, role permissions, and the database-enforced "
+     "append-only audit trail."),
+    ("tests/test_ingest.py", "Defensive import",
+     "Both decimal conventions, column aliasing, content-hash idempotency, and per-row "
+     "rejection with a reason."),
+    ("tests/test_statements.py", "Bank statement formats",
+     "MT940 and CAMT.053 parsed to the same payments, including the debit indicator that "
+     "decides whether cash came in or went out."),
+    ("tests/test_exceptions.py", "The exception taxonomy",
+     "Every reason code detected, ageing buckets at their edges, SLA thresholds, and the "
+     "resolution lifecycle."),
+    ("tests/test_app.py", "The web layer",
+     "Every route serving, and the refusals driven through the real HTTP forms rather "
+     "than asserted in isolation."),
+]
+
+
 @app.get("/quality")
 def quality(request: Request):
     path = db.DATA_DIR / "quality.json"
@@ -374,8 +442,38 @@ def quality(request: Request):
             report = json.loads(path.read_text(encoding="utf-8"))
         except json.JSONDecodeError:
             report = {}
-    return render("quality.html", request, "/quality", report=report,
+
+    by_module = report.get("by_module", {})
+    areas = []
+    for module, title, protects in AREAS:
+        cases = by_module.get(module, [])
+        if not cases:
+            continue
+        areas.append({
+            "module": module, "title": title, "protects": protects, "cases": cases,
+            "passed": sum(1 for c in cases if c["outcome"] == "passed"),
+            "failed": sum(1 for c in cases if c["outcome"] != "passed"),
+        })
+    # anything the list above does not name still shows, so the page cannot hide a module
+    for module, cases in by_module.items():
+        if not any(a["module"] == module for a in areas):
+            areas.append({
+                "module": module, "title": module, "protects": "", "cases": cases,
+                "passed": sum(1 for c in cases if c["outcome"] == "passed"),
+                "failed": sum(1 for c in cases if c["outcome"] != "passed"),
+            })
+
+    return render("quality.html", request, "/quality", report=report, areas=areas,
                   manifest=generate.load_manifest(), cfg=matching.DEFAULT_CONFIG)
+
+
+# -------------------------------------------------------------------------- favicon
+
+@app.get("/favicon.ico", include_in_schema=False)
+@app.get("/favicon.svg", include_in_schema=False)
+def favicon():
+    """Both names, one local file. Browsers still request .ico unprompted."""
+    return FileResponse(BASE / "static" / "favicon.svg", media_type="image/svg+xml")
 
 
 # ----------------------------------------------------------------------- demo role
