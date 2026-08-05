@@ -1,0 +1,3020 @@
+{
+  "generated_at": "2026-08-05 17:01:16",
+  "duration": 1.69,
+  "total": 214,
+  "passed": 214,
+  "failed": 0,
+  "exit_status": 0,
+  "cases": [
+    {
+      "name": "test_every_navigation_route_serves[/]",
+      "module": "tests/test_app.py",
+      "label": "Every page in the top navigation returns 200 with real content.",
+      "outcome": "passed",
+      "duration": 0.024
+    },
+    {
+      "name": "test_every_navigation_route_serves[/workspace]",
+      "module": "tests/test_app.py",
+      "label": "Every page in the top navigation returns 200 with real content.",
+      "outcome": "passed",
+      "duration": 0.022
+    },
+    {
+      "name": "test_every_navigation_route_serves[/exceptions]",
+      "module": "tests/test_app.py",
+      "label": "Every page in the top navigation returns 200 with real content.",
+      "outcome": "passed",
+      "duration": 0.017
+    },
+    {
+      "name": "test_every_navigation_route_serves[/approvals]",
+      "module": "tests/test_app.py",
+      "label": "Every page in the top navigation returns 200 with real content.",
+      "outcome": "passed",
+      "duration": 0.008
+    },
+    {
+      "name": "test_every_navigation_route_serves[/audit]",
+      "module": "tests/test_app.py",
+      "label": "Every page in the top navigation returns 200 with real content.",
+      "outcome": "passed",
+      "duration": 0.011
+    },
+    {
+      "name": "test_every_navigation_route_serves[/import]",
+      "module": "tests/test_app.py",
+      "label": "Every page in the top navigation returns 200 with real content.",
+      "outcome": "passed",
+      "duration": 0.008
+    },
+    {
+      "name": "test_every_navigation_route_serves[/quality]",
+      "module": "tests/test_app.py",
+      "label": "Every page in the top navigation returns 200 with real content.",
+      "outcome": "passed",
+      "duration": 0.009
+    },
+    {
+      "name": "test_every_page_has_a_heading_and_a_lede[/]",
+      "module": "tests/test_app.py",
+      "label": "Each page states what it shows, per the shared UI bar.",
+      "outcome": "passed",
+      "duration": 0.006
+    },
+    {
+      "name": "test_every_page_has_a_heading_and_a_lede[/workspace]",
+      "module": "tests/test_app.py",
+      "label": "Each page states what it shows, per the shared UI bar.",
+      "outcome": "passed",
+      "duration": 0.013
+    },
+    {
+      "name": "test_every_page_has_a_heading_and_a_lede[/exceptions]",
+      "module": "tests/test_app.py",
+      "label": "Each page states what it shows, per the shared UI bar.",
+      "outcome": "passed",
+      "duration": 0.009
+    },
+    {
+      "name": "test_every_page_has_a_heading_and_a_lede[/approvals]",
+      "module": "tests/test_app.py",
+      "label": "Each page states what it shows, per the shared UI bar.",
+      "outcome": "passed",
+      "duration": 0.003
+    },
+    {
+      "name": "test_every_page_has_a_heading_and_a_lede[/audit]",
+      "module": "tests/test_app.py",
+      "label": "Each page states what it shows, per the shared UI bar.",
+      "outcome": "passed",
+      "duration": 0.003
+    },
+    {
+      "name": "test_every_page_has_a_heading_and_a_lede[/import]",
+      "module": "tests/test_app.py",
+      "label": "Each page states what it shows, per the shared UI bar.",
+      "outcome": "passed",
+      "duration": 0.003
+    },
+    {
+      "name": "test_every_page_has_a_heading_and_a_lede[/quality]",
+      "module": "tests/test_app.py",
+      "label": "Each page states what it shows, per the shared UI bar.",
+      "outcome": "passed",
+      "duration": 0.002
+    },
+    {
+      "name": "test_every_page_declares_a_mobile_viewport[/]",
+      "module": "tests/test_app.py",
+      "label": "The responsive meta tag is present so the layout holds on a phone.",
+      "outcome": "passed",
+      "duration": 0.005
+    },
+    {
+      "name": "test_every_page_declares_a_mobile_viewport[/workspace]",
+      "module": "tests/test_app.py",
+      "label": "The responsive meta tag is present so the layout holds on a phone.",
+      "outcome": "passed",
+      "duration": 0.012
+    },
+    {
+      "name": "test_every_page_declares_a_mobile_viewport[/exceptions]",
+      "module": "tests/test_app.py",
+      "label": "The responsive meta tag is present so the layout holds on a phone.",
+      "outcome": "passed",
+      "duration": 0.008
+    },
+    {
+      "name": "test_every_page_declares_a_mobile_viewport[/approvals]",
+      "module": "tests/test_app.py",
+      "label": "The responsive meta tag is present so the layout holds on a phone.",
+      "outcome": "passed",
+      "duration": 0.003
+    },
+    {
+      "name": "test_every_page_declares_a_mobile_viewport[/audit]",
+      "module": "tests/test_app.py",
+      "label": "The responsive meta tag is present so the layout holds on a phone.",
+      "outcome": "passed",
+      "duration": 0.004
+    },
+    {
+      "name": "test_every_page_declares_a_mobile_viewport[/import]",
+      "module": "tests/test_app.py",
+      "label": "The responsive meta tag is present so the layout holds on a phone.",
+      "outcome": "passed",
+      "duration": 0.003
+    },
+    {
+      "name": "test_every_page_declares_a_mobile_viewport[/quality]",
+      "module": "tests/test_app.py",
+      "label": "The responsive meta tag is present so the layout holds on a phone.",
+      "outcome": "passed",
+      "duration": 0.003
+    },
+    {
+      "name": "test_match_detail_shows_a_confidence_breakdown",
+      "module": "tests/test_app.py",
+      "label": "The match detail page explains the decision rather than stating a number.",
+      "outcome": "passed",
+      "duration": 0.013
+    },
+    {
+      "name": "test_rule_based_match_detail_explains_its_rule",
+      "module": "tests/test_app.py",
+      "label": "A first-pass match shows its rule and reasoning, not an empty breakdown panel.",
+      "outcome": "passed",
+      "duration": 0.003
+    },
+    {
+      "name": "test_exception_detail_serves",
+      "module": "tests/test_app.py",
+      "label": "An exception opens with its guidance and underlying record.",
+      "outcome": "passed",
+      "duration": 0.015
+    },
+    {
+      "name": "test_missing_records_redirect_with_a_message",
+      "module": "tests/test_app.py",
+      "label": "A bad id is handled, not turned into a stack trace.",
+      "outcome": "passed",
+      "duration": 0.035
+    },
+    {
+      "name": "test_workspace_views_and_filters_serve",
+      "module": "tests/test_app.py",
+      "label": "The workspace tabs and filters all render.",
+      "outcome": "passed",
+      "duration": 0.026
+    },
+    {
+      "name": "test_exception_filters_serve",
+      "module": "tests/test_app.py",
+      "label": "Queue filters return a page rather than an error, even when empty.",
+      "outcome": "passed",
+      "duration": 0.016
+    },
+    {
+      "name": "test_empty_filter_result_shows_an_empty_state",
+      "module": "tests/test_app.py",
+      "label": "A filter matching nothing shows a real empty state, never a blank box.",
+      "outcome": "passed",
+      "duration": 0.003
+    },
+    {
+      "name": "test_static_stylesheets_are_served",
+      "module": "tests/test_app.py",
+      "label": "Both stylesheets load, so the page is not unstyled.",
+      "outcome": "passed",
+      "duration": 0.006
+    },
+    {
+      "name": "test_dashboard_reports_a_computed_match_rate",
+      "module": "tests/test_app.py",
+      "label": "The headline figure on the dashboard is the one the engine actually computed.",
+      "outcome": "passed",
+      "duration": 0.006
+    },
+    {
+      "name": "test_dashboard_labels_the_data_as_synthetic",
+      "module": "tests/test_app.py",
+      "label": "The honesty rule: synthetic data is declared in the interface itself.",
+      "outcome": "passed",
+      "duration": 0.006
+    },
+    {
+      "name": "test_quality_page_reports_the_planted_scenarios",
+      "module": "tests/test_app.py",
+      "label": "The evidence page lists what the dataset deliberately contains.",
+      "outcome": "passed",
+      "duration": 0.003
+    },
+    {
+      "name": "test_errors_are_served_as_pages_with_their_real_status",
+      "module": "tests/test_app.py",
+      "label": "A person who mistypes a URL gets the application, not a JSON fragment.",
+      "outcome": "passed",
+      "duration": 0.006
+    },
+    {
+      "name": "test_the_app_has_an_identity_in_the_browser_chrome",
+      "module": "tests/test_app.py",
+      "label": "Favicon under both names, from a local file, plus page metadata.",
+      "outcome": "passed",
+      "duration": 0.009
+    },
+    {
+      "name": "test_every_page_is_navigable_by_keyboard_and_screen_reader[/]",
+      "module": "tests/test_app.py",
+      "label": "Skip link first, landmarks named, tables captioned with column scope.",
+      "outcome": "passed",
+      "duration": 0.006
+    },
+    {
+      "name": "test_every_page_is_navigable_by_keyboard_and_screen_reader[/workspace]",
+      "module": "tests/test_app.py",
+      "label": "Skip link first, landmarks named, tables captioned with column scope.",
+      "outcome": "passed",
+      "duration": 0.012
+    },
+    {
+      "name": "test_every_page_is_navigable_by_keyboard_and_screen_reader[/exceptions]",
+      "module": "tests/test_app.py",
+      "label": "Skip link first, landmarks named, tables captioned with column scope.",
+      "outcome": "passed",
+      "duration": 0.009
+    },
+    {
+      "name": "test_every_page_is_navigable_by_keyboard_and_screen_reader[/approvals]",
+      "module": "tests/test_app.py",
+      "label": "Skip link first, landmarks named, tables captioned with column scope.",
+      "outcome": "passed",
+      "duration": 0.003
+    },
+    {
+      "name": "test_every_page_is_navigable_by_keyboard_and_screen_reader[/audit]",
+      "module": "tests/test_app.py",
+      "label": "Skip link first, landmarks named, tables captioned with column scope.",
+      "outcome": "passed",
+      "duration": 0.004
+    },
+    {
+      "name": "test_every_page_is_navigable_by_keyboard_and_screen_reader[/import]",
+      "module": "tests/test_app.py",
+      "label": "Skip link first, landmarks named, tables captioned with column scope.",
+      "outcome": "passed",
+      "duration": 0.003
+    },
+    {
+      "name": "test_every_page_is_navigable_by_keyboard_and_screen_reader[/quality]",
+      "module": "tests/test_app.py",
+      "label": "Skip link first, landmarks named, tables captioned with column scope.",
+      "outcome": "passed",
+      "duration": 0.002
+    },
+    {
+      "name": "test_every_page_holds_up_against_an_empty_database",
+      "module": "tests/test_app.py",
+      "label": "First run, nothing imported: every page shows an empty state, not a stack trace.",
+      "outcome": "passed",
+      "duration": 0.023
+    },
+    {
+      "name": "test_role_switch_changes_the_acting_user",
+      "module": "tests/test_app.py",
+      "label": "The demo switcher sets the acting identity and the page reflects it.",
+      "outcome": "passed",
+      "duration": 0.009
+    },
+    {
+      "name": "test_an_unknown_demo_user_is_refused",
+      "module": "tests/test_app.py",
+      "label": "Only the defined demo identities can be assumed.",
+      "outcome": "passed",
+      "duration": 0.006
+    },
+    {
+      "name": "test_auditor_write_is_refused_over_http",
+      "module": "tests/test_app.py",
+      "label": "Driving the real form as the auditor is refused by the server, not the template.",
+      "outcome": "passed",
+      "duration": 0.006
+    },
+    {
+      "name": "test_self_approval_is_refused_over_http",
+      "module": "tests/test_app.py",
+      "label": "The seeded supervisor-raised item cannot be approved by that same supervisor.",
+      "outcome": "passed",
+      "duration": 0.005
+    },
+    {
+      "name": "test_analyst_approval_is_refused_over_http",
+      "module": "tests/test_app.py",
+      "label": "An analyst pressing approve is told why it will not work.",
+      "outcome": "passed",
+      "duration": 0.005
+    },
+    {
+      "name": "test_supervisor_can_approve_an_analyst_request_over_http",
+      "module": "tests/test_app.py",
+      "label": "The intended path completes and the decision is recorded with the checker.",
+      "outcome": "passed",
+      "duration": 0.007
+    },
+    {
+      "name": "test_uploading_a_known_file_posts_nothing",
+      "module": "tests/test_app.py",
+      "label": "Re-uploading a file already imported is refused, with the counts to prove it.",
+      "outcome": "passed",
+      "duration": 0.008
+    },
+    {
+      "name": "test_uploading_a_new_file_with_a_bad_row_reports_both_counts",
+      "module": "tests/test_app.py",
+      "label": "A mixed file imports the good rows and reports the bad one.",
+      "outcome": "passed",
+      "duration": 0.007
+    },
+    {
+      "name": "test_an_empty_upload_is_refused",
+      "module": "tests/test_app.py",
+      "label": "An empty file is rejected before it reaches the parser.",
+      "outcome": "passed",
+      "duration": 0.004
+    },
+    {
+      "name": "test_uploading_a_bank_statement_goes_through_the_same_machinery",
+      "module": "tests/test_app.py",
+      "label": "An MT940 upload imports as payments, with the batch and hash checks intact.",
+      "outcome": "passed",
+      "duration": 0.015
+    },
+    {
+      "name": "test_uploading_a_camt053_statement_imports_the_same_way",
+      "module": "tests/test_app.py",
+      "label": "The XML format lands through the identical path, debits included.",
+      "outcome": "passed",
+      "duration": 0.008
+    },
+    {
+      "name": "test_auditor_cannot_upload_over_http",
+      "module": "tests/test_app.py",
+      "label": "The read-only role is refused at the import route too.",
+      "outcome": "passed",
+      "duration": 0.005
+    },
+    {
+      "name": "test_rematch_is_refused_for_the_auditor",
+      "module": "tests/test_app.py",
+      "label": "Re-running the engine is a write and is gated like one.",
+      "outcome": "passed",
+      "duration": 0.005
+    },
+    {
+      "name": "test_audit_state_is_rendered_as_fields_not_raw_json",
+      "module": "tests/test_app.py",
+      "label": "Recorded state reaches the page as field names, not a JSON blob.",
+      "outcome": "passed",
+      "duration": 0.004
+    },
+    {
+      "name": "test_audit_change_column_shows_only_what_moved",
+      "module": "tests/test_app.py",
+      "label": "The audit page states the transition, and drops fields that did not move.",
+      "outcome": "passed",
+      "duration": 0.004
+    },
+    {
+      "name": "test_audit_page_shows_the_recorded_history",
+      "module": "tests/test_app.py",
+      "label": "The audit page reflects the entries the seeding and tests actually wrote.",
+      "outcome": "passed",
+      "duration": 0.004
+    },
+    {
+      "name": "test_role_lookup_defaults_to_read_only",
+      "module": "tests/test_controls.py",
+      "label": "An unrecognised actor gets the least privilege, never the most.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_auditor_holds_read_only",
+      "module": "tests/test_controls.py",
+      "label": "The auditor role can read and nothing else.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_analyst_cannot_approve",
+      "module": "tests/test_controls.py",
+      "label": "An analyst may propose but never decide.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_supervisor_can_approve",
+      "module": "tests/test_controls.py",
+      "label": "Only the supervisor role carries the approve permission.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_require_refuses_the_auditor_with_a_usable_message",
+      "module": "tests/test_controls.py",
+      "label": "The refusal explains what to do, because a user will read it.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_require_refuses_an_unknown_role",
+      "module": "tests/test_controls.py",
+      "label": "An unmapped role is refused rather than defaulting to permissive.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_threshold_decides_whether_approval_is_needed",
+      "module": "tests/test_controls.py",
+      "label": "Small corrections do not need four eyes; the boundary value does.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_a_maker_cannot_approve_their_own_request",
+      "module": "tests/test_controls.py",
+      "label": "Segregation of duties: the person who raised an item cannot approve it.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_a_maker_cannot_reject_their_own_request_either",
+      "module": "tests/test_controls.py",
+      "label": "The rule covers rejection as well as approval, and says so in readable English.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_the_self_approval_message_reads_correctly",
+      "module": "tests/test_controls.py",
+      "label": "The refusal names the action properly rather than mangling the verb.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_an_analyst_cannot_approve_someone_elses_request",
+      "module": "tests/test_controls.py",
+      "label": "Being a different person is not enough; the role must carry the permission.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_an_auditor_cannot_approve",
+      "module": "tests/test_controls.py",
+      "label": "Read-only stays read-only in the approval queue too.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_a_supervisor_can_approve_another_persons_request",
+      "module": "tests/test_controls.py",
+      "label": "The intended path works: a different person holding the right role decides.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_a_decision_cannot_be_revisited",
+      "module": "tests/test_controls.py",
+      "label": "Once decided, an item is closed and a second decision is refused.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_an_unknown_decision_is_refused",
+      "module": "tests/test_controls.py",
+      "label": "Only approve and reject exist; anything else is an error.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_deciding_a_missing_approval_is_refused",
+      "module": "tests/test_controls.py",
+      "label": "A non-existent approval id fails loudly.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_an_auditor_cannot_raise_a_request",
+      "module": "tests/test_controls.py",
+      "label": "The read-only role cannot even start the maker-checker flow.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_blocked_reason_agrees_with_enforcement",
+      "module": "tests/test_controls.py",
+      "label": "What the UI says is blocked is exactly what the domain function refuses.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_raising_a_request_is_audited",
+      "module": "tests/test_controls.py",
+      "label": "The request itself is an event, not only the decision.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_both_decisions_are_audited",
+      "module": "tests/test_controls.py",
+      "label": "Approval and rejection each write their own distinguishable entry.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_audit_captures_before_and_after_state",
+      "module": "tests/test_controls.py",
+      "label": "An entry records what changed, not merely that something changed.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_a_refused_action_leaves_no_audit_entry",
+      "module": "tests/test_controls.py",
+      "label": "Nothing happened, so nothing is logged: the trail records changes, not attempts.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_the_audit_log_cannot_be_updated",
+      "module": "tests/test_controls.py",
+      "label": "Immutability is enforced by a database trigger, not by convention.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_the_audit_log_cannot_be_deleted_from",
+      "module": "tests/test_controls.py",
+      "label": "The same trigger blocks deletion, so history cannot be quietly trimmed.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_audit_survives_an_attempted_mass_delete",
+      "module": "tests/test_controls.py",
+      "label": "A blanket delete is refused as a whole, leaving every row in place.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_audit_serialises_non_json_values",
+      "module": "tests/test_controls.py",
+      "label": "Dates and other objects are recorded rather than crashing the write.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_short_payment_is_detected",
+      "module": "tests/test_exceptions.py",
+      "label": "A payment materially below the invoice raises SHORT_PAY, not a silent write-off.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_overpayment_is_detected",
+      "module": "tests/test_exceptions.py",
+      "label": "More money than invoiced raises OVER_PAY.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_difference_inside_tolerance_raises_nothing",
+      "module": "tests/test_exceptions.py",
+      "label": "A two-tetri rounding difference is settled, not escalated to a human.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_duplicate_payment_is_detected",
+      "module": "tests/test_exceptions.py",
+      "label": "The same payer sending the same amount days later is flagged as a suspected duplicate.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_matched_instalments_are_not_flagged_as_duplicates",
+      "module": "tests/test_exceptions.py",
+      "label": "Two equal payments that both settle one invoice are an instalment plan, not a duplicate.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_duplicate_outside_the_window_is_not_flagged",
+      "module": "tests/test_exceptions.py",
+      "label": "Two equal payments months apart are ordinary recurring business.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_unknown_customer_is_detected",
+      "module": "tests/test_exceptions.py",
+      "label": "Cash from a payer with no customer account is flagged as high severity.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_currency_mismatch_is_detected",
+      "module": "tests/test_exceptions.py",
+      "label": "An invoice and payment in different currencies raise CURRENCY_MISMATCH.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_currency_mismatch_suppresses_a_misleading_short_pay",
+      "module": "tests/test_exceptions.py",
+      "label": "A currency difference is reported as such, not disguised as a shortfall.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_unpaid_invoice_raises_only_once_past_due",
+      "module": "tests/test_exceptions.py",
+      "label": "An invoice still inside its terms is not an exception; a late one is.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_unapplied_payment_is_detected",
+      "module": "tests/test_exceptions.py",
+      "label": "Cash with a known payer but no identifiable invoice is UNAPPLIED_PAYMENT.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_reversal_is_detected",
+      "module": "tests/test_exceptions.py",
+      "label": "A negative entry is typed as a reversal rather than treated as a payment.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_ambiguous_match_is_raised_for_a_proposal",
+      "module": "tests/test_exceptions.py",
+      "label": "A proposal below the auto threshold becomes a queue item for a human.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_ageing_bucket_boundaries[0-0-7]",
+      "module": "tests/test_exceptions.py",
+      "label": "Bucket edges are inclusive on the upper bound and do not overlap.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_ageing_bucket_boundaries[7-0-7]",
+      "module": "tests/test_exceptions.py",
+      "label": "Bucket edges are inclusive on the upper bound and do not overlap.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_ageing_bucket_boundaries[8-8-30]",
+      "module": "tests/test_exceptions.py",
+      "label": "Bucket edges are inclusive on the upper bound and do not overlap.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_ageing_bucket_boundaries[30-8-30]",
+      "module": "tests/test_exceptions.py",
+      "label": "Bucket edges are inclusive on the upper bound and do not overlap.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_ageing_bucket_boundaries[31-31-60]",
+      "module": "tests/test_exceptions.py",
+      "label": "Bucket edges are inclusive on the upper bound and do not overlap.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_ageing_bucket_boundaries[60-31-60]",
+      "module": "tests/test_exceptions.py",
+      "label": "Bucket edges are inclusive on the upper bound and do not overlap.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_ageing_bucket_boundaries[61-60+]",
+      "module": "tests/test_exceptions.py",
+      "label": "Bucket edges are inclusive on the upper bound and do not overlap.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_ageing_bucket_boundaries[400-60+]",
+      "module": "tests/test_exceptions.py",
+      "label": "Bucket edges are inclusive on the upper bound and do not overlap.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_sla_breach_depends_on_severity[high-3-False]",
+      "module": "tests/test_exceptions.py",
+      "label": "Each severity has its own clock, and the boundary day is not yet a breach.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_sla_breach_depends_on_severity[high-4-True]",
+      "module": "tests/test_exceptions.py",
+      "label": "Each severity has its own clock, and the boundary day is not yet a breach.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_sla_breach_depends_on_severity[medium-7-False]",
+      "module": "tests/test_exceptions.py",
+      "label": "Each severity has its own clock, and the boundary day is not yet a breach.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_sla_breach_depends_on_severity[medium-8-True]",
+      "module": "tests/test_exceptions.py",
+      "label": "Each severity has its own clock, and the boundary day is not yet a breach.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_sla_breach_depends_on_severity[low-30-False]",
+      "module": "tests/test_exceptions.py",
+      "label": "Each severity has its own clock, and the boundary day is not yet a breach.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_sla_breach_depends_on_severity[low-31-True]",
+      "module": "tests/test_exceptions.py",
+      "label": "Each severity has its own clock, and the boundary day is not yet a breach.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_age_is_measured_from_the_dataset_as_of_date",
+      "module": "tests/test_exceptions.py",
+      "label": "Ageing uses the fixed as-of date, so the queue does not drift with the wall clock.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_derivation_is_deterministic",
+      "module": "tests/test_exceptions.py",
+      "label": "The same reconciliation state yields the same queue in the same order.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_every_reason_code_has_guidance",
+      "module": "tests/test_exceptions.py",
+      "label": "Each code carries what it means and what to do, so the UI never shows a bare code.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_findings_persist_without_colliding",
+      "module": "tests/test_exceptions.py",
+      "label": "Several differences of the same kind are all stored, not collapsed into one row.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_transition_to_investigating_records_the_note",
+      "module": "tests/test_exceptions.py",
+      "label": "Moving an item forward keeps the analyst's note against it.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_resolving_requires_a_reason",
+      "module": "tests/test_exceptions.py",
+      "label": "An exception cannot be closed silently.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_resolved_items_cannot_be_reopened",
+      "module": "tests/test_exceptions.py",
+      "label": "Once closed, the record is closed; the audit trail holds the history.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_auditor_cannot_change_an_exception",
+      "module": "tests/test_exceptions.py",
+      "label": "The read-only role is refused by the domain function itself.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_every_transition_writes_an_audit_row",
+      "module": "tests/test_exceptions.py",
+      "label": "State changes are all recorded, with the before and after state.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_reassignment_is_audited",
+      "module": "tests/test_exceptions.py",
+      "label": "Changing the owner is a state change and is logged like any other.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_analyst_work_survives_a_rebuild",
+      "module": "tests/test_exceptions.py",
+      "label": "Re-deriving the queue does not discard an item somebody is already working on.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_unknown_status_is_refused",
+      "module": "tests/test_exceptions.py",
+      "label": "An invalid lifecycle state is rejected rather than written to the database.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_sha256_is_stable_and_content_sensitive",
+      "module": "tests/test_ingest.py",
+      "label": "The same bytes always hash the same, one changed byte does not.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_parse_decimal_dot_convention[1234.56-123456]",
+      "module": "tests/test_ingest.py",
+      "label": "Plain dot-decimal amounts parse to exact minor units.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_parse_decimal_dot_convention[0.02-2]",
+      "module": "tests/test_ingest.py",
+      "label": "Plain dot-decimal amounts parse to exact minor units.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_parse_decimal_dot_convention[1234-123400]",
+      "module": "tests/test_ingest.py",
+      "label": "Plain dot-decimal amounts parse to exact minor units.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_parse_decimal_dot_convention[-99.99--9999]",
+      "module": "tests/test_ingest.py",
+      "label": "Plain dot-decimal amounts parse to exact minor units.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_parse_decimal_comma_convention[1.234,56-123456]",
+      "module": "tests/test_ingest.py",
+      "label": "European comma-decimal amounts parse to the same minor units.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_parse_decimal_comma_convention[1 234,56-123456]",
+      "module": "tests/test_ingest.py",
+      "label": "European comma-decimal amounts parse to the same minor units.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_parse_decimal_comma_convention[1,23-123]",
+      "module": "tests/test_ingest.py",
+      "label": "European comma-decimal amounts parse to the same minor units.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_parse_decimal_comma_convention[1.234.567,89-123456789]",
+      "module": "tests/test_ingest.py",
+      "label": "European comma-decimal amounts parse to the same minor units.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_parse_decimal_thousands_separators[1,234.56-123456]",
+      "module": "tests/test_ingest.py",
+      "label": "Thousands separators are stripped, including the ambiguous lone-separator case.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_parse_decimal_thousands_separators[12 345.67-1234567]",
+      "module": "tests/test_ingest.py",
+      "label": "Thousands separators are stripped, including the ambiguous lone-separator case.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_parse_decimal_thousands_separators[1,234-123400]",
+      "module": "tests/test_ingest.py",
+      "label": "Thousands separators are stripped, including the ambiguous lone-separator case.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_parse_decimal_thousands_separators[1.234-123400]",
+      "module": "tests/test_ingest.py",
+      "label": "Thousands separators are stripped, including the ambiguous lone-separator case.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_parse_decimal_parenthesised_negative",
+      "module": "tests/test_ingest.py",
+      "label": "Accounting-style parentheses mean a negative amount.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_parse_decimal_ignores_currency_symbols",
+      "module": "tests/test_ingest.py",
+      "label": "Symbols and codes attached to the amount do not defeat parsing.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_parse_decimal_rejects_garbage[]",
+      "module": "tests/test_ingest.py",
+      "label": "Unparseable amounts raise rather than silently becoming zero.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_parse_decimal_rejects_garbage[   ]",
+      "module": "tests/test_ingest.py",
+      "label": "Unparseable amounts raise rather than silently becoming zero.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_parse_decimal_rejects_garbage[abc]",
+      "module": "tests/test_ingest.py",
+      "label": "Unparseable amounts raise rather than silently becoming zero.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_parse_decimal_rejects_garbage[n/a]",
+      "module": "tests/test_ingest.py",
+      "label": "Unparseable amounts raise rather than silently becoming zero.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_parse_decimal_rejects_garbage[None]",
+      "module": "tests/test_ingest.py",
+      "label": "Unparseable amounts raise rather than silently becoming zero.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_parse_date_accepts_known_formats[2026-04-17]",
+      "module": "tests/test_ingest.py",
+      "label": "Day-first and ISO date formats all normalise to the same ISO string.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_parse_date_accepts_known_formats[17/04/2026]",
+      "module": "tests/test_ingest.py",
+      "label": "Day-first and ISO date formats all normalise to the same ISO string.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_parse_date_accepts_known_formats[17.04.2026]",
+      "module": "tests/test_ingest.py",
+      "label": "Day-first and ISO date formats all normalise to the same ISO string.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_parse_date_accepts_known_formats[2026/04/17]",
+      "module": "tests/test_ingest.py",
+      "label": "Day-first and ISO date formats all normalise to the same ISO string.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_parse_date_rejects_impossible_dates[]",
+      "module": "tests/test_ingest.py",
+      "label": "A date that cannot exist is refused, including 31 February.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_parse_date_rejects_impossible_dates[not-a-date]",
+      "module": "tests/test_ingest.py",
+      "label": "A date that cannot exist is refused, including 31 February.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_parse_date_rejects_impossible_dates[31/02/2026]",
+      "module": "tests/test_ingest.py",
+      "label": "A date that cannot exist is refused, including 31 February.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_parse_date_rejects_impossible_dates[2026-13-45]",
+      "module": "tests/test_ingest.py",
+      "label": "A date that cannot exist is refused, including 31 February.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_normalise_header_collapses_case_space_and_underscores",
+      "module": "tests/test_ingest.py",
+      "label": "Header spelling variation is flattened to one canonical form.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_resolve_columns_tolerates_reordering_and_aliases",
+      "module": "tests/test_ingest.py",
+      "label": "Canonical fields are found regardless of order or which alias was used.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_to_gel_uses_the_fixed_rate_table",
+      "module": "tests/test_ingest.py",
+      "label": "Foreign currency converts at the published fixed rate, not a live one.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_to_gel_rejects_an_unknown_currency",
+      "module": "tests/test_ingest.py",
+      "label": "A currency with no published rate is an error, never a guess.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_import_accepts_a_clean_file",
+      "module": "tests/test_ingest.py",
+      "label": "A well-formed file posts every row and records the counts.",
+      "outcome": "passed",
+      "duration": 0.001
+    },
+    {
+      "name": "test_importing_the_same_file_twice_posts_nothing",
+      "module": "tests/test_ingest.py",
+      "label": "Idempotency: identical bytes are recorded as a duplicate and never double-posted.",
+      "outcome": "passed",
+      "duration": 0.001
+    },
+    {
+      "name": "test_duplicate_file_records_why_it_was_skipped",
+      "module": "tests/test_ingest.py",
+      "label": "The duplicate batch explains which earlier batch already held that content.",
+      "outcome": "passed",
+      "duration": 0.001
+    },
+    {
+      "name": "test_import_tolerates_reordered_columns_and_header_noise",
+      "module": "tests/test_ingest.py",
+      "label": "A file with shuffled, differently spelled headers still imports correctly.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_import_parses_european_decimals",
+      "module": "tests/test_ingest.py",
+      "label": "A file written 1.234,56 imports to the same minor units as 1234.56.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_one_bad_date_rejects_only_that_row",
+      "module": "tests/test_ingest.py",
+      "label": "A malformed row is refused with a reason while the rest of the file posts.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_negative_invoice_amount_is_rejected",
+      "module": "tests/test_ingest.py",
+      "label": "An invoice for a negative amount is refused; only payments may be negative.",
+      "outcome": "passed",
+      "duration": 0.001
+    },
+    {
+      "name": "test_missing_reference_is_rejected",
+      "module": "tests/test_ingest.py",
+      "label": "A row with no invoice number cannot be identified later, so it is refused.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_unknown_currency_is_rejected",
+      "module": "tests/test_ingest.py",
+      "label": "A currency with no rate is refused rather than converted at a guess.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_missing_required_column_rejects_the_file_with_a_reason",
+      "module": "tests/test_ingest.py",
+      "label": "A file without an amount column is rejected as a whole, and says which column.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_row_already_present_is_skipped_not_duplicated",
+      "module": "tests/test_ingest.py",
+      "label": "A different file repeating a known invoice number skips that row only.",
+      "outcome": "passed",
+      "duration": 0.001
+    },
+    {
+      "name": "test_import_writes_an_audit_row",
+      "module": "tests/test_ingest.py",
+      "label": "Importing is a state change, so it lands in the audit log.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_auditor_cannot_import",
+      "module": "tests/test_ingest.py",
+      "label": "The read-only role is refused at the import boundary, not in the template.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_fmt_money_groups_thousands_and_keeps_two_decimals",
+      "module": "tests/test_ingest.py",
+      "label": "Display formatting is exact and never rounds a stored value away.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_normalise_ref_strips_case_and_punctuation",
+      "module": "tests/test_matching.py",
+      "label": "References differing only in case or punctuation compare equal.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_exact_reference_matches_first",
+      "module": "tests/test_matching.py",
+      "label": "A remittance quoting the invoice number matches on rule R1 with full confidence.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_reference_containment_survives_prefixes",
+      "module": "tests/test_matching.py",
+      "label": "'PMT-INV-2026-0001 PAYMENT' still resolves to the invoice it contains.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_amount_customer_and_date_rule",
+      "module": "tests/test_matching.py",
+      "label": "With no usable reference, an exact amount for one customer matches on R2.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_two_identical_candidates_are_not_auto_matched",
+      "module": "tests/test_matching.py",
+      "label": "When two invoices fit equally well, R2 refuses to guess.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_tolerance_absolute_boundary_is_inclusive",
+      "module": "tests/test_matching.py",
+      "label": "Exactly 0.02 is inside the flat tolerance and 0.03 is outside.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_tolerance_percentage_boundary_is_inclusive",
+      "module": "tests/test_matching.py",
+      "label": "At 0.5% of 100.00 the allowance is exactly 0.50: 0.50 passes, 0.51 does not.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_tolerance_takes_the_larger_of_the_two_rules",
+      "module": "tests/test_matching.py",
+      "label": "On a tiny invoice the flat 0.02 binds; on a large one the percentage does.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_within_tolerance_difference_matches_on_r3",
+      "module": "tests/test_matching.py",
+      "label": "A rounding difference inside tolerance still settles, on rule R3.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_many_to_one_grouping",
+      "module": "tests/test_matching.py",
+      "label": "One payment settling three invoices is found and recorded as an n:1 match.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_one_to_many_grouping",
+      "module": "tests/test_matching.py",
+      "label": "Two instalments settling one invoice are found and recorded as a 1:n match.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_scored_breakdown_sums_to_the_confidence",
+      "module": "tests/test_matching.py",
+      "label": "The confidence is exactly the sum of the component contributions, not a black box.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_component_weights_sum_to_one_hundred",
+      "module": "tests/test_matching.py",
+      "label": "A perfect match on every component scores exactly 100.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_single_character_typo_is_explained_in_words",
+      "module": "tests/test_matching.py",
+      "label": "A one-character reference error is described as such, not as a raw ratio.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_amount_difference_is_explained_with_the_figure",
+      "module": "tests/test_matching.py",
+      "label": "The explanation states the actual money difference and its direction.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_early_payment_is_explained_as_before_the_invoice",
+      "module": "tests/test_matching.py",
+      "label": "Cash arriving before the invoice date is described in plain language.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_unusable_reference_cannot_reach_the_auto_threshold",
+      "module": "tests/test_matching.py",
+      "label": "Structural guarantee: with no reference, amount, date and customer cap out below auto.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_wrong_customer_scores_zero_on_identity",
+      "module": "tests/test_matching.py",
+      "label": "A payer unrelated to the customer contributes nothing to the score.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_currency_mismatch_still_matches_on_reference_and_is_flagged",
+      "module": "tests/test_matching.py",
+      "label": "A payment in the wrong currency still finds its invoice, and the note says so.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_a_payment_is_never_assigned_twice",
+      "module": "tests/test_matching.py",
+      "label": "No payment appears on more than one proposal, whatever the pass.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_an_invoice_is_never_assigned_twice",
+      "module": "tests/test_matching.py",
+      "label": "The same guarantee holds on the invoice side.",
+      "outcome": "passed",
+      "duration": 0.001
+    },
+    {
+      "name": "test_matching_is_deterministic",
+      "module": "tests/test_matching.py",
+      "label": "The same inputs produce the same proposals, in the same order, every time.",
+      "outcome": "passed",
+      "duration": 0.001
+    },
+    {
+      "name": "test_scores_below_the_review_floor_produce_no_proposal",
+      "module": "tests/test_matching.py",
+      "label": "A pair with nothing in common is left alone rather than forced into a match.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_proposed_band_is_between_the_two_thresholds",
+      "module": "tests/test_matching.py",
+      "label": "A partial-signal pair lands in the review band, neither posted nor discarded.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_config_is_overridable",
+      "module": "tests/test_matching.py",
+      "label": "Tolerance is configuration, not a constant baked into the rules.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_run_matching_persists_links_and_breakdown",
+      "module": "tests/test_matching.py",
+      "label": "Persisted matches carry their links and their stored explanation.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_run_matching_is_repeatable_without_duplicating",
+      "module": "tests/test_matching.py",
+      "label": "Re-running matching rebuilds rather than accumulating rows.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_manual_confirmation_survives_a_rematch",
+      "module": "tests/test_matching.py",
+      "label": "Human decisions are preserved when the engine re-runs.",
+      "outcome": "passed",
+      "duration": 0.001
+    },
+    {
+      "name": "test_matching_writes_an_audit_row",
+      "module": "tests/test_matching.py",
+      "label": "Running the engine is itself an auditable event.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_auditor_cannot_run_matching",
+      "module": "tests/test_matching.py",
+      "label": "The read-only role cannot trigger a re-match.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_format_is_detected_from_content_not_from_the_file_name",
+      "module": "tests/test_statements.py",
+      "label": "A bank that names an MT940 file .txt still sends MT940.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_mt940_yields_one_row_per_transaction_with_the_payment_row_shape",
+      "module": "tests/test_statements.py",
+      "label": "test_mt940_yields_one_row_per_transaction_with_the_payment_row_shape",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_mt940_amounts_and_value_dates_survive_the_parse",
+      "module": "tests/test_statements.py",
+      "label": "test_mt940_amounts_and_value_dates_survive_the_parse",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_mt940_debit_marks_arrive_negative",
+      "module": "tests/test_statements.py",
+      "label": "A D line is money leaving. Read as a credit it would post as a receipt.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_mt940_folds_both_61_and_86_onto_the_reference",
+      "module": "tests/test_statements.py",
+      "label": "The invoice number turns up in either field depending on the bank.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_mt940_takes_the_currency_from_the_statement_balance",
+      "module": "tests/test_statements.py",
+      "label": "test_mt940_takes_the_currency_from_the_statement_balance",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_mt940_bank_reference_becomes_the_payment_key",
+      "module": "tests/test_statements.py",
+      "label": "test_mt940_bank_reference_becomes_the_payment_key",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_mt940_continuation_lines_are_folded_into_their_tag",
+      "module": "tests/test_statements.py",
+      "label": ":86: wraps across lines in real statements; the tail must not be lost.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_mt940_ignores_lines_it_cannot_parse_rather_than_failing_the_file",
+      "module": "tests/test_statements.py",
+      "label": "test_mt940_ignores_lines_it_cannot_parse_rather_than_failing_the_file",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_camt053_yields_one_row_per_entry_with_the_payment_row_shape",
+      "module": "tests/test_statements.py",
+      "label": "test_camt053_yields_one_row_per_entry_with_the_payment_row_shape",
+      "outcome": "passed",
+      "duration": 0.001
+    },
+    {
+      "name": "test_camt053_reads_cdtdbtind_so_a_debit_is_negative",
+      "module": "tests/test_statements.py",
+      "label": "The amount element is unsigned. Without CdtDbtInd a debit posts as cash in.",
+      "outcome": "passed",
+      "duration": 0.001
+    },
+    {
+      "name": "test_camt053_reads_currency_payer_and_remittance",
+      "module": "tests/test_statements.py",
+      "label": "test_camt053_reads_currency_payer_and_remittance",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_camt053_parses_whatever_the_namespace_version_is",
+      "module": "tests/test_statements.py",
+      "label": "Any camt.053 minor version resolves by local name.",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_camt053_rejects_a_malformed_document_loudly",
+      "module": "tests/test_statements.py",
+      "label": "test_camt053_rejects_a_malformed_document_loudly",
+      "outcome": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "test_the_two_formats_produce_the_same_payments",
+      "module": "tests/test_statements.py",
+      "label": "The whole point: one bank, two file formats, one set of facts.",
+      "outcome": "passed",
+      "duration": 0.001
+    }
+  ],
+  "by_module": {
+    "tests/test_app.py": [
+      {
+        "name": "test_every_navigation_route_serves[/]",
+        "module": "tests/test_app.py",
+        "label": "Every page in the top navigation returns 200 with real content.",
+        "outcome": "passed",
+        "duration": 0.024
+      },
+      {
+        "name": "test_every_navigation_route_serves[/workspace]",
+        "module": "tests/test_app.py",
+        "label": "Every page in the top navigation returns 200 with real content.",
+        "outcome": "passed",
+        "duration": 0.022
+      },
+      {
+        "name": "test_every_navigation_route_serves[/exceptions]",
+        "module": "tests/test_app.py",
+        "label": "Every page in the top navigation returns 200 with real content.",
+        "outcome": "passed",
+        "duration": 0.017
+      },
+      {
+        "name": "test_every_navigation_route_serves[/approvals]",
+        "module": "tests/test_app.py",
+        "label": "Every page in the top navigation returns 200 with real content.",
+        "outcome": "passed",
+        "duration": 0.008
+      },
+      {
+        "name": "test_every_navigation_route_serves[/audit]",
+        "module": "tests/test_app.py",
+        "label": "Every page in the top navigation returns 200 with real content.",
+        "outcome": "passed",
+        "duration": 0.011
+      },
+      {
+        "name": "test_every_navigation_route_serves[/import]",
+        "module": "tests/test_app.py",
+        "label": "Every page in the top navigation returns 200 with real content.",
+        "outcome": "passed",
+        "duration": 0.008
+      },
+      {
+        "name": "test_every_navigation_route_serves[/quality]",
+        "module": "tests/test_app.py",
+        "label": "Every page in the top navigation returns 200 with real content.",
+        "outcome": "passed",
+        "duration": 0.009
+      },
+      {
+        "name": "test_every_page_has_a_heading_and_a_lede[/]",
+        "module": "tests/test_app.py",
+        "label": "Each page states what it shows, per the shared UI bar.",
+        "outcome": "passed",
+        "duration": 0.006
+      },
+      {
+        "name": "test_every_page_has_a_heading_and_a_lede[/workspace]",
+        "module": "tests/test_app.py",
+        "label": "Each page states what it shows, per the shared UI bar.",
+        "outcome": "passed",
+        "duration": 0.013
+      },
+      {
+        "name": "test_every_page_has_a_heading_and_a_lede[/exceptions]",
+        "module": "tests/test_app.py",
+        "label": "Each page states what it shows, per the shared UI bar.",
+        "outcome": "passed",
+        "duration": 0.009
+      },
+      {
+        "name": "test_every_page_has_a_heading_and_a_lede[/approvals]",
+        "module": "tests/test_app.py",
+        "label": "Each page states what it shows, per the shared UI bar.",
+        "outcome": "passed",
+        "duration": 0.003
+      },
+      {
+        "name": "test_every_page_has_a_heading_and_a_lede[/audit]",
+        "module": "tests/test_app.py",
+        "label": "Each page states what it shows, per the shared UI bar.",
+        "outcome": "passed",
+        "duration": 0.003
+      },
+      {
+        "name": "test_every_page_has_a_heading_and_a_lede[/import]",
+        "module": "tests/test_app.py",
+        "label": "Each page states what it shows, per the shared UI bar.",
+        "outcome": "passed",
+        "duration": 0.003
+      },
+      {
+        "name": "test_every_page_has_a_heading_and_a_lede[/quality]",
+        "module": "tests/test_app.py",
+        "label": "Each page states what it shows, per the shared UI bar.",
+        "outcome": "passed",
+        "duration": 0.002
+      },
+      {
+        "name": "test_every_page_declares_a_mobile_viewport[/]",
+        "module": "tests/test_app.py",
+        "label": "The responsive meta tag is present so the layout holds on a phone.",
+        "outcome": "passed",
+        "duration": 0.005
+      },
+      {
+        "name": "test_every_page_declares_a_mobile_viewport[/workspace]",
+        "module": "tests/test_app.py",
+        "label": "The responsive meta tag is present so the layout holds on a phone.",
+        "outcome": "passed",
+        "duration": 0.012
+      },
+      {
+        "name": "test_every_page_declares_a_mobile_viewport[/exceptions]",
+        "module": "tests/test_app.py",
+        "label": "The responsive meta tag is present so the layout holds on a phone.",
+        "outcome": "passed",
+        "duration": 0.008
+      },
+      {
+        "name": "test_every_page_declares_a_mobile_viewport[/approvals]",
+        "module": "tests/test_app.py",
+        "label": "The responsive meta tag is present so the layout holds on a phone.",
+        "outcome": "passed",
+        "duration": 0.003
+      },
+      {
+        "name": "test_every_page_declares_a_mobile_viewport[/audit]",
+        "module": "tests/test_app.py",
+        "label": "The responsive meta tag is present so the layout holds on a phone.",
+        "outcome": "passed",
+        "duration": 0.004
+      },
+      {
+        "name": "test_every_page_declares_a_mobile_viewport[/import]",
+        "module": "tests/test_app.py",
+        "label": "The responsive meta tag is present so the layout holds on a phone.",
+        "outcome": "passed",
+        "duration": 0.003
+      },
+      {
+        "name": "test_every_page_declares_a_mobile_viewport[/quality]",
+        "module": "tests/test_app.py",
+        "label": "The responsive meta tag is present so the layout holds on a phone.",
+        "outcome": "passed",
+        "duration": 0.003
+      },
+      {
+        "name": "test_match_detail_shows_a_confidence_breakdown",
+        "module": "tests/test_app.py",
+        "label": "The match detail page explains the decision rather than stating a number.",
+        "outcome": "passed",
+        "duration": 0.013
+      },
+      {
+        "name": "test_rule_based_match_detail_explains_its_rule",
+        "module": "tests/test_app.py",
+        "label": "A first-pass match shows its rule and reasoning, not an empty breakdown panel.",
+        "outcome": "passed",
+        "duration": 0.003
+      },
+      {
+        "name": "test_exception_detail_serves",
+        "module": "tests/test_app.py",
+        "label": "An exception opens with its guidance and underlying record.",
+        "outcome": "passed",
+        "duration": 0.015
+      },
+      {
+        "name": "test_missing_records_redirect_with_a_message",
+        "module": "tests/test_app.py",
+        "label": "A bad id is handled, not turned into a stack trace.",
+        "outcome": "passed",
+        "duration": 0.035
+      },
+      {
+        "name": "test_workspace_views_and_filters_serve",
+        "module": "tests/test_app.py",
+        "label": "The workspace tabs and filters all render.",
+        "outcome": "passed",
+        "duration": 0.026
+      },
+      {
+        "name": "test_exception_filters_serve",
+        "module": "tests/test_app.py",
+        "label": "Queue filters return a page rather than an error, even when empty.",
+        "outcome": "passed",
+        "duration": 0.016
+      },
+      {
+        "name": "test_empty_filter_result_shows_an_empty_state",
+        "module": "tests/test_app.py",
+        "label": "A filter matching nothing shows a real empty state, never a blank box.",
+        "outcome": "passed",
+        "duration": 0.003
+      },
+      {
+        "name": "test_static_stylesheets_are_served",
+        "module": "tests/test_app.py",
+        "label": "Both stylesheets load, so the page is not unstyled.",
+        "outcome": "passed",
+        "duration": 0.006
+      },
+      {
+        "name": "test_dashboard_reports_a_computed_match_rate",
+        "module": "tests/test_app.py",
+        "label": "The headline figure on the dashboard is the one the engine actually computed.",
+        "outcome": "passed",
+        "duration": 0.006
+      },
+      {
+        "name": "test_dashboard_labels_the_data_as_synthetic",
+        "module": "tests/test_app.py",
+        "label": "The honesty rule: synthetic data is declared in the interface itself.",
+        "outcome": "passed",
+        "duration": 0.006
+      },
+      {
+        "name": "test_quality_page_reports_the_planted_scenarios",
+        "module": "tests/test_app.py",
+        "label": "The evidence page lists what the dataset deliberately contains.",
+        "outcome": "passed",
+        "duration": 0.003
+      },
+      {
+        "name": "test_errors_are_served_as_pages_with_their_real_status",
+        "module": "tests/test_app.py",
+        "label": "A person who mistypes a URL gets the application, not a JSON fragment.",
+        "outcome": "passed",
+        "duration": 0.006
+      },
+      {
+        "name": "test_the_app_has_an_identity_in_the_browser_chrome",
+        "module": "tests/test_app.py",
+        "label": "Favicon under both names, from a local file, plus page metadata.",
+        "outcome": "passed",
+        "duration": 0.009
+      },
+      {
+        "name": "test_every_page_is_navigable_by_keyboard_and_screen_reader[/]",
+        "module": "tests/test_app.py",
+        "label": "Skip link first, landmarks named, tables captioned with column scope.",
+        "outcome": "passed",
+        "duration": 0.006
+      },
+      {
+        "name": "test_every_page_is_navigable_by_keyboard_and_screen_reader[/workspace]",
+        "module": "tests/test_app.py",
+        "label": "Skip link first, landmarks named, tables captioned with column scope.",
+        "outcome": "passed",
+        "duration": 0.012
+      },
+      {
+        "name": "test_every_page_is_navigable_by_keyboard_and_screen_reader[/exceptions]",
+        "module": "tests/test_app.py",
+        "label": "Skip link first, landmarks named, tables captioned with column scope.",
+        "outcome": "passed",
+        "duration": 0.009
+      },
+      {
+        "name": "test_every_page_is_navigable_by_keyboard_and_screen_reader[/approvals]",
+        "module": "tests/test_app.py",
+        "label": "Skip link first, landmarks named, tables captioned with column scope.",
+        "outcome": "passed",
+        "duration": 0.003
+      },
+      {
+        "name": "test_every_page_is_navigable_by_keyboard_and_screen_reader[/audit]",
+        "module": "tests/test_app.py",
+        "label": "Skip link first, landmarks named, tables captioned with column scope.",
+        "outcome": "passed",
+        "duration": 0.004
+      },
+      {
+        "name": "test_every_page_is_navigable_by_keyboard_and_screen_reader[/import]",
+        "module": "tests/test_app.py",
+        "label": "Skip link first, landmarks named, tables captioned with column scope.",
+        "outcome": "passed",
+        "duration": 0.003
+      },
+      {
+        "name": "test_every_page_is_navigable_by_keyboard_and_screen_reader[/quality]",
+        "module": "tests/test_app.py",
+        "label": "Skip link first, landmarks named, tables captioned with column scope.",
+        "outcome": "passed",
+        "duration": 0.002
+      },
+      {
+        "name": "test_every_page_holds_up_against_an_empty_database",
+        "module": "tests/test_app.py",
+        "label": "First run, nothing imported: every page shows an empty state, not a stack trace.",
+        "outcome": "passed",
+        "duration": 0.023
+      },
+      {
+        "name": "test_role_switch_changes_the_acting_user",
+        "module": "tests/test_app.py",
+        "label": "The demo switcher sets the acting identity and the page reflects it.",
+        "outcome": "passed",
+        "duration": 0.009
+      },
+      {
+        "name": "test_an_unknown_demo_user_is_refused",
+        "module": "tests/test_app.py",
+        "label": "Only the defined demo identities can be assumed.",
+        "outcome": "passed",
+        "duration": 0.006
+      },
+      {
+        "name": "test_auditor_write_is_refused_over_http",
+        "module": "tests/test_app.py",
+        "label": "Driving the real form as the auditor is refused by the server, not the template.",
+        "outcome": "passed",
+        "duration": 0.006
+      },
+      {
+        "name": "test_self_approval_is_refused_over_http",
+        "module": "tests/test_app.py",
+        "label": "The seeded supervisor-raised item cannot be approved by that same supervisor.",
+        "outcome": "passed",
+        "duration": 0.005
+      },
+      {
+        "name": "test_analyst_approval_is_refused_over_http",
+        "module": "tests/test_app.py",
+        "label": "An analyst pressing approve is told why it will not work.",
+        "outcome": "passed",
+        "duration": 0.005
+      },
+      {
+        "name": "test_supervisor_can_approve_an_analyst_request_over_http",
+        "module": "tests/test_app.py",
+        "label": "The intended path completes and the decision is recorded with the checker.",
+        "outcome": "passed",
+        "duration": 0.007
+      },
+      {
+        "name": "test_uploading_a_known_file_posts_nothing",
+        "module": "tests/test_app.py",
+        "label": "Re-uploading a file already imported is refused, with the counts to prove it.",
+        "outcome": "passed",
+        "duration": 0.008
+      },
+      {
+        "name": "test_uploading_a_new_file_with_a_bad_row_reports_both_counts",
+        "module": "tests/test_app.py",
+        "label": "A mixed file imports the good rows and reports the bad one.",
+        "outcome": "passed",
+        "duration": 0.007
+      },
+      {
+        "name": "test_an_empty_upload_is_refused",
+        "module": "tests/test_app.py",
+        "label": "An empty file is rejected before it reaches the parser.",
+        "outcome": "passed",
+        "duration": 0.004
+      },
+      {
+        "name": "test_uploading_a_bank_statement_goes_through_the_same_machinery",
+        "module": "tests/test_app.py",
+        "label": "An MT940 upload imports as payments, with the batch and hash checks intact.",
+        "outcome": "passed",
+        "duration": 0.015
+      },
+      {
+        "name": "test_uploading_a_camt053_statement_imports_the_same_way",
+        "module": "tests/test_app.py",
+        "label": "The XML format lands through the identical path, debits included.",
+        "outcome": "passed",
+        "duration": 0.008
+      },
+      {
+        "name": "test_auditor_cannot_upload_over_http",
+        "module": "tests/test_app.py",
+        "label": "The read-only role is refused at the import route too.",
+        "outcome": "passed",
+        "duration": 0.005
+      },
+      {
+        "name": "test_rematch_is_refused_for_the_auditor",
+        "module": "tests/test_app.py",
+        "label": "Re-running the engine is a write and is gated like one.",
+        "outcome": "passed",
+        "duration": 0.005
+      },
+      {
+        "name": "test_audit_state_is_rendered_as_fields_not_raw_json",
+        "module": "tests/test_app.py",
+        "label": "Recorded state reaches the page as field names, not a JSON blob.",
+        "outcome": "passed",
+        "duration": 0.004
+      },
+      {
+        "name": "test_audit_change_column_shows_only_what_moved",
+        "module": "tests/test_app.py",
+        "label": "The audit page states the transition, and drops fields that did not move.",
+        "outcome": "passed",
+        "duration": 0.004
+      },
+      {
+        "name": "test_audit_page_shows_the_recorded_history",
+        "module": "tests/test_app.py",
+        "label": "The audit page reflects the entries the seeding and tests actually wrote.",
+        "outcome": "passed",
+        "duration": 0.004
+      }
+    ],
+    "tests/test_controls.py": [
+      {
+        "name": "test_role_lookup_defaults_to_read_only",
+        "module": "tests/test_controls.py",
+        "label": "An unrecognised actor gets the least privilege, never the most.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_auditor_holds_read_only",
+        "module": "tests/test_controls.py",
+        "label": "The auditor role can read and nothing else.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_analyst_cannot_approve",
+        "module": "tests/test_controls.py",
+        "label": "An analyst may propose but never decide.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_supervisor_can_approve",
+        "module": "tests/test_controls.py",
+        "label": "Only the supervisor role carries the approve permission.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_require_refuses_the_auditor_with_a_usable_message",
+        "module": "tests/test_controls.py",
+        "label": "The refusal explains what to do, because a user will read it.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_require_refuses_an_unknown_role",
+        "module": "tests/test_controls.py",
+        "label": "An unmapped role is refused rather than defaulting to permissive.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_threshold_decides_whether_approval_is_needed",
+        "module": "tests/test_controls.py",
+        "label": "Small corrections do not need four eyes; the boundary value does.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_a_maker_cannot_approve_their_own_request",
+        "module": "tests/test_controls.py",
+        "label": "Segregation of duties: the person who raised an item cannot approve it.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_a_maker_cannot_reject_their_own_request_either",
+        "module": "tests/test_controls.py",
+        "label": "The rule covers rejection as well as approval, and says so in readable English.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_the_self_approval_message_reads_correctly",
+        "module": "tests/test_controls.py",
+        "label": "The refusal names the action properly rather than mangling the verb.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_an_analyst_cannot_approve_someone_elses_request",
+        "module": "tests/test_controls.py",
+        "label": "Being a different person is not enough; the role must carry the permission.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_an_auditor_cannot_approve",
+        "module": "tests/test_controls.py",
+        "label": "Read-only stays read-only in the approval queue too.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_a_supervisor_can_approve_another_persons_request",
+        "module": "tests/test_controls.py",
+        "label": "The intended path works: a different person holding the right role decides.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_a_decision_cannot_be_revisited",
+        "module": "tests/test_controls.py",
+        "label": "Once decided, an item is closed and a second decision is refused.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_an_unknown_decision_is_refused",
+        "module": "tests/test_controls.py",
+        "label": "Only approve and reject exist; anything else is an error.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_deciding_a_missing_approval_is_refused",
+        "module": "tests/test_controls.py",
+        "label": "A non-existent approval id fails loudly.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_an_auditor_cannot_raise_a_request",
+        "module": "tests/test_controls.py",
+        "label": "The read-only role cannot even start the maker-checker flow.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_blocked_reason_agrees_with_enforcement",
+        "module": "tests/test_controls.py",
+        "label": "What the UI says is blocked is exactly what the domain function refuses.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_raising_a_request_is_audited",
+        "module": "tests/test_controls.py",
+        "label": "The request itself is an event, not only the decision.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_both_decisions_are_audited",
+        "module": "tests/test_controls.py",
+        "label": "Approval and rejection each write their own distinguishable entry.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_audit_captures_before_and_after_state",
+        "module": "tests/test_controls.py",
+        "label": "An entry records what changed, not merely that something changed.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_a_refused_action_leaves_no_audit_entry",
+        "module": "tests/test_controls.py",
+        "label": "Nothing happened, so nothing is logged: the trail records changes, not attempts.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_the_audit_log_cannot_be_updated",
+        "module": "tests/test_controls.py",
+        "label": "Immutability is enforced by a database trigger, not by convention.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_the_audit_log_cannot_be_deleted_from",
+        "module": "tests/test_controls.py",
+        "label": "The same trigger blocks deletion, so history cannot be quietly trimmed.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_audit_survives_an_attempted_mass_delete",
+        "module": "tests/test_controls.py",
+        "label": "A blanket delete is refused as a whole, leaving every row in place.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_audit_serialises_non_json_values",
+        "module": "tests/test_controls.py",
+        "label": "Dates and other objects are recorded rather than crashing the write.",
+        "outcome": "passed",
+        "duration": 0.0
+      }
+    ],
+    "tests/test_exceptions.py": [
+      {
+        "name": "test_short_payment_is_detected",
+        "module": "tests/test_exceptions.py",
+        "label": "A payment materially below the invoice raises SHORT_PAY, not a silent write-off.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_overpayment_is_detected",
+        "module": "tests/test_exceptions.py",
+        "label": "More money than invoiced raises OVER_PAY.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_difference_inside_tolerance_raises_nothing",
+        "module": "tests/test_exceptions.py",
+        "label": "A two-tetri rounding difference is settled, not escalated to a human.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_duplicate_payment_is_detected",
+        "module": "tests/test_exceptions.py",
+        "label": "The same payer sending the same amount days later is flagged as a suspected duplicate.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_matched_instalments_are_not_flagged_as_duplicates",
+        "module": "tests/test_exceptions.py",
+        "label": "Two equal payments that both settle one invoice are an instalment plan, not a duplicate.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_duplicate_outside_the_window_is_not_flagged",
+        "module": "tests/test_exceptions.py",
+        "label": "Two equal payments months apart are ordinary recurring business.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_unknown_customer_is_detected",
+        "module": "tests/test_exceptions.py",
+        "label": "Cash from a payer with no customer account is flagged as high severity.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_currency_mismatch_is_detected",
+        "module": "tests/test_exceptions.py",
+        "label": "An invoice and payment in different currencies raise CURRENCY_MISMATCH.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_currency_mismatch_suppresses_a_misleading_short_pay",
+        "module": "tests/test_exceptions.py",
+        "label": "A currency difference is reported as such, not disguised as a shortfall.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_unpaid_invoice_raises_only_once_past_due",
+        "module": "tests/test_exceptions.py",
+        "label": "An invoice still inside its terms is not an exception; a late one is.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_unapplied_payment_is_detected",
+        "module": "tests/test_exceptions.py",
+        "label": "Cash with a known payer but no identifiable invoice is UNAPPLIED_PAYMENT.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_reversal_is_detected",
+        "module": "tests/test_exceptions.py",
+        "label": "A negative entry is typed as a reversal rather than treated as a payment.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_ambiguous_match_is_raised_for_a_proposal",
+        "module": "tests/test_exceptions.py",
+        "label": "A proposal below the auto threshold becomes a queue item for a human.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_ageing_bucket_boundaries[0-0-7]",
+        "module": "tests/test_exceptions.py",
+        "label": "Bucket edges are inclusive on the upper bound and do not overlap.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_ageing_bucket_boundaries[7-0-7]",
+        "module": "tests/test_exceptions.py",
+        "label": "Bucket edges are inclusive on the upper bound and do not overlap.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_ageing_bucket_boundaries[8-8-30]",
+        "module": "tests/test_exceptions.py",
+        "label": "Bucket edges are inclusive on the upper bound and do not overlap.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_ageing_bucket_boundaries[30-8-30]",
+        "module": "tests/test_exceptions.py",
+        "label": "Bucket edges are inclusive on the upper bound and do not overlap.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_ageing_bucket_boundaries[31-31-60]",
+        "module": "tests/test_exceptions.py",
+        "label": "Bucket edges are inclusive on the upper bound and do not overlap.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_ageing_bucket_boundaries[60-31-60]",
+        "module": "tests/test_exceptions.py",
+        "label": "Bucket edges are inclusive on the upper bound and do not overlap.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_ageing_bucket_boundaries[61-60+]",
+        "module": "tests/test_exceptions.py",
+        "label": "Bucket edges are inclusive on the upper bound and do not overlap.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_ageing_bucket_boundaries[400-60+]",
+        "module": "tests/test_exceptions.py",
+        "label": "Bucket edges are inclusive on the upper bound and do not overlap.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_sla_breach_depends_on_severity[high-3-False]",
+        "module": "tests/test_exceptions.py",
+        "label": "Each severity has its own clock, and the boundary day is not yet a breach.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_sla_breach_depends_on_severity[high-4-True]",
+        "module": "tests/test_exceptions.py",
+        "label": "Each severity has its own clock, and the boundary day is not yet a breach.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_sla_breach_depends_on_severity[medium-7-False]",
+        "module": "tests/test_exceptions.py",
+        "label": "Each severity has its own clock, and the boundary day is not yet a breach.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_sla_breach_depends_on_severity[medium-8-True]",
+        "module": "tests/test_exceptions.py",
+        "label": "Each severity has its own clock, and the boundary day is not yet a breach.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_sla_breach_depends_on_severity[low-30-False]",
+        "module": "tests/test_exceptions.py",
+        "label": "Each severity has its own clock, and the boundary day is not yet a breach.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_sla_breach_depends_on_severity[low-31-True]",
+        "module": "tests/test_exceptions.py",
+        "label": "Each severity has its own clock, and the boundary day is not yet a breach.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_age_is_measured_from_the_dataset_as_of_date",
+        "module": "tests/test_exceptions.py",
+        "label": "Ageing uses the fixed as-of date, so the queue does not drift with the wall clock.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_derivation_is_deterministic",
+        "module": "tests/test_exceptions.py",
+        "label": "The same reconciliation state yields the same queue in the same order.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_every_reason_code_has_guidance",
+        "module": "tests/test_exceptions.py",
+        "label": "Each code carries what it means and what to do, so the UI never shows a bare code.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_findings_persist_without_colliding",
+        "module": "tests/test_exceptions.py",
+        "label": "Several differences of the same kind are all stored, not collapsed into one row.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_transition_to_investigating_records_the_note",
+        "module": "tests/test_exceptions.py",
+        "label": "Moving an item forward keeps the analyst's note against it.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_resolving_requires_a_reason",
+        "module": "tests/test_exceptions.py",
+        "label": "An exception cannot be closed silently.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_resolved_items_cannot_be_reopened",
+        "module": "tests/test_exceptions.py",
+        "label": "Once closed, the record is closed; the audit trail holds the history.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_auditor_cannot_change_an_exception",
+        "module": "tests/test_exceptions.py",
+        "label": "The read-only role is refused by the domain function itself.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_every_transition_writes_an_audit_row",
+        "module": "tests/test_exceptions.py",
+        "label": "State changes are all recorded, with the before and after state.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_reassignment_is_audited",
+        "module": "tests/test_exceptions.py",
+        "label": "Changing the owner is a state change and is logged like any other.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_analyst_work_survives_a_rebuild",
+        "module": "tests/test_exceptions.py",
+        "label": "Re-deriving the queue does not discard an item somebody is already working on.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_unknown_status_is_refused",
+        "module": "tests/test_exceptions.py",
+        "label": "An invalid lifecycle state is rejected rather than written to the database.",
+        "outcome": "passed",
+        "duration": 0.0
+      }
+    ],
+    "tests/test_ingest.py": [
+      {
+        "name": "test_sha256_is_stable_and_content_sensitive",
+        "module": "tests/test_ingest.py",
+        "label": "The same bytes always hash the same, one changed byte does not.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_parse_decimal_dot_convention[1234.56-123456]",
+        "module": "tests/test_ingest.py",
+        "label": "Plain dot-decimal amounts parse to exact minor units.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_parse_decimal_dot_convention[0.02-2]",
+        "module": "tests/test_ingest.py",
+        "label": "Plain dot-decimal amounts parse to exact minor units.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_parse_decimal_dot_convention[1234-123400]",
+        "module": "tests/test_ingest.py",
+        "label": "Plain dot-decimal amounts parse to exact minor units.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_parse_decimal_dot_convention[-99.99--9999]",
+        "module": "tests/test_ingest.py",
+        "label": "Plain dot-decimal amounts parse to exact minor units.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_parse_decimal_comma_convention[1.234,56-123456]",
+        "module": "tests/test_ingest.py",
+        "label": "European comma-decimal amounts parse to the same minor units.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_parse_decimal_comma_convention[1 234,56-123456]",
+        "module": "tests/test_ingest.py",
+        "label": "European comma-decimal amounts parse to the same minor units.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_parse_decimal_comma_convention[1,23-123]",
+        "module": "tests/test_ingest.py",
+        "label": "European comma-decimal amounts parse to the same minor units.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_parse_decimal_comma_convention[1.234.567,89-123456789]",
+        "module": "tests/test_ingest.py",
+        "label": "European comma-decimal amounts parse to the same minor units.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_parse_decimal_thousands_separators[1,234.56-123456]",
+        "module": "tests/test_ingest.py",
+        "label": "Thousands separators are stripped, including the ambiguous lone-separator case.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_parse_decimal_thousands_separators[12 345.67-1234567]",
+        "module": "tests/test_ingest.py",
+        "label": "Thousands separators are stripped, including the ambiguous lone-separator case.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_parse_decimal_thousands_separators[1,234-123400]",
+        "module": "tests/test_ingest.py",
+        "label": "Thousands separators are stripped, including the ambiguous lone-separator case.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_parse_decimal_thousands_separators[1.234-123400]",
+        "module": "tests/test_ingest.py",
+        "label": "Thousands separators are stripped, including the ambiguous lone-separator case.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_parse_decimal_parenthesised_negative",
+        "module": "tests/test_ingest.py",
+        "label": "Accounting-style parentheses mean a negative amount.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_parse_decimal_ignores_currency_symbols",
+        "module": "tests/test_ingest.py",
+        "label": "Symbols and codes attached to the amount do not defeat parsing.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_parse_decimal_rejects_garbage[]",
+        "module": "tests/test_ingest.py",
+        "label": "Unparseable amounts raise rather than silently becoming zero.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_parse_decimal_rejects_garbage[   ]",
+        "module": "tests/test_ingest.py",
+        "label": "Unparseable amounts raise rather than silently becoming zero.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_parse_decimal_rejects_garbage[abc]",
+        "module": "tests/test_ingest.py",
+        "label": "Unparseable amounts raise rather than silently becoming zero.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_parse_decimal_rejects_garbage[n/a]",
+        "module": "tests/test_ingest.py",
+        "label": "Unparseable amounts raise rather than silently becoming zero.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_parse_decimal_rejects_garbage[None]",
+        "module": "tests/test_ingest.py",
+        "label": "Unparseable amounts raise rather than silently becoming zero.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_parse_date_accepts_known_formats[2026-04-17]",
+        "module": "tests/test_ingest.py",
+        "label": "Day-first and ISO date formats all normalise to the same ISO string.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_parse_date_accepts_known_formats[17/04/2026]",
+        "module": "tests/test_ingest.py",
+        "label": "Day-first and ISO date formats all normalise to the same ISO string.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_parse_date_accepts_known_formats[17.04.2026]",
+        "module": "tests/test_ingest.py",
+        "label": "Day-first and ISO date formats all normalise to the same ISO string.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_parse_date_accepts_known_formats[2026/04/17]",
+        "module": "tests/test_ingest.py",
+        "label": "Day-first and ISO date formats all normalise to the same ISO string.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_parse_date_rejects_impossible_dates[]",
+        "module": "tests/test_ingest.py",
+        "label": "A date that cannot exist is refused, including 31 February.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_parse_date_rejects_impossible_dates[not-a-date]",
+        "module": "tests/test_ingest.py",
+        "label": "A date that cannot exist is refused, including 31 February.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_parse_date_rejects_impossible_dates[31/02/2026]",
+        "module": "tests/test_ingest.py",
+        "label": "A date that cannot exist is refused, including 31 February.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_parse_date_rejects_impossible_dates[2026-13-45]",
+        "module": "tests/test_ingest.py",
+        "label": "A date that cannot exist is refused, including 31 February.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_normalise_header_collapses_case_space_and_underscores",
+        "module": "tests/test_ingest.py",
+        "label": "Header spelling variation is flattened to one canonical form.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_resolve_columns_tolerates_reordering_and_aliases",
+        "module": "tests/test_ingest.py",
+        "label": "Canonical fields are found regardless of order or which alias was used.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_to_gel_uses_the_fixed_rate_table",
+        "module": "tests/test_ingest.py",
+        "label": "Foreign currency converts at the published fixed rate, not a live one.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_to_gel_rejects_an_unknown_currency",
+        "module": "tests/test_ingest.py",
+        "label": "A currency with no published rate is an error, never a guess.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_import_accepts_a_clean_file",
+        "module": "tests/test_ingest.py",
+        "label": "A well-formed file posts every row and records the counts.",
+        "outcome": "passed",
+        "duration": 0.001
+      },
+      {
+        "name": "test_importing_the_same_file_twice_posts_nothing",
+        "module": "tests/test_ingest.py",
+        "label": "Idempotency: identical bytes are recorded as a duplicate and never double-posted.",
+        "outcome": "passed",
+        "duration": 0.001
+      },
+      {
+        "name": "test_duplicate_file_records_why_it_was_skipped",
+        "module": "tests/test_ingest.py",
+        "label": "The duplicate batch explains which earlier batch already held that content.",
+        "outcome": "passed",
+        "duration": 0.001
+      },
+      {
+        "name": "test_import_tolerates_reordered_columns_and_header_noise",
+        "module": "tests/test_ingest.py",
+        "label": "A file with shuffled, differently spelled headers still imports correctly.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_import_parses_european_decimals",
+        "module": "tests/test_ingest.py",
+        "label": "A file written 1.234,56 imports to the same minor units as 1234.56.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_one_bad_date_rejects_only_that_row",
+        "module": "tests/test_ingest.py",
+        "label": "A malformed row is refused with a reason while the rest of the file posts.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_negative_invoice_amount_is_rejected",
+        "module": "tests/test_ingest.py",
+        "label": "An invoice for a negative amount is refused; only payments may be negative.",
+        "outcome": "passed",
+        "duration": 0.001
+      },
+      {
+        "name": "test_missing_reference_is_rejected",
+        "module": "tests/test_ingest.py",
+        "label": "A row with no invoice number cannot be identified later, so it is refused.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_unknown_currency_is_rejected",
+        "module": "tests/test_ingest.py",
+        "label": "A currency with no rate is refused rather than converted at a guess.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_missing_required_column_rejects_the_file_with_a_reason",
+        "module": "tests/test_ingest.py",
+        "label": "A file without an amount column is rejected as a whole, and says which column.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_row_already_present_is_skipped_not_duplicated",
+        "module": "tests/test_ingest.py",
+        "label": "A different file repeating a known invoice number skips that row only.",
+        "outcome": "passed",
+        "duration": 0.001
+      },
+      {
+        "name": "test_import_writes_an_audit_row",
+        "module": "tests/test_ingest.py",
+        "label": "Importing is a state change, so it lands in the audit log.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_auditor_cannot_import",
+        "module": "tests/test_ingest.py",
+        "label": "The read-only role is refused at the import boundary, not in the template.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_fmt_money_groups_thousands_and_keeps_two_decimals",
+        "module": "tests/test_ingest.py",
+        "label": "Display formatting is exact and never rounds a stored value away.",
+        "outcome": "passed",
+        "duration": 0.0
+      }
+    ],
+    "tests/test_matching.py": [
+      {
+        "name": "test_normalise_ref_strips_case_and_punctuation",
+        "module": "tests/test_matching.py",
+        "label": "References differing only in case or punctuation compare equal.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_exact_reference_matches_first",
+        "module": "tests/test_matching.py",
+        "label": "A remittance quoting the invoice number matches on rule R1 with full confidence.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_reference_containment_survives_prefixes",
+        "module": "tests/test_matching.py",
+        "label": "'PMT-INV-2026-0001 PAYMENT' still resolves to the invoice it contains.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_amount_customer_and_date_rule",
+        "module": "tests/test_matching.py",
+        "label": "With no usable reference, an exact amount for one customer matches on R2.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_two_identical_candidates_are_not_auto_matched",
+        "module": "tests/test_matching.py",
+        "label": "When two invoices fit equally well, R2 refuses to guess.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_tolerance_absolute_boundary_is_inclusive",
+        "module": "tests/test_matching.py",
+        "label": "Exactly 0.02 is inside the flat tolerance and 0.03 is outside.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_tolerance_percentage_boundary_is_inclusive",
+        "module": "tests/test_matching.py",
+        "label": "At 0.5% of 100.00 the allowance is exactly 0.50: 0.50 passes, 0.51 does not.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_tolerance_takes_the_larger_of_the_two_rules",
+        "module": "tests/test_matching.py",
+        "label": "On a tiny invoice the flat 0.02 binds; on a large one the percentage does.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_within_tolerance_difference_matches_on_r3",
+        "module": "tests/test_matching.py",
+        "label": "A rounding difference inside tolerance still settles, on rule R3.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_many_to_one_grouping",
+        "module": "tests/test_matching.py",
+        "label": "One payment settling three invoices is found and recorded as an n:1 match.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_one_to_many_grouping",
+        "module": "tests/test_matching.py",
+        "label": "Two instalments settling one invoice are found and recorded as a 1:n match.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_scored_breakdown_sums_to_the_confidence",
+        "module": "tests/test_matching.py",
+        "label": "The confidence is exactly the sum of the component contributions, not a black box.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_component_weights_sum_to_one_hundred",
+        "module": "tests/test_matching.py",
+        "label": "A perfect match on every component scores exactly 100.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_single_character_typo_is_explained_in_words",
+        "module": "tests/test_matching.py",
+        "label": "A one-character reference error is described as such, not as a raw ratio.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_amount_difference_is_explained_with_the_figure",
+        "module": "tests/test_matching.py",
+        "label": "The explanation states the actual money difference and its direction.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_early_payment_is_explained_as_before_the_invoice",
+        "module": "tests/test_matching.py",
+        "label": "Cash arriving before the invoice date is described in plain language.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_unusable_reference_cannot_reach_the_auto_threshold",
+        "module": "tests/test_matching.py",
+        "label": "Structural guarantee: with no reference, amount, date and customer cap out below auto.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_wrong_customer_scores_zero_on_identity",
+        "module": "tests/test_matching.py",
+        "label": "A payer unrelated to the customer contributes nothing to the score.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_currency_mismatch_still_matches_on_reference_and_is_flagged",
+        "module": "tests/test_matching.py",
+        "label": "A payment in the wrong currency still finds its invoice, and the note says so.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_a_payment_is_never_assigned_twice",
+        "module": "tests/test_matching.py",
+        "label": "No payment appears on more than one proposal, whatever the pass.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_an_invoice_is_never_assigned_twice",
+        "module": "tests/test_matching.py",
+        "label": "The same guarantee holds on the invoice side.",
+        "outcome": "passed",
+        "duration": 0.001
+      },
+      {
+        "name": "test_matching_is_deterministic",
+        "module": "tests/test_matching.py",
+        "label": "The same inputs produce the same proposals, in the same order, every time.",
+        "outcome": "passed",
+        "duration": 0.001
+      },
+      {
+        "name": "test_scores_below_the_review_floor_produce_no_proposal",
+        "module": "tests/test_matching.py",
+        "label": "A pair with nothing in common is left alone rather than forced into a match.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_proposed_band_is_between_the_two_thresholds",
+        "module": "tests/test_matching.py",
+        "label": "A partial-signal pair lands in the review band, neither posted nor discarded.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_config_is_overridable",
+        "module": "tests/test_matching.py",
+        "label": "Tolerance is configuration, not a constant baked into the rules.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_run_matching_persists_links_and_breakdown",
+        "module": "tests/test_matching.py",
+        "label": "Persisted matches carry their links and their stored explanation.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_run_matching_is_repeatable_without_duplicating",
+        "module": "tests/test_matching.py",
+        "label": "Re-running matching rebuilds rather than accumulating rows.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_manual_confirmation_survives_a_rematch",
+        "module": "tests/test_matching.py",
+        "label": "Human decisions are preserved when the engine re-runs.",
+        "outcome": "passed",
+        "duration": 0.001
+      },
+      {
+        "name": "test_matching_writes_an_audit_row",
+        "module": "tests/test_matching.py",
+        "label": "Running the engine is itself an auditable event.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_auditor_cannot_run_matching",
+        "module": "tests/test_matching.py",
+        "label": "The read-only role cannot trigger a re-match.",
+        "outcome": "passed",
+        "duration": 0.0
+      }
+    ],
+    "tests/test_statements.py": [
+      {
+        "name": "test_format_is_detected_from_content_not_from_the_file_name",
+        "module": "tests/test_statements.py",
+        "label": "A bank that names an MT940 file .txt still sends MT940.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_mt940_yields_one_row_per_transaction_with_the_payment_row_shape",
+        "module": "tests/test_statements.py",
+        "label": "test_mt940_yields_one_row_per_transaction_with_the_payment_row_shape",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_mt940_amounts_and_value_dates_survive_the_parse",
+        "module": "tests/test_statements.py",
+        "label": "test_mt940_amounts_and_value_dates_survive_the_parse",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_mt940_debit_marks_arrive_negative",
+        "module": "tests/test_statements.py",
+        "label": "A D line is money leaving. Read as a credit it would post as a receipt.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_mt940_folds_both_61_and_86_onto_the_reference",
+        "module": "tests/test_statements.py",
+        "label": "The invoice number turns up in either field depending on the bank.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_mt940_takes_the_currency_from_the_statement_balance",
+        "module": "tests/test_statements.py",
+        "label": "test_mt940_takes_the_currency_from_the_statement_balance",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_mt940_bank_reference_becomes_the_payment_key",
+        "module": "tests/test_statements.py",
+        "label": "test_mt940_bank_reference_becomes_the_payment_key",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_mt940_continuation_lines_are_folded_into_their_tag",
+        "module": "tests/test_statements.py",
+        "label": ":86: wraps across lines in real statements; the tail must not be lost.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_mt940_ignores_lines_it_cannot_parse_rather_than_failing_the_file",
+        "module": "tests/test_statements.py",
+        "label": "test_mt940_ignores_lines_it_cannot_parse_rather_than_failing_the_file",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_camt053_yields_one_row_per_entry_with_the_payment_row_shape",
+        "module": "tests/test_statements.py",
+        "label": "test_camt053_yields_one_row_per_entry_with_the_payment_row_shape",
+        "outcome": "passed",
+        "duration": 0.001
+      },
+      {
+        "name": "test_camt053_reads_cdtdbtind_so_a_debit_is_negative",
+        "module": "tests/test_statements.py",
+        "label": "The amount element is unsigned. Without CdtDbtInd a debit posts as cash in.",
+        "outcome": "passed",
+        "duration": 0.001
+      },
+      {
+        "name": "test_camt053_reads_currency_payer_and_remittance",
+        "module": "tests/test_statements.py",
+        "label": "test_camt053_reads_currency_payer_and_remittance",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_camt053_parses_whatever_the_namespace_version_is",
+        "module": "tests/test_statements.py",
+        "label": "Any camt.053 minor version resolves by local name.",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_camt053_rejects_a_malformed_document_loudly",
+        "module": "tests/test_statements.py",
+        "label": "test_camt053_rejects_a_malformed_document_loudly",
+        "outcome": "passed",
+        "duration": 0.0
+      },
+      {
+        "name": "test_the_two_formats_produce_the_same_payments",
+        "module": "tests/test_statements.py",
+        "label": "The whole point: one bank, two file formats, one set of facts.",
+        "outcome": "passed",
+        "duration": 0.001
+      }
+    ]
+  }
+}

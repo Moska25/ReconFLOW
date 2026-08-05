@@ -6,12 +6,28 @@ turns that boundary into a coin toss.
 """
 from __future__ import annotations
 
+import os
 import sqlite3
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "data"
-DB_PATH = DATA_DIR / "reconflow.db"
+# ponytail: serverless filesystems are read-only apart from /tmp, so the database lives
+# there when deployed. It is rebuilt per instance from the bundled CSVs; writes made
+# through the UI last for that instance only, which is what a demo deployment needs.
+DB_PATH = Path(os.environ.get("RECONFLOW_DB") or
+               ("/tmp/reconflow.db" if os.environ.get("VERCEL") else DATA_DIR / "reconflow.db"))
+
+
+def dataset_dir() -> Path:
+    """Where the CSV dataset is read from and, if absent, written to.
+
+    Normally the bundled data/ directory. A deployment that ships without those files
+    falls back to the writable directory holding the database: the dataset comes from a
+    fixed seed, so regenerating it there produces byte-identical files.
+    """
+    return DATA_DIR if (DATA_DIR / "manifest.json").exists() else DB_PATH.parent
+
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS customers (

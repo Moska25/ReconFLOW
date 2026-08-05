@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 from urllib.parse import urlencode
 
@@ -56,6 +57,14 @@ ERRORS = {
 def get_conn():
     conn = db.connect()
     db.bootstrap(conn)
+    if os.environ.get("VERCEL") and not db.is_seeded(conn):
+        # ponytail: a deployed instance starts with an empty /tmp database, so the first
+        # request seeds it (0.7s from the bundled CSVs). Locally run.sh does the seeding,
+        # and the empty-database test relies on an unseeded database staying unseeded.
+        from app import seed as _seed
+        conn.close()
+        _seed.seed()
+        conn = db.connect()
     return conn
 
 

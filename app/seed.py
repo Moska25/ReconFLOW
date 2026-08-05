@@ -22,14 +22,15 @@ QUALITY_PATH = db.DATA_DIR / "quality.json"
 
 
 def ensure_files() -> dict:
-    manifest = generate.load_manifest()
+    out = db.dataset_dir()
+    manifest = generate.load_manifest(out)
     if not manifest:
-        manifest = generate.write_csvs()
+        manifest = generate.write_csvs(out)
     return manifest
 
 
 def load_customers(conn) -> int:
-    path = db.DATA_DIR / "customers.csv"
+    path = db.dataset_dir() / "customers.csv"
     if not path.exists():
         return 0
     with path.open(encoding="utf-8-sig", newline="") as fh:
@@ -49,17 +50,16 @@ def import_all(conn) -> list[dict]:
     reconciliation system double-posts. Seeding reproduces it so the import page shows a
     real duplicate batch rather than a description of one.
     """
+    src = db.dataset_dir()
     batches = []
-    order = ["invoices.csv"] + sorted(
-        p.name for p in db.DATA_DIR.glob("payments_*.csv")
-    )
+    order = ["invoices.csv"] + sorted(p.name for p in src.glob("payments_*.csv"))
     for name in order:
-        path = db.DATA_DIR / name
+        path = src / name
         kind = "invoices" if name.startswith("invoices") else "payments"
         batches.append(ingest.import_bytes(conn, name, path.read_bytes(), kind,
                                            actor="system", role="supervisor"))
 
-    resend = db.DATA_DIR / "payments_2026_05.csv"
+    resend = src / "payments_2026_05.csv"
     if resend.exists():
         batches.append(ingest.import_bytes(
             conn, "payments_2026_05.csv (bank resend)", resend.read_bytes(), "payments",
@@ -105,6 +105,10 @@ def plant_approvals(conn) -> list[int]:
 
 def write_quality(force: bool = False) -> dict:
     """Regenerate data/quality.json by actually running the suite."""
+    if os.environ.get("VERCEL"):
+        # ponytail: read-only filesystem, no test run there. The committed report is it.
+        return json.loads(QUALITY_PATH.read_text(encoding="utf-8")) \
+            if QUALITY_PATH.exists() else {}
     if QUALITY_PATH.exists() and not force:
         return json.loads(QUALITY_PATH.read_text(encoding="utf-8"))
     env = dict(os.environ, RECONFLOW_SEEDING="1")

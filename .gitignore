@@ -4,7 +4,6 @@ __pycache__/
 *.db
 .pytest_cache/
 data/cache/
-data/quality.json
 .DS_Store
 
 # Local design handoff bundle: the extracted UI components, their gallery and the
